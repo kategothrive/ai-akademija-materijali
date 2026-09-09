@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lead Qualification Agent &mdash; Sve AI tajne, Modul 3</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 3</div>
+<h1>Lead Qualification Agent</h1>
+<p class="lede">Agent koji svaki upit ocijeni po pet kriterija, prepozna crvene zastavice i kaže ti koga zvati danas, a koga ne zvati nikad. S kalkulatorom kojim možeš kalibrirati model prije nego što ga predaš agentu.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>5 kriterija</span><span>6 zastavica</span><span>Kalkulator</span><span>10 pitanja</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Zašto ovaj agent vraća najviše</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <div class="prose" style="font-size:.96rem">
+      <p>Većina malih firmi ne gubi novac na lošim ponudama. Gubi ga na <b>dobrim ponudama napisanim za pogrešne ljude</b>.</p>
+      <p>Ponuda košta dva do četiri sata. Ako četvrtina njih ide upitima koji nikad nisu imali ni budžet ni odlučitelja ni rok, to je nekoliko radnih dana mjesečno bez ijedne kune prihoda.</p>
+      <p>Ovaj agent ne prodaje. On samo odlučuje <b>što je vrijedno tvoja četiri sata</b>.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Što agent radi, a što ne</h4>
+    <ul class="ticks">
+      <li><b>Radi:</b> čita upit, ocjenjuje po pet kriterija s dokazom iz teksta, prepoznaje zastavice, dodjeljuje razred i predlaže tri pitanja.</li>
+      <li><b>Radi:</b> kaže ti što <em>ne zna</em> &mdash; koji kriterij nije mogao ocijeniti jer podatka nema.</li>
+      <li><b>Ne radi:</b> ne piše odgovor klijentu i ne obraća mu se. Izlaz čitaš samo ti.</li>
+      <li><b>Ne radi:</b> ne odlučuje konačno. Razred je preporuka, potpis je tvoj.</li>
+    </ul>
+    <div class="note ru"><strong>Nikad ne puštaj ovog agenta da sam odgovara upitima.</strong> Kvalifikacija je interni proces. Klijent ne smije ni naslutiti da je ocijenjen brojem.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Kalkulator</h2><p>Prije nego predaš model agentu, kalibriraj ga na deset stvarnih upita iz svoje pošte. Ako se razred ne poklapa s tvojim osjećajem, promijeni težine &mdash; ne osjećaj.</p></div></div>
+<div class="grid g2" style="align-items:start">
+  <div class="card">
+    <h4>Ocijeni upit</h4>
+    <div class="field"><label for="fit">Poklapanje problema <span class="mono" style="color:var(--muted);font-weight:400">&middot; težina 30%</span></label><select id="fit" data-w="30" data-name="Poklapanje problema" class="crit"><option value="" selected>&mdash; odaberi &mdash;</option><option value="100">Traži točno ono što je naša glavna ponuda</option><option value="70">Traži nešto blizu — možemo pokriti bez izmišljanja</option><option value="40">Traži nešto što radimo, ali nam nije jaka strana</option><option value="0">Traži nešto što ne radimo</option></select></div><div class="field"><label for="budget">Sposobnost i volja plaćanja <span class="mono" style="color:var(--muted);font-weight:400">&middot; težina 25%</span></label><select id="budget" data-w="25" data-name="Sposobnost i volja plaćanja" class="crit"><option value="" selected>&mdash; odaberi &mdash;</option><option value="100">Naveo/navela budžet u našem rasponu ili višem</option><option value="70">Nije naveo, ali profil tvrtke i potreba to podnose</option><option value="30">Vjerojatno ispod našeg minimuma</option><option value="0">Izričito traži najjeftinije ili besplatno</option></select></div><div class="field"><label for="authority">Ovlast odlučivanja <span class="mono" style="color:var(--muted);font-weight:400">&middot; težina 15%</span></label><select id="authority" data-w="15" data-name="Ovlast odlučivanja" class="crit"><option value="" selected>&mdash; odaberi &mdash;</option><option value="100">Piše osoba koja odlučuje</option><option value="65">Piše osoba koja priprema odluku i ima pristup odlučitelju</option><option value="35">Ne znamo tko odlučuje</option><option value="10">Piše netko bez utjecaja na odluku</option></select></div><div class="field"><label for="timing">Rok i hitnost <span class="mono" style="color:var(--muted);font-weight:400">&middot; težina 15%</span></label><select id="timing" data-w="15" data-name="Rok i hitnost" class="crit"><option value="" selected>&mdash; odaberi &mdash;</option><option value="100">Ima konkretan rok u sljedećih 30 dana</option><option value="70">Rok u sljedeća 3 mjeseca</option><option value="40">Istražuje za kasnije ove godine</option><option value="15">Nema rok, samo se informira</option></select></div><div class="field"><label for="size">Veličina i potencijal ponavljanja <span class="mono" style="color:var(--muted);font-weight:400">&middot; težina 15%</span></label><select id="size" data-w="15" data-name="Veličina i potencijal ponavljanja" class="crit"><option value="" selected>&mdash; odaberi &mdash;</option><option value="100">Veći klijent, jasan potencijal za nastavak suradnje</option><option value="70">Odgovara našem profilu, moguć nastavak</option><option value="40">Jednokratni manji posao</option><option value="10">Ispod našeg minimuma za isplativost</option></select></div>
+    <h4 style="margin-top:10px">Crvene zastavice</h4>
+    <div class="prose" style="font-size:.9rem"><p>Jedna označena zastavica nadjačava rezultat, koliko god bio visok.</p></div>
+    <div><label class="chk"><input type="checkbox" class="flag"><span class="t"><b>Izričito traži rad bez ugovora ili bez računa</b><span>Ovo nije cjenovni prigovor, nego signal kako će izgledati cijela suradnja.</span></span></label><label class="chk"><input type="checkbox" class="flag"><span class="t"><b>Traži besplatan rad kao &#x27;test&#x27; ili &#x27;probni projekt&#x27;</b><span>Probni projekt se plaća. Ako se ne plaća, nije test — nego posao.</span></span></label><label class="chk"><input type="checkbox" class="flag"><span class="t"><b>Rok je nemoguć i ne pristaje ga mijenjati</b><span>Preuzeti nemoguć rok znači platiti prekovremeno i završiti s nezadovoljnim klijentom.</span></span></label><label class="chk"><input type="checkbox" class="flag"><span class="t"><b>Već je promijenio tri dobavljača za isti posao</b><span>Ponekad su svi bili loši. Češće je problem u definiciji posla ili u očekivanjima.</span></span></label><label class="chk"><input type="checkbox" class="flag"><span class="t"><b>Ne želi uvodni razgovor, hoće samo cijenu na mail</b><span>Ponuda bez razgovora je pogađanje. Ako ne daju 20 minuta, ne daju ni podatke.</span></span></label><label class="chk"><input type="checkbox" class="flag"><span class="t"><b>Industrija ili posao s kojim ne želimo raditi</b><span>Napiši svoju listu. Bolje je imati je unaprijed nego odlučivati kad ponuda već zvuči dobro.</span></span></label></div>
+  </div>
+  <div class="card" style="position:sticky;top:16px">
+    <h4>Rezultat</h4>
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <div id="snum" style="font-family:'Bricolage Grotesque',sans-serif;font-size:3.4rem;font-weight:800;line-height:1;letter-spacing:-.03em"></div>
+      <div class="count">od 100</div>
+    </div>
+    <div class="progressbar"><i id="sbar"></i></div>
+    <div class="mono" id="scalc" style="font-size:.7rem;color:var(--muted);word-break:break-word"></div>
+    <div class="note" id="sverdict"></div>
+    <div class="note"><strong>Težine nisu svete.</strong> Ako u tvom poslu rok ne znači ništa, a ovlast znači sve &mdash; promijeni ih u sustavu prije nego što ga uvedeš. Važno je samo da su iste za svaki upit.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Pravila usmjeravanja</h2><p>Razred bez pravila je broj bez posljedice. Ovo je dio koji štedi vrijeme.</p></div></div>
+<div class="tbl-scroll"><table><thead><tr><th>Razred</th><th>Rezultat</th><th>Što se događa</th></tr></thead><tbody><tr><td class="k"><span class="badge em">A</span></td><td class="k">75 - 100</td><td>Poziv u roku 24 sata. Vodi ga vlasnik ili najiskusniji u prodaji. Ponuda u roku 3 dana.</td></tr><tr><td class="k"><span class="badge em">B</span></td><td class="k">55 - 74</td><td>Poziv u roku 3 radna dana. Standardni proces. Ponuda nakon razgovora.</td></tr><tr><td class="k"><span class="badge gy">C</span></td><td class="k">35 - 54</td><td>Bez poziva. Ide u nurture sekvencu — koristan sadržaj svakih 10-14 dana. Provjeri za 2 mjeseca.</td></tr><tr><td class="k"><span class="badge gy">D</span></td><td class="k">pod 35</td><td>Kratak pristojan odgovor s uputom na resurs ili na nekoga kome to odgovara. Bez ponude.</td></tr><tr><td class="k"><span class="badge ru">DQ</span></td><td class="k">crvena zastavica</td><td>Odbij bez obzira na rezultat. Jedna rečenica, bez opravdavanja, vrata ostaju otvorena.</td></tr></tbody></table></div>
+<div class="note em" style="margin-top:14px"><strong>Pravilo koje se najlakše prekrši:</strong> razred C i D <em>ne dobivaju poziv</em>. Svaki sat koji tamo uložiš uzet je razredu A &mdash; a razred A čeka i odlazi konkurenciji koja se javila prva.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Deset pitanja koja daju podatke za ocjenu</h2><p>Ako ovih odgovora nema, agent nema čime ocjenjivati. Stavi ih u obrazac na webu ili ih pitaj u prvih deset minuta razgovora.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Što konkretno želite riješiti?</h3></div></div><div class="item-body"><div class="note"><strong>Zašto:</strong> Otvoreno pitanje. Ako ne mogu opisati problem, još nisu spremni kupiti.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Što ste do sada probali?</h3></div></div><div class="item-body"><div class="note"><strong>Zašto:</strong> Otkriva jesu li već imali dobavljača i zašto nije uspjelo.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Kako ovo rješavate danas?</h3></div></div><div class="item-body"><div class="note"><strong>Zašto:</strong> Alternativa protiv koje se natječeš nije konkurent — nego status quo.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Koliko vas to trenutno košta — u novcu ili u vremenu?</h3></div></div><div class="item-body"><div class="note"><strong>Zašto:</strong> Ako ne znaju, problem im nije dovoljno velik.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Do kada ovo treba biti riješeno i zašto ta datum?</h3></div></div><div class="item-body"><div class="note"><strong>Zašto:</strong> &#x27;Zašto taj datum&#x27; razdvaja pravi rok od želje.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Koji je okvir budžeta za ovo?</h3></div></div><div class="item-body"><div class="note"><strong>Zašto:</strong> Pitaj direktno. Tko se uvrijedi, ionako nije klijent.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Tko još odlučuje o ovome osim vas?</h3></div></div><div class="item-body"><div class="note"><strong>Zašto:</strong> Najvažnije pitanje u cijelom popisu. Postavi ga rano.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Kako izgleda vaš postupak odlučivanja i koliko traje?</h3></div></div><div class="item-body"><div class="note"><strong>Zašto:</strong> Otkriva hoće li se odluka donijeti u tjednu ili u kvartalu.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Što bi za vas značilo da je ovo uspjelo?</h3></div></div><div class="item-body"><div class="note"><strong>Zašto:</strong> Definicija uspjeha koju kasnije stavljaš u ponudu.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Ima li nešto zbog čega bi ovo moglo propasti?</h3></div></div><div class="item-body"><div class="note"><strong>Zašto:</strong> Ljudi iznenađujuće često sami kažu pravi prigovor.</div></div></article>
+<div class="note ru" style="margin-top:14px"><strong>U obrazac na webu stavi najviše pet.</strong> Deset polja odbija i dobre upite. Pitanja 1, 5, 6, 7 i 9 nose većinu ocjene &mdash; ostalo pitaj na razgovoru.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">05</div><div class="txt"><h2>System prompt agenta</h2><p>Zalijepi u instrukcije Claude Projecta, popuni polja u zagradama i testiraj na dvadeset stvarnih upita.</p></div></div>
+<div class="card">
+<pre class="p">Ti si agent za kvalifikaciju upita za <span class="f">[TVRTKA</span>]. Ne prodaješ i ne pišeš ponudu — ocjenjuješ i usmjeravaš.
+
+Kontekst:
+Što prodajemo: <span class="f">[OPIS PONUDE</span>]
+Naš cjenovni raspon: <span class="f">[OD - DO</span>]
+Naš idealni klijent: <span class="f">[OPIS</span>]
+S kim ne radimo: <span class="f">[POPIS</span>]
+
+Za svaki upit koji ti dam vrati TOČNO ovu strukturu:
+
+1. SAŽETAK UPITA — dvije rečenice: što traže i za što im to treba
+2. OCJENA PO KRITERIJIMA — tablica: kriterij | ocjena 0-100 | dokaz iz upita
+   Kriteriji i težine: poklapanje problema 30%, budžet 25%, ovlast 15%, rok 15%, veličina 15%
+3. UKUPNI REZULTAT — ponderirani broj 0-100, s prikazanim izračunom
+4. CRVENE ZASTAVICE — ako ih ima. Svaka zastavica nadjačava rezultat.
+5. RAZRED I POSTUPAK — A / B / C / D / DISKVALIFICIRAN, po pravilima usmjeravanja
+6. TRI PITANJA — što pitati prije nego što uložimo vrijeme u ponudu
+7. ŠTO NE ZNAM — koji kriterij nisam mogao ocijeniti jer podatka nema u upitu
+
+Obavezna pravila:
+- Za svaku ocjenu navedi DOKAZ iz upita. Bez citata nema ocjene.
+- Ako podatka nema, ocijeni taj kriterij kao &quot;nepoznato&quot; i u točki 7 napiši što treba pitati. Ne pogađaj budžet.
+- Ne budi optimističan. Upit koji zvuči dobro, a nema ni budžet ni rok ni odlučitelja, nije dobar upit.
+- Ne piši prodajni tekst i ne obraćaj se klijentu. Tvoj izlaz čitam samo ja.
+- Ako postoji crvena zastavica, napiši je jasno čak i ako je ukupni rezultat visok.</pre>
+<div class="actions"><button class="copybtn" type="button">Kopiraj system prompt</button></div>
+<div class="note"><strong>Točka 7 je zaštitni mehanizam.</strong> Bez nje model popunjava rupe pretpostavkama &mdash; i to uvijek optimističnima. Upit bez navedenog budžeta postane &bdquo;vjerojatno imaju budžet&ldquo;, i ti pišeš ponudu za nikoga.</div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">06</div><div class="txt"><h2>Postavljanje u dvije faze</h2><p>Po kućnom pravilu: Faza 1 bez programiranja i bez nove pretplate.</p></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <h4>Faza 1 &mdash; oko sat vremena</h4>
+    <ol class="steps">
+      <li>Obrazac na webu s pet pitanja &mdash; Google Forms, MS Forms ili što već imaš. Odgovori idu u tablicu.</li>
+      <li>Claude Project &bdquo;Kvalifikacija upita&ldquo; s system promptom iz sekcije 05 i s opisom ponude i cjenika u datotekama.</li>
+      <li>Jednom dnevno kopiraš nove upite u razgovor i dobivaš ocjene. Deset upita &mdash; tri minute.</li>
+      <li>Razred upišeš u tablicu u stupac <span class="mono">RAZRED</span>. A i B ideš zvati, C ide u nurture.</li>
+      <li>Tjedno pogledaj poklapa li se razred s onim što se stvarno dogodilo. To je tvoja kalibracija.</li>
+    </ol>
+    <div class="note">Nema integracije, nema API-ja, nema scenarija. Radi od prvog dana i pokaže ti gdje model griješi &mdash; dok je ispravak još besplatan.</div>
+  </div>
+  <div class="card">
+    <h4>Faza 2 &mdash; tek nakon dva mjeseca</h4>
+    <ol class="steps">
+      <li>Novi red u tablici pokreće scenarij (Make, Zapier ili Power Automate).</li>
+      <li>Scenarij pošalje upit modelu i vrati ocjenu, razred i tri pitanja.</li>
+      <li>Razred se upiše u tablicu ili CRM, uz obrazloženje.</li>
+      <li>Razred A pokreće obavijest na mobitel i zadatak s rokom od 24 sata.</li>
+      <li>Razred C automatski ulazi u nurture sekvencu.</li>
+    </ol>
+    <div class="note ru"><strong>Ne prije dva mjeseca.</strong> U prvim tjednima ćeš mijenjati težine i zastavice svaki tjedan. Automatizirati model koji se još mijenja znači graditi scenarij koji odmah treba prepravljati.</div>
+  </div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+(function(){
+  var sels=[].slice.call(document.querySelectorAll('.crit')),
+      flags=[].slice.call(document.querySelectorAll('.flag')),
+      bar=document.getElementById('sbar'), num=document.getElementById('snum'),
+      verdict=document.getElementById('sverdict'), calc=document.getElementById('scalc');
+  function plural(n){
+    if(n===1) return '1 crvena zastavica';
+    if(n>=2 && n<=4) return n+' crvene zastavice';
+    return n+' crvenih zastavica';
+  }
+  function run(){
+    var chosen=sels.filter(function(s){return s.value!==''});
+    var fl=flags.filter(function(f){return f.checked}).length;
+    if(chosen.length<sels.length){
+      num.textContent='—';
+      bar.style.width='0%';
+      calc.textContent='';
+      verdict.className='note';
+      verdict.innerHTML='<strong>Odaberi svih pet kriterija.</strong> Nedostaje ih '+(sels.length-chosen.length)+
+        '. Ako neki kriterij ne možeš ocijeniti jer podatka nema — to je samo po sebi nalaz: prvo pitaj, pa ocijeni.';
+      return;
+    }
+    var total=0, wsum=0, lines=[];
+    sels.forEach(function(s){
+      var w=parseFloat(s.getAttribute('data-w')), v=parseFloat(s.value);
+      total+=w*v/100; wsum+=w;
+      lines.push(s.getAttribute('data-name')+' '+v+' × '+w+'% = '+(w*v/100).toFixed(1));
+    });
+    var score=Math.round(total*100/wsum);
+    num.textContent = fl>0 ? 'DQ' : score;
+    bar.style.width = (fl>0?100:score)+'%';
+    bar.style.background = fl>0 ? 'var(--rust)' : (score>=55?'var(--emerald)':(score>=35?'var(--amber)':'var(--rust)'));
+    calc.textContent = lines.join('   |   ') + '   →   ukupno ' + score;
+    var cls,txt;
+    if(fl>0){cls='note ru';txt='<strong>DISKVALIFICIRAN.</strong> Označeno je '+plural(fl)+'. Zastavica nadjačava rezultat ('+score+'). Odbij kratko i pristojno, bez opravdavanja — jedna rečenica i vrata ostaju otvorena.'}
+    else if(score>=75){cls='note em';txt='<strong>Razred A ('+score+').</strong> Poziv u roku 24 sata, vodi ga vlasnik ili najiskusniji u prodaji. Ponuda u roku tri dana. Ovakvih upita mjesečno nema mnogo — ne dopusti da čekaju.'}
+    else if(score>=55){cls='note em';txt='<strong>Razred B ('+score+').</strong> Poziv u roku tri radna dana, standardni proces. Ponuda nakon razgovora, ne prije.'}
+    else if(score>=35){cls='note';txt='<strong>Razred C ('+score+').</strong> Bez poziva. Ide u nurture sekvencu — koristan sadržaj svakih 10 do 14 dana. Provjeri ponovno za dva mjeseca.'}
+    else {cls='note ru';txt='<strong>Razred D ('+score+').</strong> Kratak pristojan odgovor s uputom na resurs ili na nekoga kome to odgovara. Bez ponude. Vrijeme uloženo ovdje uzeto je razredu A.'}
+    verdict.className=cls; verdict.innerHTML=txt;
+  }
+  sels.forEach(function(s){s.addEventListener('change',run)});
+  flags.forEach(function(f){f.addEventListener('change',run)});
+  run();
+})();
+</script>
+
+</div>
+</body>
+</html>

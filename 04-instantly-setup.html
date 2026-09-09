@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instantly Campaign Setup &mdash; Sve AI tajne, Modul 4</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 4</div>
+<h1>Instantly &mdash; od nule do prve kampanje</h1>
+<p class="lede">Deset koraka, checklista od dvanaest točaka koje moraš imati prije prvog maila, i tablica za rješavanje problema kad nešto ne radi. Redoslijed nije preporuka &mdash; preskočeni korak je razlog zbog kojeg kampanja padne.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>10 koraka</span><span>12 točaka</span><span>7 problema</span><span>Rujan 2026.</span></div>
+</header>
+
+<div class="note ru" style="margin-top:28px"><strong>Pravni okvir prije tehnike:</strong> hladni mail prema tvrtkama u EU nije zabranjen, ali je uređen. Piši na poslovne adrese, navedi tko si i odakle ti kontakt, ponudi odjavu u jednoj rečenici i poštuj ju odmah. Kupljene liste i privatne adrese su izvan toga &mdash; i tehnički i pravno.</div>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Zašto zagrijavanje nije formalnost</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <div class="prose" style="font-size:.96rem">
+      <p>Nova domena koja prvog dana pošalje pedeset mailova nepoznatim ljudima izgleda točno kao spam &mdash; jer se tako ponaša spam.</p>
+      <p>Zagrijavanje gradi povijest: mala količina, postupan rast, mailovi koji se otvaraju i na koje se odgovara. Nakon dva do tri tjedna primatelji te vide kao redovnog pošiljatelja.</p>
+      <p>Ovo je jedini korak koji se ne može ubrzati novcem. Zato ga svi preskoče &mdash; i zato većina prvih kampanja završi u spamu.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Dva do tri računa, mali volumen</h4>
+    <div class="prose" style="font-size:.94rem">
+      <p>Volumen se dijeli na više računa jer je jedan račun koji šalje mnogo sumnjiviji od tri koja šalju malo.</p>
+      <p>Počni namjerno nisko &mdash; nekoliko desetaka mailova dnevno ukupno, ne po računu &mdash; i povećavaj tjedno, prateći bounce i prijave.</p>
+    </div>
+    <div class="note"><strong>Provjeri aktualne limite:</strong> preporuke se mijenjaju kako se mijenjaju filteri kod Googlea i Microsofta. Ono što se ne mijenja: postupno je bolje od naglog, i manje je bolje od više.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>DNS zapisi</h2><p>Četiri zapisa. Bez prva tri kampanja ne može raditi, bez četvrtog radi loše.</p></div></div>
+<div class="tbl-scroll"><table><thead><tr><th>Zapis</th><th>Što je</th><th>Zašto važi</th></tr></thead><tbody><tr><td class="k">SPF</td><td>Popis servera kojima je dopušteno slati u ime tvoje domene.</td><td>Bez ispravnog SPF-a dio pošte ide direktno u spam. Postavlja se jedan TXT zapis.</td></tr><tr><td class="k">DKIM</td><td>Kriptografski potpis kojim primatelj provjerava da mail nije mijenjan.</td><td>Google i Microsoft ga generiraju sami &mdash; ti samo kopiraš zapis u DNS.</td></tr><tr><td class="k">DMARC</td><td>Pravilo što učiniti s poštom koja ne prođe SPF ili DKIM.</td><td>Počni s najblažom politikom pa pooštravaj. Bez DMARC-a ozbiljni primatelji te tretiraju kao sumnjivog.</td></tr><tr><td class="k">Custom tracking domena</td><td>Vlastita poddomena za praćenje umjesto zajedničke.</td><td>Zajedničku tracking domenu koriste tisuće pošiljatelja i većina je već na crnim listama.</td></tr></tbody></table></div>
+<div class="note em" style="margin-top:14px"><strong>Kako provjeriti da su ispravni:</strong> pošalji mail sa svoje nove adrese na Gmail adresu, otvori ga, pa u meniju odaberi prikaz izvornog koda. Tražiš tri puta riječ <span class="mono">PASS</span> &mdash; za SPF, DKIM i DMARC. Ako nešto piše <span class="mono">FAIL</span> ili <span class="mono">NONE</span>, tamo ti je problem.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Deset koraka</h2><p>Prva tri traju tjedne, ostalih sedam dane. Nema prečice kroz prvi dio.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Postavi domenu i zapise</h3></div><div class="item-badges"><span class="badge gy">1-2 dana, većina je čekanje da se DNS proširi</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Kupi sekundarnu domenu, postavi SPF, DKIM i DMARC, dodaj custom tracking poddomenu.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Dodaj pošiljateljske račune</h3></div><div class="item-badges"><span class="badge gy">30 minuta</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Dva do tri računa, povezana preko OAuth-a s Googleom ili Microsoftom. Popuni ime, fotografiju i potpis.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Uključi zagrijavanje</h3></div><div class="item-badges"><span class="badge gy">2-3 tjedna čekanja</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Ostavi ga da radi dva do tri tjedna. Za to vrijeme ne šalji hladne kampanje s tih računa.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Pripremi listu</h3></div><div class="item-badges"><span class="badge gy">2-3 sata za prvih par stotina</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Izvezi kontakte po svom ICP-u, pročisti ih i provjeri adrese. Ručno pogledaj deset.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Napiši sekvencu</h3></div><div class="item-badges"><span class="badge gy">1-2 sata</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Četiri maila kroz dvanaest dana. Uzmi predloške iz materijala 03 i prilagodi ih.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Postavi raspored i limite</h3></div><div class="item-badges"><span class="badge gy">15 minuta</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Radni dani, radno vrijeme primatelja, mali dnevni volumen po računu. Počni namjerno nisko.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Pošalji test sebi</h3></div><div class="item-badges"><span class="badge gy">20 minuta</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Pošalji cijelu sekvencu na svoju adresu i na jednu adresu na drugom servisu. Pročitaj na mobitelu.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Pusti prvih pedeset</h3></div><div class="item-badges"><span class="badge gy">3-5 dana</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Ne cijelu listu. Pedeset kontakata, pa stani i pogledaj brojeve.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Pročitaj odgovore i popravi</h3></div><div class="item-badges"><span class="badge gy">1 sat</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Odgovori ti točno kažu je li problem u listi, ponudi ili poruci.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Skaliraj postupno</h3></div><div class="item-badges"><span class="badge gy">kontinuirano</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Povećavaj volumen tjedno, ne dnevno. Prati bounce i prijave za spam.</p></div></div></article>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Checklista prije prvog maila</h2><p>Dvanaest točaka. Ako ih ne možeš sve označiti, još nije vrijeme za slanje.</p></div></div>
+<div class="card">
+  <div class="item-badges"><h4 style="flex:1 1 auto">Provjera spremnosti</h4><span class="count" id="klab"></span></div>
+  <div class="progressbar"><i id="kbar"></i></div>
+  <div><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Sekundarna domena za outreach</b><span>Ne šalji hladne mailove s domene na kojoj ti je glavna pošta. Kupi sličnu (.com, .eu, s crticom) i šalji s nje.</span><span style="color:var(--emerald)">Ako nešto ode po zlu, glavna domena ostaje čista. Ovo nije opcija, ovo je osiguranje.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>SPF, DKIM i DMARC postavljeni</b><span>Sva tri zapisa u DNS-u nove domene.</span><span style="color:var(--emerald)">Provjeri alatom za provjeru zapisa prije nego što dodaješ račun.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Dva do tri pošiljateljska računa</b><span>Ne jedan. Ne deset.</span><span style="color:var(--emerald)">Volumen se dijeli. Jedan račun koji šalje mnogo je sumnjiviji od tri koja šalju malo.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Profil izgleda kao pravi čovjek</b><span>Ime i prezime, fotografija, potpis s adresom i telefonom.</span><span style="color:var(--emerald)">Prazan profil je signal robota, i ljudima i filterima.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Zagrijavanje 2-3 tjedna prije prve kampanje</b><span>Uključi warmup i pusti ga da radi. Bez prečica.</span><span style="color:var(--emerald)">Ovo je korak koji svi preskoče i zbog kojeg većina kampanja padne.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Isključeno praćenje otvaranja</b><span>Pračenje otvaranja umetne piksel u mail i ruši isporučivost.</span><span style="color:var(--emerald)">Otvaranje se ionako sve slabije mjeri i ništa ne govori. Mjeri odgovore.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Bez linkova i privitaka u prvom mailu</b><span>Oboje ruše isporučivost. Link ide u treći mail, i to samo ako treba.</span><span style="color:var(--emerald)">Ako moraš poslati nešto, ponudi to i pošalji nakon što odgovore.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Čisti tekst, bez slika i HTML-a</b><span>Mail treba izgledati kao da ga je napisao čovjek u Gmailu.</span><span style="color:var(--emerald)">Formatirani newsletter u hladnom mailu je odmah prepoznat kao masovna pošta.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Lista pročišćena i provjerena</b><span>Samo provjerene adrese. Ručno pogledaj deset.</span><span style="color:var(--emerald)">Visok bounce je najbrži način da ti račun bude označen.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Ispravna vremenska zona i radni dani</b><span>Slanje samo radnim danom, u radno vrijeme primatelja.</span><span style="color:var(--emerald)">Mail koji stigne u subotu u 3 ujutro odaje automat.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Odjava u jednoj rečenici</b><span>Jasna mogućnost da kažu da ne žele više &mdash; i poštuj ju odmah.</span><span style="color:var(--emerald)">Zakonska obveza u EU, a i najbrži način da izbjegneš prijavu za spam.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Odgovori idu u sandučić koji čitaš</b><span>Provjeri gdje stižu odgovori prije nego što pošalješ prvu kampanju.</span><span style="color:var(--emerald)">Viđeno više puta: kampanja radi, odgovori stižu, nitko ih ne čita tri dana.</span></span></label></div>
+  <div class="note" id="kverdict"></div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">05</div><div class="txt"><h2>Što mjeriš</h2><p>Tri broja. Ostalo je šum.</p></div></div>
+<div class="grid g3">
+  <div class="card hero"><h4>Stopa odgovora</h4><div class="prose" style="font-size:.93rem"><p>Jedini broj koji stvarno govori radi li kampanja. Uključi i negativne odgovore &mdash; oni ti govore što popraviti.</p></div></div>
+  <div class="card"><h4>Bounce</h4><div class="prose" style="font-size:.93rem"><p>Drži ga nisko. Kad pređe nekoliko posto, zaustavi i očisti listu &mdash; posljedice se osjećaju još tjednima.</p></div></div>
+  <div class="card"><h4>Prijave za spam</h4><div class="prose" style="font-size:.93rem"><p>Bilo koja prijava je znak da lista ili tekst nisu dobri. Ovo se ne popravlja postavkama.</p></div></div>
+</div>
+<div class="note ru" style="margin-top:16px"><strong>Što <em>ne</em> mjeriti:</strong> stopu otvaranja. Pračenje otvaranja ruši isporučivost, a brojevi su ionako nepouzdani jer mail klijenti unaprijed učitavaju sadržaj. Isključi ga i mjeri odgovore.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">06</div><div class="txt"><h2>Kad nešto ne radi</h2><p>Nađi simptom, primijeni rješenje. Ne mijenjaj pet stvari odjednom &mdash; onda ne znaš što je pomoglo.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><h3>Bounce iznad 2-3%</h3></div><div class="item-badges"><span class="badge ru">Uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Najčešći uzrok:</b> Lista nije pročišćena ili su adrese stare.</p></div><div class="note"><strong>Što napraviti:</strong> Stani odmah. Ponovno provjeri adrese i izbaci sve nepotvrđene. Bounce šteti računu još tjednima nakon što prestaneš.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Mailovi završavaju u spamu</h3></div><div class="item-badges"><span class="badge ru">Uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Najčešći uzrok:</b> Najčešće: preskočeno zagrijavanje, uključeno praćenje otvaranja, linkovi u prvom mailu ili neispravni DNS zapisi.</p></div><div class="note"><strong>Što napraviti:</strong> Provjeri točno u tom redu. U 90% slučajeva je jedno od ta četiri.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Nula odgovora na pedeset mailova</h3></div><div class="item-badges"><span class="badge am">Uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Najčešći uzrok:</b> Lista ili ponuda, ne poruka.</p></div><div class="note"><strong>Što napraviti:</strong> Vrati se na ICP i napravi test od deset kontakata. Ako lista prođe, problem je u ponudi &mdash; bol koju opisuješ nije njihova.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Odgovori tipa &bdquo;nije za mene, probajte s&hellip;&ldquo;</h3></div><div class="item-badges"><span class="badge em">Uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Najčešći uzrok:</b> Prava tvrtka, pogrešna pozicija.</p></div><div class="note"><strong>Što napraviti:</strong> Promijeni titule u filterima. Ovaj odgovor je koristan &mdash; kaže ti točno gdje si promašio/promašila.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Odgovori su pristojni ali bez interesa</h3></div><div class="item-badges"><span class="badge am">Uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Najčešći uzrok:</b> Pogodio/pogodila si čovjeka, promašio/promašila problem.</p></div><div class="note"><strong>Što napraviti:</strong> Prepravi prvi mail tako da bol bude konkretnija. Pitaj tri postojeća klijenta kako bi oni to opisali.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Prijave za spam</h3></div><div class="item-badges"><span class="badge ru">Uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Najčešći uzrok:</b> Ili je lista kupljena, ili je poruka izgledala kao masovna pošiljka.</p></div><div class="note"><strong>Što napraviti:</strong> Zaustavi kampanju. Ovo se ne popravlja postavkama &mdash; popravlja se listom i tekstom.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Račun je suspendiran</h3></div><div class="item-badges"><span class="badge ru">Uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Najčešći uzrok:</b> Volumen prevelik prerano ili visok bounce.</p></div><div class="note"><strong>Što napraviti:</strong> Ne otvaraj novi račun na istoj domeni. Riješi uzrok, pa čekaj.</div></div></article>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+(function(){
+  var chks=[].slice.call(document.querySelectorAll('.kchk')),bar=document.getElementById('kbar'),
+      lab=document.getElementById('klab'),v=document.getElementById('kverdict');
+  function prog(){
+    var n=chks.filter(function(c){return c.checked}).length;
+    if(bar)bar.style.width=(n/chks.length*100)+'%';
+    if(lab)lab.textContent=n+' od '+chks.length;
+    if(v){
+      if(n===chks.length){v.className='note em';v.innerHTML='<strong>Spremno za prvih pedeset.</strong> Pošalji pedeset kontakata, stani i pogledaj brojeve prije nego što nastaviš.'}
+      else if(n>=9){v.className='note';v.innerHTML='<strong>Blizu.</strong> Riješi ostalo prije prve kampanje — svaka neoznačena točka je razlog zbog kojeg kampanje padaju.'}
+      else {v.className='note ru';v.innerHTML='<strong>Ne šalji još.</strong> Ispod devet zadovoljenih točaka kampanja najvjerojatnije završi u spamu, a račun nosi posljedice tjednima.'}
+    }
+  }
+  chks.forEach(function(c){c.addEventListener('change',prog)});prog();
+})();
+</script>
+
+</div>
+</body>
+</html>

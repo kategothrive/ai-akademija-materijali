@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cold Email Template Pack &mdash; Sve AI tajne, Modul 4</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 4</div>
+<h1>Cold Email Template Pack</h1>
+<p class="lede">Deset sekvenci po industrijama, četiri maila u svakoj, razmaknutih kroz dvanaest dana. Svaki mail dolazi s objašnjenjem zašto je napisan baš tako &mdash; jer prepisati tuđi mail nije isto što i razumjeti ga.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>10 sekvenci</span><span>40 mailova</span><span>12 dana po sekvenci</span><span>Rujan 2026.</span></div>
+</header>
+
+<div class="note ru" style="margin-top:28px"><strong>Prije nego pošalješ ijedan:</strong> hladni mail prema tvrtkama u EU podliježe pravilima o zaštiti podataka i elektroničkoj komunikaciji. Piši na poslovne adrese, navedi tko si i odakle ti kontakt, omogući odjavu jednom rečenicom i poštuj je odmah. Ovi predlošci su napisani tako &mdash; nemoj im maknuti potpis i kontekst.</div>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Anatomija sekvence koja radi</h2><p>Četiri maila, četiri različita posla. Ako sva četiri rade isto, sekvenca ne radi.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Dan 0 &mdash; problem, ne ponuda</h4>
+    <div class="prose" style="font-size:.94rem">
+      <p>Osamdeset posto teksta o njima, dvadeset o tebi. Bez uvoda o sebi, bez povijesti tvrtke.</p>
+      <p>Subject: mala slova, tri do pet riječi, izgleda kao poruka kolege. Nikad &bdquo;Poslovna suradnja&ldquo; ili &bdquo;Prijedlog partnerstva&ldquo;.</p>
+      <p>Jedan poziv na akciju. Petnaest minuta, ne sat.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Dan 3 &mdash; pitanje, ne ponavljanje</h4>
+    <div class="prose" style="font-size:.94rem">
+      <p>Najviše tri rečenice. Ne ponavljaj sadržaj prvog maila &mdash; postavi jedno konkretno pitanje.</p>
+      <p>Idealno pitanje traži broj: koliko puta tjedno, koliko dana, koliko upita. Broj tjera na kratki mentalni izračun, a izračun je ono što uvjerava.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Dan 7 &mdash; mehanizam</h4>
+    <div class="prose" style="font-size:.94rem">
+      <p>Ovdje daješ nešto bez traženja: kako to konkretno izgleda, gdje se najviše dobije, što se <em>ne</em> dira.</p>
+      <p>Ponudi manji zahtjev od poziva &mdash; snimku, primjer, opis. Ljudi kažu da na tri puta lakše nego na sat vremena.</p>
+    </div>
+  </div>
+  <div class="card hero">
+    <h4>Dan 12 &mdash; zatvaranje</h4>
+    <div class="prose" style="font-size:.94rem">
+      <p>Ovo je mail s najvećom stopom odgovora u cijeloj sekvenci, i to redovito.</p>
+      <p>Bez ljutnje, bez pasivne agresije, bez traženja razloga. Zatvaraš temu i ostavljaš vrata otvorena.</p>
+      <p>Kad ljudima daš dopuštenje da kažu ne, često kažu pravi razlog &mdash; a ponekad i da.</p>
+    </div>
+  </div>
+</div>
+<div class="note em" style="margin-top:16px"><strong>Jedno pravilo koje nadjačava sve predloške:</strong> jedna rečenica koja dokazuje da si pogledao/pogledala baš njih vrijedi više od cijelog ostatka maila. Nedavna objava, promjena u tvrtki, novi pogon, natječaj koji su dobili. Trideset sekundi istraživanja mijenja stopu odgovora više od bilo koje formulacije.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Deset sekvenci</h2><p>Filtriraj po industriji. Sve u uglatim zagradama zamijeni prije slanja &mdash; naročito ime i primjer sličnog klijenta.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži &mdash; npr. narudžbe, izvještaji, termini, dokumenti&hellip;" aria-label="Traži sekvencu">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Sve<span class="n">10</span></button><button class="chip" data-cat="proizvodnja" aria-pressed="false">Proizvodnja</button><button class="chip" data-cat="logistika" aria-pressed="false">Logistika</button><button class="chip" data-cat="racunovodstvo" aria-pressed="false">Računovodstvo</button><button class="chip" data-cat="it" aria-pressed="false">IT</button><button class="chip" data-cat="trgovina" aria-pressed="false">Trgovina</button><button class="chip" data-cat="zdravstvo" aria-pressed="false">Zdravstvo</button><button class="chip" data-cat="pravo" aria-pressed="false">Pravo</button><button class="chip" data-cat="agencije" aria-pressed="false">Agencije</button><button class="chip" data-cat="horeca" aria-pressed="false">HoReCa</button><button class="chip" data-cat="edukacija" aria-pressed="false">Edukacija</button></div>
+</div>
+<article class="item" data-cat="proizvodnja" data-search="proizvodnja — papirnati radni nalozi radni nalozi se vode ručno, na papiru ili u excelu, pa nitko u realnom vremenu ne zna gdje je koji nalog. voditelj proizvodnje, direktor, vlasnik u tvrtki s 20-150 zaposlenih poštovani [ime],
+
+radim s proizvodnim tvrtkama vaše veličine na jednoj konkretnoj stvari: da se u svakom trenutku zna gdje je koji radni nalog, bez zvanja po pogonu.
+
+kod [slična tvrtka — bez naziva, npr. &#x27;metaloprerađivača s 60 zaposlenih&#x27;] to je značilo 6 sati tjedno manje na traženju informacija i nula naloga koji se izgube između smjena.
+
+imate li 15 minuta ovaj tjedan da vidim kako to danas radite kod vas?
+
+[potpis] [ime],
+
+jedno pitanje, pa vas ne gnjavim dalje: koliko vam puta tjedno netko dođe pitati u kojoj je fazi neki nalog?
+
+ako je odgovor &#x27;stalno&#x27; — to je točno ono što rješavam.
+
+[potpis] [ime],
+
+nisam siguran je li ovo tema za vas, pa evo konkretno kako izgleda:
+
+nalog se unese jednom. svaka promjena statusa ide skenom koda ili jednim klikom na tabletu u pogonu. ured u svakom trenutku vidi popis naloga i gdje zapinje. bez novog erp-a i bez mijenjanja načina rada u pogonu.
+
+postavljanje je 2-3 tjedna. ako želite vidjeti kako izgleda, pošaljem vam snimku od 4 minute.
+
+[potpis] [ime],
+
+pretpostavljam da ovo sada nije prioritet — potpuno u redu.
+
+zatvaram temu s moje strane. ako se kroz koji mjesec pojavi potreba, javite se i nastavljamo odakle smo stali.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Proizvodnja — papirnati radni nalozi</h3></div><div class="item-badges"><span class="badge em">4 maila / 12 dana</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Bol</td><td>Radni nalozi se vode ručno, na papiru ili u Excelu, pa nitko u realnom vremenu ne zna gdje je koji nalog.</td></tr><tr><td class="k">Kome</td><td>Voditelj proizvodnje, direktor, vlasnik u tvrtki s 20-150 zaposlenih</td></tr></tbody></table></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 0 &mdash; prvi kontakt</span><span class="badge gy">Subject: nalozi u Excelu</span></div><pre class="p">Poštovani <span class="f">[IME</span>],
+
+Radim s proizvodnim tvrtkama vaše veličine na jednoj konkretnoj stvari: da se u svakom trenutku zna gdje je koji radni nalog, bez zvanja po pogonu.
+
+Kod <span class="f">[SLIČNA TVRTKA — bez naziva, npr. &#x27;metaloprerađivača s 60 zaposlenih&#x27;</span>] to je značilo 6 sati tjedno manje na traženju informacija i nula naloga koji se izgube između smjena.
+
+Imate li 15 minuta ovaj tjedan da vidim kako to danas radite kod vas?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Ne spominji AI u prvom mailu. Spominješ problem i broj. AI je kako, ne što.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 3 &mdash; follow-up</span><span class="badge gy">Subject: Re: nalozi u Excelu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Jedno pitanje, pa vas ne gnjavim dalje: koliko vam puta tjedno netko dođe pitati u kojoj je fazi neki nalog?
+
+Ako je odgovor &#x27;stalno&#x27; — to je točno ono što rješavam.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Tri rečenice. Follow-up koji pita, ne ponavlja.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 7 &mdash; vrijednost</span><span class="badge gy">Subject: kako to izgleda u praksi</span></div><pre class="p"><span class="f">[IME</span>],
+
+Nisam siguran je li ovo tema za vas, pa evo konkretno kako izgleda:
+
+Nalog se unese jednom. Svaka promjena statusa ide skenom koda ili jednim klikom na tabletu u pogonu. Ured u svakom trenutku vidi popis naloga i gdje zapinje. Bez novog ERP-a i bez mijenjanja načina rada u pogonu.
+
+Postavljanje je 2-3 tjedna. Ako želite vidjeti kako izgleda, pošaljem vam snimku od 4 minute.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Treći mail daje vrijednost i konkretan mehanizam. Snimka je manji zahtjev od poziva.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 12 &mdash; zatvaranje</span><span class="badge gy">Subject: zatvaram temu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Pretpostavljam da ovo sada nije prioritet — potpuno u redu.
+
+Zatvaram temu s moje strane. Ako se kroz koji mjesec pojavi potreba, javite se i nastavljamo odakle smo stali.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Breakup mail bez ljutnje dobiva najviše odgovora u cijeloj sekvenci. Ne traži razlog.</div></div></div></article><article class="item" data-cat="logistika" data-search="logistika i transport — dokumentacija vozni nalozi, cmr-ovi i otpremnice obrađuju se ručno, a fakturiranje kasni jer papiri stižu neuredno. voditelj transporta, direktor špedicije poštovani [ime],
+
+kod špedicija i prijevoznika najčešće naiđem na isti uski grlo: vozila su odradila posao, a faktura čeka jer papiri stižu neuredno i netko ih mora prepisati.
+
+radim na tome da se dokument fotografira, podaci sami izađu u tablicu, a fakturiranje krene isti dan.
+
+imate li 15 minuta da vidim kako to danas ide kod vas?
+
+[potpis] [ime],
+
+koliko dana u prosjeku prođe od istovara do izdane fakture?
+
+ako je više od tri, tu je novac koji vam stoji bez razloga.
+
+[potpis] [ime],
+
+tri mjesta na kojima se kod prijevoznika gubi najviše vremena:
+
+1. prepisivanje podataka s papira u sustav
+2. traženje dokumenta koji je negdje u mailu
+3. provjera je li sve naplaćeno
+
+sva tri se rješavaju istim postavljanjem. ako želite, pošaljem vam kratak opis kako to izgleda kod prijevoznika s 15 vozila.
+
+[potpis] [ime],
+
+ne javljam se više po ovoj temi.
+
+ako se kroz koji mjesec pokaže da je fakturiranje i dalje usko grlo, znate gdje sam.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Logistika i transport — dokumentacija</h3></div><div class="item-badges"><span class="badge em">4 maila / 12 dana</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Bol</td><td>Vozni nalozi, CMR-ovi i otpremnice obrađuju se ručno, a fakturiranje kasni jer papiri stižu neuredno.</td></tr><tr><td class="k">Kome</td><td>Voditelj transporta, direktor špedicije</td></tr></tbody></table></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 0 &mdash; prvi kontakt</span><span class="badge gy">Subject: CMR-ovi i fakturiranje</span></div><pre class="p">Poštovani <span class="f">[IME</span>],
+
+Kod špedicija i prijevoznika najčešće naiđem na isti uski grlo: vozila su odradila posao, a faktura čeka jer papiri stižu neuredno i netko ih mora prepisati.
+
+Radim na tome da se dokument fotografira, podaci sami izađu u tablicu, a fakturiranje krene isti dan.
+
+Imate li 15 minuta da vidim kako to danas ide kod vas?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Cash flow je jezik koji vlasnik prijevozničke firme razumije odmah.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 3 &mdash; follow-up</span><span class="badge gy">Subject: Re: CMR-ovi i fakturiranje</span></div><pre class="p"><span class="f">[IME</span>],
+
+Koliko dana u prosjeku prođe od istovara do izdane fakture?
+
+Ako je više od tri, tu je novac koji vam stoji bez razloga.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Pitanje s brojem. Prisiljava na kratki mentalni izračun.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 7 &mdash; vrijednost</span><span class="badge gy">Subject: gdje se najčešće gubi vrijeme</span></div><pre class="p"><span class="f">[IME</span>],
+
+Tri mjesta na kojima se kod prijevoznika gubi najviše vremena:
+
+1. Prepisivanje podataka s papira u sustav
+2. Traženje dokumenta koji je negdje u mailu
+3. Provjera je li sve naplaćeno
+
+Sva tri se rješavaju istim postavljanjem. Ako želite, pošaljem vam kratak opis kako to izgleda kod prijevoznika s 15 vozila.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Lista od tri je najbolji format za treći mail. Lako se skenira.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 12 &mdash; zatvaranje</span><span class="badge gy">Subject: zatvaram temu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Ne javljam se više po ovoj temi.
+
+Ako se kroz koji mjesec pokaže da je fakturiranje i dalje usko grlo, znate gdje sam.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Kratko. Dostojanstveno.</div></div></div></article><article class="item" data-cat="racunovodstvo" data-search="računovodstveni servisi — ista pitanja klijenti mailom pitaju istih dvadeset stvari, a odgovaranje pojede pola dana svakom u uredu. vlasnik knjigovodstvenog servisa poštovani [ime],
+
+pitanje za vas: koliko vremena vaš ured dnevno potroši na mailove tipa &#x27;je li stigao izvod&#x27;, &#x27;koliko je doprinos&#x27;, &#x27;jeste li predali pdv&#x27;?
+
+kod servisa s kojima radim to je bilo 2-3 sata dnevno. sada na većinu tih upita odgovor stiže a da nitko iz ureda ne otvori mail.
+
+15 minuta da vam pokažem kako?
+
+[potpis] [ime],
+
+znam da je rujan gust, pa kratko: ovo se postavlja u dva tjedna i ne mijenja ništa u vašem programu.
+
+vrijedi li 15 minuta?
+
+[potpis] [ime],
+
+da razjasnim, jer to je prvo pitanje koje dobijem:
+
+ne mijenja se vaš računovodstveni program. ne mijenja se način rada. ne ide ništa van vašeg sustava bez vašeg odobrenja.
+
+dodaje se samo sloj koji odgovara na ponavljajuća pitanja klijenata iz onoga što već imate zapisano.
+
+ako želite, pošaljem primjer kako izgledaju ti odgovori.
+
+[potpis] [ime],
+
+zatvaram ovu temu — pretpostavljam da nije trenutak.
+
+ako se poslije sezone pokaže drukčije, javite se.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Računovodstveni servisi — ista pitanja</h3></div><div class="item-badges"><span class="badge em">4 maila / 12 dana</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Bol</td><td>Klijenti mailom pitaju istih dvadeset stvari, a odgovaranje pojede pola dana svakom u uredu.</td></tr><tr><td class="k">Kome</td><td>Vlasnik knjigovodstvenog servisa</td></tr></tbody></table></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 0 &mdash; prvi kontakt</span><span class="badge gy">Subject: 20 istih pitanja</span></div><pre class="p">Poštovani <span class="f">[IME</span>],
+
+Pitanje za vas: koliko vremena vaš ured dnevno potroši na mailove tipa &#x27;je li stigao izvod&#x27;, &#x27;koliko je doprinos&#x27;, &#x27;jeste li predali PDV&#x27;?
+
+Kod servisa s kojima radim to je bilo 2-3 sata dnevno. Sada na većinu tih upita odgovor stiže a da nitko iz ureda ne otvori mail.
+
+15 minuta da vam pokažem kako?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Otvaranje pitanjem na koje je odgovor &#x27;previše&#x27;. Radi jer je istina.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 3 &mdash; follow-up</span><span class="badge gy">Subject: Re: 20 istih pitanja</span></div><pre class="p"><span class="f">[IME</span>],
+
+Znam da je rujan gust, pa kratko: ovo se postavlja u dva tjedna i ne mijenja ništa u vašem programu.
+
+Vrijedi li 15 minuta?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Sezonski kontekst pokazuje da pišeš čovjeku, ne listi.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 7 &mdash; vrijednost</span><span class="badge gy">Subject: što se ne dira</span></div><pre class="p"><span class="f">[IME</span>],
+
+Da razjasnim, jer to je prvo pitanje koje dobijem:
+
+Ne mijenja se vaš računovodstveni program. Ne mijenja se način rada. Ne ide ništa van vašeg sustava bez vašeg odobrenja.
+
+Dodaje se samo sloj koji odgovara na ponavljajuća pitanja klijenata iz onoga što već imate zapisano.
+
+Ako želite, pošaljem primjer kako izgledaju ti odgovori.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Kod knjigovođa je strah od promjene sustava veći od boli. Prvo skloni strah.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 12 &mdash; zatvaranje</span><span class="badge gy">Subject: zatvaram temu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Zatvaram ovu temu — pretpostavljam da nije trenutak.
+
+Ako se poslije sezone pokaže drukčije, javite se.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div></div></div></article><article class="item" data-cat="it" data-search="it i software house — nekvalificirani upiti upiti dolaze s weba, ali polovica nema ni budžet ni rok, a netko iz tima na svaki potroši sat. vlasnik ili voditelj prodaje u software houseu s 10-50 ljudi poštovani [ime],
+
+kod software housea vaše veličine obično je isto: upita ima dovoljno, ali polovica nema ni budžet ni odlučitelja, a netko iz tima na svaki potroši sat prije nego što to shvati.
+
+postavljam kvalifikaciju koja svaki upit ocijeni prije nego što dođe do vašeg tima — s obrazloženjem, ne samo s ocjenom.
+
+imate li 15 minuta ovaj tjedan?
+
+[potpis] [ime],
+
+koliko upita mjesečno dobijete, i koliko ih na kraju postane ponuda?
+
+ako je omjer gori od 1:5, kvalifikacija se isplati prvi mjesec.
+
+[potpis] [ime],
+
+ukratko kako to izgleda:
+
+upit se ocjenjuje po pet kriterija — poklapanje, budžet, ovlast, rok, veličina. svaki s dokazom iz teksta upita, ne s pretpostavkom. rezultat je razred i tri pitanja koja treba postaviti prije nego što se uloži vrijeme u ponudu.
+
+sve što ne može ocijeniti, izričito kaže da ne zna. to je bitno — inače dobijete optimistične ocjene.
+
+da pošaljem primjer na jednom vašem upitu?
+
+[potpis] [ime],
+
+ne gnjavim više.
+
+ako se pokaže da vam kvalifikacija ipak treba, ponuda za probu na jednom vašem upitu stoji.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>IT i software house — nekvalificirani upiti</h3></div><div class="item-badges"><span class="badge em">4 maila / 12 dana</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Bol</td><td>Upiti dolaze s weba, ali polovica nema ni budžet ni rok, a netko iz tima na svaki potroši sat.</td></tr><tr><td class="k">Kome</td><td>Vlasnik ili voditelj prodaje u software houseu s 10-50 ljudi</td></tr></tbody></table></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 0 &mdash; prvi kontakt</span><span class="badge gy">Subject: upiti koji pojedu sat, a nisu ništa</span></div><pre class="p">Poštovani <span class="f">[IME</span>],
+
+Kod software housea vaše veličine obično je isto: upita ima dovoljno, ali polovica nema ni budžet ni odlučitelja, a netko iz tima na svaki potroši sat prije nego što to shvati.
+
+Postavljam kvalifikaciju koja svaki upit ocijeni prije nego što dođe do vašeg tima — s obrazloženjem, ne samo s ocjenom.
+
+Imate li 15 minuta ovaj tjedan?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Tehničkoj publici pišeš mehanizam, ne obećanje.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 3 &mdash; follow-up</span><span class="badge gy">Subject: Re: upiti koji pojedu sat</span></div><pre class="p"><span class="f">[IME</span>],
+
+Koliko upita mjesečno dobijete, i koliko ih na kraju postane ponuda?
+
+Ako je omjer gori od 1:5, kvalifikacija se isplati prvi mjesec.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Traži broj. Tehnički ljudi vole izračun.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 7 &mdash; vrijednost</span><span class="badge gy">Subject: kako radi kvalifikacija</span></div><pre class="p"><span class="f">[IME</span>],
+
+Ukratko kako to izgleda:
+
+Upit se ocjenjuje po pet kriterija — poklapanje, budžet, ovlast, rok, veličina. Svaki s dokazom iz teksta upita, ne s pretpostavkom. Rezultat je razred i tri pitanja koja treba postaviti prije nego što se uloži vrijeme u ponudu.
+
+Sve što ne može ocijeniti, izričito kaže da ne zna. To je bitno — inače dobijete optimistične ocjene.
+
+Da pošaljem primjer na jednom vašem upitu?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Zadnja rečenica je najjača ponuda u cijeloj sekvenci: besplatan dokaz na njihovim podacima.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 12 &mdash; zatvaranje</span><span class="badge gy">Subject: zatvaram temu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Ne gnjavim više.
+
+Ako se pokaže da vam kvalifikacija ipak treba, ponuda za probu na jednom vašem upitu stoji.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div></div></div></article><article class="item" data-cat="trgovina" data-search="trgovina na veliko — narudžbe mailom narudžbe stižu mailom u deset različitih formata i netko ih prepisuje u sustav. voditelj prodaje ili nabave u veletrgovini poštovani [ime],
+
+ako vam narudžbe stižu mailom — netko ih vjerojatno prepisuje u sustav. tablica, pdf, tekst u mailu, ponekad slika.
+
+radim na tome da se to prepisivanje makne: narudžba se pročita iz maila u bilo kojem formatu i pripremi za unos, s označenim onim što ne izgleda uredno.
+
+15 minuta da vidim kako to danas ide kod vas?
+
+[potpis] [ime],
+
+koliko narudžbi dnevno prođe kroz ruke, i tko ih unosi?
+
+ako je odgovor &#x27;jedna osoba i to joj je pola dana&#x27; — vrijedi 15 minuta.
+
+[potpis] [ime],
+
+prvo pitanje koje uvijek dobijem: što ako pogriješi?
+
+zato ništa ne ide u sustav samo. priprema se unos, a vaša osoba potvrđuje. sve što je neuobičajeno — količina koja odudara, artikl kojeg nema, nejasan format — izdvoji se posebno umjesto da se pogodi.
+
+prepisivanje nestaje, kontrola ostaje.
+
+ako želite, pokažem na tri vaše stvarne narudžbe.
+
+[potpis] [ime],
+
+zatvaram temu.
+
+ako kroz koji mjesec bude aktualno, javite se — ponuda za probu na tri narudžbe vrijedi i tada.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Trgovina na veliko — narudžbe mailom</h3></div><div class="item-badges"><span class="badge em">4 maila / 12 dana</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Bol</td><td>Narudžbe stižu mailom u deset različitih formata i netko ih prepisuje u sustav.</td></tr><tr><td class="k">Kome</td><td>Voditelj prodaje ili nabave u veletrgovini</td></tr></tbody></table></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 0 &mdash; prvi kontakt</span><span class="badge gy">Subject: narudžbe u deset formata</span></div><pre class="p">Poštovani <span class="f">[IME</span>],
+
+Ako vam narudžbe stižu mailom — netko ih vjerojatno prepisuje u sustav. Tablica, PDF, tekst u mailu, ponekad slika.
+
+Radim na tome da se to prepisivanje makne: narudžba se pročita iz maila u bilo kojem formatu i pripremi za unos, s označenim onim što ne izgleda uredno.
+
+15 minuta da vidim kako to danas ide kod vas?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Nabroji formate. Time pokazuješ da poznaješ njihov stvarni dan.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 3 &mdash; follow-up</span><span class="badge gy">Subject: Re: narudžbe u deset formata</span></div><pre class="p"><span class="f">[IME</span>],
+
+Koliko narudžbi dnevno prođe kroz ruke, i tko ih unosi?
+
+Ako je odgovor &#x27;jedna osoba i to joj je pola dana&#x27; — vrijedi 15 minuta.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Kratko i s konkretnim scenarijem u pitanju.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 7 &mdash; vrijednost</span><span class="badge gy">Subject: što se događa s greškama</span></div><pre class="p"><span class="f">[IME</span>],
+
+Prvo pitanje koje uvijek dobijem: što ako pogriješi?
+
+Zato ništa ne ide u sustav samo. Priprema se unos, a vaša osoba potvrđuje. Sve što je neuobičajeno — količina koja odudara, artikl kojeg nema, nejasan format — izdvoji se posebno umjesto da se pogodi.
+
+Prepisivanje nestaje, kontrola ostaje.
+
+Ako želite, pokažem na tri vaše stvarne narudžbe.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Odgovor na neizgovoreni prigovor. Ovo je najvažniji mail u sekvenci za operativne ljude.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 12 &mdash; zatvaranje</span><span class="badge gy">Subject: zatvaram temu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Zatvaram temu.
+
+Ako kroz koji mjesec bude aktualno, javite se — ponuda za probu na tri narudžbe vrijedi i tada.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div></div></div></article><article class="item" data-cat="zdravstvo" data-search="privatne poliklinike — naručivanje recepcija pola dana provodi na telefonu s naručivanjem i podsjetnicima, a ipak ima praznih termina. voditelj poliklinike, vlasnik ordinacije poštovani [ime],
+
+kod poliklinika obično postoje dva odvojena problema koja imaju isti uzrok: recepcija je pola dana na telefonu, a u rasporedu ipak ostaju prazni termini.
+
+radim na tome da se naručivanje i podsjetnici odvijaju bez telefona, a otkazani termin automatski ponudi sljedećem na listi.
+
+imate li 15 minuta ovaj tjedan?
+
+[potpis] [ime],
+
+koliko termina mjesečno ostane neiskorišteno zbog otkazivanja u zadnji čas?
+
+svaki od njih je prihod koji je već bio dogovoren.
+
+[potpis] [ime],
+
+ako bi vas zanimalo, ovo se radi u tri koraka:
+
+1. podsjetnici — najmanji zahvat, najveći učinak na nedolaske
+2. lista čekanja koja se sama javi kad se termin oslobodi
+3. naručivanje bez telefona, za one koji to žele
+
+prvi korak se postavi u tjedan dana i vidi se odmah.
+
+da pošaljem kratak opis?
+
+[potpis] [ime],
+
+ne javljam se više po ovome.
+
+ako se pokaže da je lista čekanja tema, znate gdje sam.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Privatne poliklinike — naručivanje</h3></div><div class="item-badges"><span class="badge em">4 maila / 12 dana</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Bol</td><td>Recepcija pola dana provodi na telefonu s naručivanjem i podsjetnicima, a ipak ima praznih termina.</td></tr><tr><td class="k">Kome</td><td>Voditelj poliklinike, vlasnik ordinacije</td></tr></tbody></table></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 0 &mdash; prvi kontakt</span><span class="badge gy">Subject: prazni termini i telefon koji zvoni</span></div><pre class="p">Poštovani <span class="f">[IME</span>],
+
+Kod poliklinika obično postoje dva odvojena problema koja imaju isti uzrok: recepcija je pola dana na telefonu, a u rasporedu ipak ostaju prazni termini.
+
+Radim na tome da se naručivanje i podsjetnici odvijaju bez telefona, a otkazani termin automatski ponudi sljedećem na listi.
+
+Imate li 15 minuta ovaj tjedan?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Dva problema, jedan uzrok. Ovo otvaranje radi jer pokazuje da razumiješ vezu.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 3 &mdash; follow-up</span><span class="badge gy">Subject: Re: prazni termini</span></div><pre class="p"><span class="f">[IME</span>],
+
+Koliko termina mjesečno ostane neiskorišteno zbog otkazivanja u zadnji čas?
+
+Svaki od njih je prihod koji je već bio dogovoren.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Prevedi problem u novac koji je već bio na stolu.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 7 &mdash; vrijednost</span><span class="badge gy">Subject: redoslijed postavljanja</span></div><pre class="p"><span class="f">[IME</span>],
+
+Ako bi vas zanimalo, ovo se radi u tri koraka:
+
+1. Podsjetnici — najmanji zahvat, najveći učinak na nedolaske
+2. Lista čekanja koja se sama javi kad se termin oslobodi
+3. Naručivanje bez telefona, za one koji to žele
+
+Prvi korak se postavi u tjedan dana i vidi se odmah.
+
+Da pošaljem kratak opis?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Postupno uvođenje smanjuje strah kod ustanova gdje je promjena rizik.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 12 &mdash; zatvaranje</span><span class="badge gy">Subject: zatvaram temu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Ne javljam se više po ovome.
+
+Ako se pokaže da je lista čekanja tema, znate gdje sam.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div></div></div></article><article class="item" data-cat="pravo" data-search="odvjetnički i konzultantski uredi — dokumenti pregled dugih ugovora i dokumentacije pojede sate koji se ne mogu naplatiti po punoj satnici. partner u uredu, samostalni konzultant poštovani [ime],
+
+kod ureda vaše veličine najskuplji je sat proveden u prvom čitanju dokumenta — nužan je, a teško se naplaćuje punom satnicom.
+
+radim na tome da to prvo čitanje bude pripremljeno: sažetak, rokovi i obveze, rizične klauzule s naznakom mjesta u dokumentu. vi onda čitate ono što je važno.
+
+imate li 15 minuta ovaj tjedan?
+
+[potpis] [ime],
+
+da razjasnim jer je to prvo pitanje: ovo ne daje pravno mišljenje i ne zamjenjuje vaš pregled.
+
+priprema materijal. odluka i potpis ostaju vaši.
+
+vrijedi li 15 minuta?
+
+[potpis] [ime],
+
+iz iskustva, najviše se dobije na tri mjesta:
+
+prvo čitanje opsežne dokumentacije. usporedba verzija ugovora. priprema sažetka za klijenta koji ne čita cijeli dokument.
+
+sve troje su sati koje danas radite, a naplaćujete ih teško.
+
+ako želite, pokažem na jednom anonimiziranom dokumentu.
+
+[potpis] [ime],
+
+zatvaram temu s moje strane.
+
+ako kroz koji mjesec bude aktualno, javite se.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Odvjetnički i konzultantski uredi — dokumenti</h3></div><div class="item-badges"><span class="badge em">4 maila / 12 dana</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Bol</td><td>Pregled dugih ugovora i dokumentacije pojede sate koji se ne mogu naplatiti po punoj satnici.</td></tr><tr><td class="k">Kome</td><td>Partner u uredu, samostalni konzultant</td></tr></tbody></table></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 0 &mdash; prvi kontakt</span><span class="badge gy">Subject: sati koji se ne naplaćuju punom satnicom</span></div><pre class="p">Poštovani <span class="f">[IME</span>],
+
+Kod ureda vaše veličine najskuplji je sat proveden u prvom čitanju dokumenta — nužan je, a teško se naplaćuje punom satnicom.
+
+Radim na tome da to prvo čitanje bude pripremljeno: sažetak, rokovi i obveze, rizične klauzule s naznakom mjesta u dokumentu. Vi onda čitate ono što je važno.
+
+Imate li 15 minuta ovaj tjedan?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Ne obećavaj zamjenu stručnjaka. Obećavaj pripremu. Kod pravnika je to razlika između poziva i briše.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 3 &mdash; follow-up</span><span class="badge gy">Subject: Re: prvo čitanje</span></div><pre class="p"><span class="f">[IME</span>],
+
+Da razjasnim jer je to prvo pitanje: ovo ne daje pravno mišljenje i ne zamjenjuje vaš pregled.
+
+Priprema materijal. Odluka i potpis ostaju vaši.
+
+Vrijedi li 15 minuta?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Kod regulirane struke odgovori na prigovor prije nego što ga postave.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 7 &mdash; vrijednost</span><span class="badge gy">Subject: gdje se najviše dobije</span></div><pre class="p"><span class="f">[IME</span>],
+
+Iz iskustva, najviše se dobije na tri mjesta:
+
+Prvo čitanje opsežne dokumentacije. Usporedba verzija ugovora. Priprema sažetka za klijenta koji ne čita cijeli dokument.
+
+Sve troje su sati koje danas radite, a naplaćujete ih teško.
+
+Ako želite, pokažem na jednom anonimiziranom dokumentu.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Anonimiziran dokument je ključna riječ. Bez nje pravnik neće ni razmisliti.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 12 &mdash; zatvaranje</span><span class="badge gy">Subject: zatvaram temu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Zatvaram temu s moje strane.
+
+Ako kroz koji mjesec bude aktualno, javite se.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div></div></div></article><article class="item" data-cat="agencije" data-search="agencije — izvještavanje klijentima mjesečni izvještaji klijentima pojedu nekoliko dana, a klijent ih pročita u pet minuta. vlasnik marketinške, dizajnerske ili pr agencije poštovani [ime],
+
+kod agencija s deset i više klijenata mjesečni izvještaji obično pojedu dva do tri dana — a klijent ih pročita u pet minuta.
+
+radim na tome da se izvještaj sastavi iz podataka koje već imate, u vašem formatu, s nalazima i preporukama — a vi ga pročitate i potpišete.
+
+imate li 15 minuta ovaj tjedan?
+
+[potpis] [ime],
+
+koliko klijenata izvještavate mjesečno?
+
+pomnožite s vremenom po izvještaju — to je broj koji obično uvjeri.
+
+[potpis] [ime],
+
+da bude jasno što se mijenja, a što ne:
+
+nalaz i preporuka ostaju vaši — to je ono za što vas klijent plaća. ono što nestaje je slaganje brojeva, prepisivanje u predložak i pisanje istih rečenica dvanaest puta.
+
+prvi izvještaj postavimo zajedno, ostali idu po istom kalupu.
+
+da pošaljem primjer na vašem formatu?
+
+[potpis] [ime],
+
+ne javljam se više.
+
+ako se u nekom mjesecu izvještaji opet oduže, znate gdje sam.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Agencije — izvještavanje klijentima</h3></div><div class="item-badges"><span class="badge em">4 maila / 12 dana</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Bol</td><td>Mjesečni izvještaji klijentima pojedu nekoliko dana, a klijent ih pročita u pet minuta.</td></tr><tr><td class="k">Kome</td><td>Vlasnik marketinške, dizajnerske ili PR agencije</td></tr></tbody></table></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 0 &mdash; prvi kontakt</span><span class="badge gy">Subject: tri dana za izvještaje koji se čitaju pet minuta</span></div><pre class="p">Poštovani <span class="f">[IME</span>],
+
+Kod agencija s deset i više klijenata mjesečni izvještaji obično pojedu dva do tri dana — a klijent ih pročita u pet minuta.
+
+Radim na tome da se izvještaj sastavi iz podataka koje već imate, u vašem formatu, s nalazima i preporukama — a vi ga pročitate i potpišete.
+
+Imate li 15 minuta ovaj tjedan?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Nesrazmjer između uloženog i pročitanog je bol koju svaka agencija osjeti odmah.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 3 &mdash; follow-up</span><span class="badge gy">Subject: Re: izvještaji</span></div><pre class="p"><span class="f">[IME</span>],
+
+Koliko klijenata izvještavate mjesečno?
+
+Pomnožite s vremenom po izvještaju — to je broj koji obično uvjeri.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Neka sami naprave izračun. Vlastiti broj uvjerava više od tuđeg.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 7 &mdash; vrijednost</span><span class="badge gy">Subject: što ostaje na vama</span></div><pre class="p"><span class="f">[IME</span>],
+
+Da bude jasno što se mijenja, a što ne:
+
+Nalaz i preporuka ostaju vaši — to je ono za što vas klijent plaća. Ono što nestaje je slaganje brojeva, prepisivanje u predložak i pisanje istih rečenica dvanaest puta.
+
+Prvi izvještaj postavimo zajedno, ostali idu po istom kalupu.
+
+Da pošaljem primjer na vašem formatu?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Agencija se boji da izgleda kao da ne radi. Naglasi da stručna prosudba ostaje njihova.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 12 &mdash; zatvaranje</span><span class="badge gy">Subject: zatvaram temu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Ne javljam se više.
+
+Ako se u nekom mjesecu izvještaji opet oduže, znate gdje sam.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div></div></div></article><article class="item" data-cat="horeca" data-search="hoteli i horeca — upiti izvan sezone upiti stižu na tri kanala, odgovori kasne, a izvan sezone svaki izgubljeni upit boli dvostruko. direktor hotela, vlasnik smještaja ili restorana poštovani [ime],
+
+izvan sezone svaki upit koji čeka odgovor duže od dva sata najčešće ode negdje drugdje.
+
+radim s objektima na tome da upit s bilo kojeg kanala dobije točan odgovor odmah — s dostupnošću i cijenom, na jeziku na kojem je pitan.
+
+imate li 15 minuta ovaj tjedan?
+
+[potpis] [ime],
+
+koliko upita dnevno dođe izvan sezone, i koliko prosječno čekaju?
+
+ako je odgovor &#x27;ovisi tko je na recepciji&#x27; — to je upravo problem.
+
+[potpis] [ime],
+
+dvije stvari koje obično zanimaju:
+
+jezik — odgovor ide na jeziku na kojem je upit stigao, a da nitko ne prevodi.
+točnost — ništa se ne izmišlja. dostupnost i cijena idu iz vašeg sustava, a sve što nije jasno ide osobi na recepciji, ne pogađa se.
+
+ako želite vidjeti kako izgleda, pošaljem primjere odgovora.
+
+[potpis] [ime],
+
+zatvaram temu.
+
+ako pred sljedeću sezonu bude aktualno, javite se na vrijeme — postavljanje traje par tjedana.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Hoteli i HoReCa — upiti izvan sezone</h3></div><div class="item-badges"><span class="badge em">4 maila / 12 dana</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Bol</td><td>Upiti stižu na tri kanala, odgovori kasne, a izvan sezone svaki izgubljeni upit boli dvostruko.</td></tr><tr><td class="k">Kome</td><td>Direktor hotela, vlasnik smještaja ili restorana</td></tr></tbody></table></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 0 &mdash; prvi kontakt</span><span class="badge gy">Subject: upiti koji čekaju odgovor</span></div><pre class="p">Poštovani <span class="f">[IME</span>],
+
+Izvan sezone svaki upit koji čeka odgovor duže od dva sata najčešće ode negdje drugdje.
+
+Radim s objektima na tome da upit s bilo kojeg kanala dobije točan odgovor odmah — s dostupnošću i cijenom, na jeziku na kojem je pitan.
+
+Imate li 15 minuta ovaj tjedan?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Vrijeme odgovora je metrika koju svaki hotelijer razumije bez objašnjavanja.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 3 &mdash; follow-up</span><span class="badge gy">Subject: Re: upiti</span></div><pre class="p"><span class="f">[IME</span>],
+
+Koliko upita dnevno dođe izvan sezone, i koliko prosječno čekaju?
+
+Ako je odgovor &#x27;ovisi tko je na recepciji&#x27; — to je upravo problem.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Rečenica koja pogađa. Svi znaju da je tako.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 7 &mdash; vrijednost</span><span class="badge gy">Subject: jezici i točnost</span></div><pre class="p"><span class="f">[IME</span>],
+
+Dvije stvari koje obično zanimaju:
+
+Jezik — odgovor ide na jeziku na kojem je upit stigao, a da nitko ne prevodi.
+Točnost — ništa se ne izmišlja. Dostupnost i cijena idu iz vašeg sustava, a sve što nije jasno ide osobi na recepciji, ne pogađa se.
+
+Ako želite vidjeti kako izgleda, pošaljem primjere odgovora.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Jezik je stvarna prednost u turizmu i vrijedi ga izdvojiti.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 12 &mdash; zatvaranje</span><span class="badge gy">Subject: zatvaram temu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Zatvaram temu.
+
+Ako pred sljedeću sezonu bude aktualno, javite se na vrijeme — postavljanje traje par tjedana.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Sezonski breakup s implicitnim rokom je jedini breakup koji smije nagovijestiti hitnost.</div></div></div></article><article class="item" data-cat="edukacija" data-search="edukacijske tvrtke — administracija polaznika prijave, potvrde, računi i podsjetnici polaznicima rade se ručno za svaku grupu iznova. vlasnik edukacijske tvrtke, voditelj programa poštovani [ime],
+
+kod edukacijskih tvrtki uvijek je isto: sadržaj je gotov i dobar, a onda svaka nova grupa donese isti krug prijava, potvrda, računa i podsjetnika.
+
+radim na tome da taj krug ide sam, a vi se bavite programom.
+
+imate li 15 minuta ovaj tjedan?
+
+[potpis] [ime],
+
+koliko sati po grupi ode na administraciju, i koliko grupa vodite godišnje?
+
+umnožak je obično razlog za razgovor.
+
+[potpis] [ime],
+
+konkretno što se postavlja:
+
+prijava upisuje polaznika i šalje potvrdu. podsjetnici idu prije termina i nakon njega. potvrda o sudjelovanju se generira sama. račun kreće a da ga nitko ne traži.
+
+sve iz alata koje već imate — obično se ne kupuje ništa novo.
+
+da pošaljem opis?
+
+[potpis] [ime],
+
+ne javljam se više po ovoj temi.
+
+ako pred sljedeći ciklus bude aktualno, javite se.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Edukacijske tvrtke — administracija polaznika</h3></div><div class="item-badges"><span class="badge em">4 maila / 12 dana</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Bol</td><td>Prijave, potvrde, računi i podsjetnici polaznicima rade se ručno za svaku grupu iznova.</td></tr><tr><td class="k">Kome</td><td>Vlasnik edukacijske tvrtke, voditelj programa</td></tr></tbody></table></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 0 &mdash; prvi kontakt</span><span class="badge gy">Subject: administracija oko svake grupe</span></div><pre class="p">Poštovani <span class="f">[IME</span>],
+
+Kod edukacijskih tvrtki uvijek je isto: sadržaj je gotov i dobar, a onda svaka nova grupa donese isti krug prijava, potvrda, računa i podsjetnika.
+
+Radim na tome da taj krug ide sam, a vi se bavite programom.
+
+Imate li 15 minuta ovaj tjedan?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> Pohvala sadržaju prije problema. Kod edukatora to otvara vrata.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 3 &mdash; follow-up</span><span class="badge gy">Subject: Re: administracija</span></div><pre class="p"><span class="f">[IME</span>],
+
+Koliko sati po grupi ode na administraciju, i koliko grupa vodite godišnje?
+
+Umnožak je obično razlog za razgovor.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 7 &mdash; vrijednost</span><span class="badge gy">Subject: od prijave do potvrde</span></div><pre class="p"><span class="f">[IME</span>],
+
+Konkretno što se postavlja:
+
+Prijava upisuje polaznika i šalje potvrdu. Podsjetnici idu prije termina i nakon njega. Potvrda o sudjelovanju se generira sama. Račun kreće a da ga nitko ne traži.
+
+Sve iz alata koje već imate — obično se ne kupuje ništa novo.
+
+Da pošaljem opis?
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Zašto ovako:</strong> &#x27;Ne kupuje se ništa novo&#x27; je rečenica koja najviše otvara vrata kod malih firmi.</div></div><div style="border-top:1px solid var(--line);padding-top:16px;margin-top:16px"><div class="item-badges" style="margin-bottom:10px"><span class="badge am">Dan 12 &mdash; zatvaranje</span><span class="badge gy">Subject: zatvaram temu</span></div><pre class="p"><span class="f">[IME</span>],
+
+Ne javljam se više po ovoj temi.
+
+Ako pred sljedeći ciklus bude aktualno, javite se.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions" style="margin-top:10px"><button class="copybtn" type="button">Kopiraj mail</button></div></div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Što čini razliku između 2% i 8% odgovora</h2><p>Redoslijed je namjeran &mdash; prve dvije nose većinu.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Prije slanja</h4>
+    <ul class="ticks">
+      <li><b>Lista prije teksta.</b> Savršen mail pogrešnoj osobi je nula. Osrednji mail pravoj osobi je sastanak. ICP template je prvi materijal ovog modula.</li>
+      <li><b>Jedna osobna rečenica</b> po primatelju. Ne ime u pozdravu &mdash; to svi rade. Nešto što samo za njih vrijedi.</li>
+      <li><b>Zagrijana adresa.</b> Nova domena koja šalje pedeset mailova prvog dana završi u spamu i ostane tamo.</li>
+      <li><b>Bez linkova i privitaka</b> u prvom mailu. Oboje ruše isporučivost.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Četiri greške koje ubijaju sekvencu</h4>
+    <ul class="ticks">
+      <li><b>Predugo.</b> Prvi mail preko stotinu riječi se ne čita. Skrati dok ne zaboli.</li>
+      <li><b>Previše poziva na akciju.</b> &bdquo;Javite se, nazovite, pogledajte web, odgovorite&ldquo; &mdash; primatelj ne radi ništa od toga.</li>
+      <li><b>Prazna obećanja.</b> &bdquo;Povećavamo učinkovitost&ldquo; ne znači ništa. Broj, sat, dan &mdash; ili ništa.</li>
+      <li><b>Sekvenca koja ne staje.</b> Četiri maila i gotovo. Peti i šesti ne donose posao, donose prijave za spam.</li>
+    </ul>
+    <div class="note ru"><strong>Mjeri jedno:</strong> stopu odgovora, ne stopu otvaranja. Otvaranje se sve slabije mjeri i ništa ne govori. Odgovor je jedini broj koji vrijedi.</div>
+  </div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || it.getAttribute('data-search').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':(n>=2&&n<=4?' rezultata':' rezultata'));
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>

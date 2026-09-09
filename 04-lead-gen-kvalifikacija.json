@@ -1,0 +1,99 @@
+{
+  "name": "Lead Gen — kvalifikacija i usmjeravanje",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-sheets:watchRows",
+      "version": 2,
+      "parameters": { "__IMTCONN__": null, "mode": "select", "spreadsheetId": "", "sheetId": "", "includesHeaders": true, "limit": 10 },
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0, "name": "Novi lead u tablici" } }
+    },
+    {
+      "id": 2,
+      "module": "anthropic-claude:createAMessage",
+      "version": 1,
+      "parameters": { "__IMTCONN__": null },
+      "mapper": {
+        "model": "claude-sonnet-5",
+        "max_tokens": 700,
+        "temperature": 0,
+        "system": "Ti si agent za kvalifikaciju upita. Ocijeni upit po pet kriterija: poklapanje problema 30%, budzet 25%, ovlast 15%, rok 15%, velicina 15%. Za svaku ocjenu navedi dokaz iz teksta upita. Ako podatka nema, ocijeni ga kao nepoznato i NE pogadaj — naročito ne budzet. Vrati odgovor TOCNO u ovom obliku, u jednom redu: RAZRED: <A|B|C|D|DQ> | REZULTAT: <0-100> | OBRAZLOZENJE: <najvise 200 znakova> | PITANJA: <tri pitanja odvojena tockom-zarezom>",
+        "messages": [
+          { "role": "user", "content": "Ime: {{1.0}}\nTvrtka: {{1.1}}\nEmail: {{1.2}}\nUpit: {{1.3}}\nBudzet: {{1.4}}\nRok: {{1.5}}" }
+        ]
+      },
+      "metadata": { "designer": { "x": 300, "y": 0, "name": "Kvalifikacija (Claude)" } }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": { "designer": { "x": 600, "y": 0, "name": "Razred" } },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 4,
+              "module": "email:ActionSendEmail",
+              "version": 7,
+              "parameters": { "__IMTCONN__": null },
+              "filter": {
+                "name": "Razred A ili B",
+                "conditions": [
+                  [ { "a": "{{2.result}}", "b": "RAZRED: A", "o": "text:contains" } ],
+                  [ { "a": "{{2.result}}", "b": "RAZRED: B", "o": "text:contains" } ]
+                ]
+              },
+              "mapper": {
+                "to": [ "prodaja@tvojadomena.hr" ],
+                "subject": "Novi lead za poziv — {{1.1}}",
+                "html": "Kvalifikacija:\n{{2.result}}\n\nKontakt: {{1.0}}, {{1.2}}\nUpit: {{1.3}}",
+                "contentType": "text"
+              },
+              "metadata": { "designer": { "x": 900, "y": -150, "name": "Obavijest prodaji" } }
+            },
+            {
+              "id": 5,
+              "module": "google-sheets:updateRow",
+              "version": 2,
+              "parameters": { "__IMTCONN__": null, "mode": "select", "spreadsheetId": "", "sheetId": "", "includesHeaders": true },
+              "mapper": { "rowNumber": "{{1.__ROW_NUMBER__}}", "values": { "7": "{{2.result}}", "8": "ZA POTVRDU" } },
+              "metadata": { "designer": { "x": 1200, "y": -150, "name": "Upiši razred" } }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 6,
+              "module": "google-sheets:updateRow",
+              "version": 2,
+              "parameters": { "__IMTCONN__": null, "mode": "select", "spreadsheetId": "", "sheetId": "", "includesHeaders": true },
+              "filter": {
+                "name": "Razred C, D ili DQ",
+                "conditions": [
+                  [
+                    { "a": "{{2.result}}", "b": "RAZRED: A", "o": "text:notcontains" },
+                    { "a": "{{2.result}}", "b": "RAZRED: B", "o": "text:notcontains" }
+                  ]
+                ]
+              },
+              "mapper": { "rowNumber": "{{1.__ROW_NUMBER__}}", "values": { "7": "{{2.result}}", "8": "NURTURE" } },
+              "metadata": { "designer": { "x": 900, "y": 150, "name": "Upiši razred (bez poziva)" } }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": { "roundtrips": 1, "maxErrors": 3, "autoCommit": true, "autoCommitTriggerLast": true, "sequential": false, "slots": null, "confidential": false, "dataloss": false, "dlq": false, "freshVariables": false },
+    "designer": { "orphans": [] },
+    "zone": "eu1.make.com",
+    "notes": []
+  }
+}

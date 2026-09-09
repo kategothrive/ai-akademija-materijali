@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prodajni copywriting &mdash; Sve AI tajne, Modul 4</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 4</div>
+<h1>Prodajni copywriting &mdash; 20 promptova</h1>
+<p class="lede">Dvadeset promptova za sve što se piše u prodaji: hladni kontakt, follow-up, LinkedIn, ponude, prigovori i priprema. Svaki traži tvoj kontekst &mdash; jer prompt bez konteksta daje tekst koji zvuči kao svi ostali.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>20 promptova</span><span>6 kategorija</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Tri pravila prije prvog prompta</h2></div></div>
+<div class="grid g3">
+  <div class="card hero">
+    <h4>AI ne zna tvoj slučaj</h4>
+    <div class="prose" style="font-size:.93rem"><p>Svako polje u uglatim zagradama koje ostaviš prazno model će ispuniti prosjekom. Tako nastaje tekst koji zvuči kao svaki drugi hladni mail.</p><p>Polje koje ne možeš ispuniti nije problem prompta &mdash; to je podatak koji ti fali i koji trebaju saznati.</p></div>
+  </div>
+  <div class="card">
+    <h4>Nikad ne pošalji prvi izlaz</h4>
+    <div class="prose" style="font-size:.93rem"><p>Prvi izlaz je nacrt. Pročitaj ga naglas &mdash; ako ne zvuči kao nešto što bi rekao/rekla, nije tvoje.</p><p>Skrati, izbaci jednu rečenicu i zamijeni jedan pridjev brojem.</p></div>
+  </div>
+  <div class="card">
+    <h4>Brojevi se ne izmišljaju</h4>
+    <div class="prose" style="font-size:.93rem"><p>Ako u tekstu stoji rezultat, mora biti tvoj i točan. Model će ponuditi uvjerljiv broj ako mu ne kažeš da ne smije.</p><p>Jedan izmišljen podatak u prodajnom mailu je jedini koji ti klijent zapamti.</p></div>
+  </div>
+</div>
+<div class="note em" style="margin-top:16px"><strong>Ubrzanje koje se isplati odmah:</strong> otvori Claude Project ili Custom GPT za prodaju, uploadaj Brand Voice dokument, cjenik i tri svoja najbolja maila &mdash; i onda više ne moras u svakom promptu opisivati sebe. Ostane samo konkretan slučaj.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Biblioteka</h2><p>Filtriraj po fazi razgovora ili traži po ključnoj riječi.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži &mdash; npr. subject, prigovor, ponuda, LinkedIn, izgubljen posao&hellip;" aria-label="Traži prompt">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Sve<span class="n">20</span></button><button class="chip" data-cat="hladno" aria-pressed="false">Hladni kontakt<span class="n">4</span></button><button class="chip" data-cat="followup" aria-pressed="false">Follow-up<span class="n">3</span></button><button class="chip" data-cat="linkedin" aria-pressed="false">LinkedIn<span class="n">3</span></button><button class="chip" data-cat="ponuda" aria-pressed="false">Ponude<span class="n">3</span></button><button class="chip" data-cat="prigovori" aria-pressed="false">Prigovori<span class="n">3</span></button><button class="chip" data-cat="istrazivanje" aria-pressed="false">Istraživanje<span class="n">4</span></button></div>
+</div>
+<h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Hladni kontakt</h4><article class="item" data-cat="hladno" data-search="hladni mail iz jednog signala kad si našao/našla konkretan signal — objavu, oglas za posao, vijest o tvrtki. napiši hladni mail od najviše 90 riječi.
+
+o meni: [ime, čime se bavim, jedna rečenica]
+primatelj: [ime, pozicija, tvrtka, industrija]
+signal koji sam pronašao/pronašla: [objava, oglas za posao, vijest, promjena u tvrtki]
+bol koju rješavam: [konkretno, njihovim riječima]
+dokaz: [jedan rezultat s brojem, bez naziva klijenta]
+cta: 15 minuta razgovora ovaj ili idući tjedan
+
+pravila:
+- subject: mala slova, 3-5 riječi, izgleda kao poruka kolege. nikad &#x27;suradnja&#x27; ni &#x27;partnerstvo&#x27;.
+- prva rečenica mora biti o njima i vezana za signal. ne o meni.
+- 80% teksta o njihovom problemu, 20% o meni.
+- jedan cta. bez linkova i bez privitaka.
+- bez uskličnika i bez &#x27;nadam se da ste dobro&#x27;.
+
+daj tri varijante subject linea i jedno tijelo maila."><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Hladni mail iz jednog signala</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad si našao/našla konkretan signal — objavu, oglas za posao, vijest o tvrtki.</div><pre class="p">Napiši hladni mail od najviše 90 riječi.
+
+O meni: <span class="f">[ime, čime se bavim, jedna rečenica</span>]
+Primatelj: <span class="f">[ime, pozicija, tvrtka, industrija</span>]
+Signal koji sam pronašao/pronašla: <span class="f">[objava, oglas za posao, vijest, promjena u tvrtki</span>]
+Bol koju rješavam: <span class="f">[konkretno, njihovim riječima</span>]
+Dokaz: <span class="f">[jedan rezultat s brojem, bez naziva klijenta</span>]
+CTA: 15 minuta razgovora ovaj ili idući tjedan
+
+Pravila:
+- Subject: mala slova, 3-5 riječi, izgleda kao poruka kolege. Nikad &#x27;suradnja&#x27; ni &#x27;partnerstvo&#x27;.
+- Prva rečenica mora biti o njima i vezana za signal. Ne o meni.
+- 80% teksta o njihovom problemu, 20% o meni.
+- Jedan CTA. Bez linkova i bez privitaka.
+- Bez uskličnika i bez &#x27;Nadam se da ste dobro&#x27;.
+
+Daj tri varijante subject linea i jedno tijelo maila.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Bez signala ovaj prompt daje generički mail. Trideset sekundi na LinkedInu je razlika između 2% i 8% odgovora.</div></div></article><article class="item" data-cat="hladno" data-search="deset subject linija za isti mail kad tekst maila stoji, a subject ne otvara. evo maila koji šaljem:
+
+[zalijepi mail]
+
+napiši 10 subject linija za njega. za svaku navedi tip (pitanje / broj / problem / referenca na njih / obična izjava) i zašto bi radila.
+
+pravila:
+- sve malim slovima, 3-6 riječi.
+- nijedna ne smije zvučati kao marketing. cilj je da izgleda kao mail od kolege.
+- bez uskličnika, bez emojija, bez riječi &#x27;besplatno&#x27;, &#x27;ponuda&#x27;, &#x27;suradnja&#x27;, &#x27;partnerstvo&#x27;.
+- bez clickbaita koji tekst maila ne ispunjava.
+
+poredaj ih od najbolje i objasni prve tri."><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Deset subject linija za isti mail</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad tekst maila stoji, a subject ne otvara.</div><pre class="p">Evo maila koji šaljem:
+
+<span class="f">[ZALIJEPI MAIL</span>]
+
+Napiši 10 subject linija za njega. Za svaku navedi tip (pitanje / broj / problem / referenca na njih / obična izjava) i zašto bi radila.
+
+Pravila:
+- Sve malim slovima, 3-6 riječi.
+- Nijedna ne smije zvučati kao marketing. Cilj je da izgleda kao mail od kolege.
+- Bez uskličnika, bez emojija, bez riječi &#x27;besplatno&#x27;, &#x27;ponuda&#x27;, &#x27;suradnja&#x27;, &#x27;partnerstvo&#x27;.
+- Bez clickbaita koji tekst maila ne ispunjava.
+
+Poredaj ih od najbolje i objasni prve tri.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Testiraj dvije, ne deset. Uz mali volumen razlika između subject linija se ne može statistički izmjeriti — birajte po tome koja zvuči kao čovjek.</div></div></article><article class="item" data-cat="hladno" data-search="prilagodba sekvence na novu industriju kad imaš sekvencu koja radi i želiš je prenijeti na drugu industriju. imam sekvencu koja radi za [postojeća industrija]:
+
+[zalijepi sva četiri maila]
+
+prilagodi ju za [nova industrija].
+
+što mora ostati: struktura, duljina, ton, redoslijed (problem → pitanje → mehanizam → zatvaranje).
+što se mijenja: bol, rječnik industrije, primjer rezultata, tipičan prigovor.
+
+prije nego što napišeš, reci mi:
+1. koja je bol u novoj industriji drukčija od stare
+2. koje riječi ljudi u toj industriji koriste, a ja bih ih možda pogriješio/pogriješila
+3. koji prigovor je specifičan za njih
+
+pa onda napiši sva četiri maila."><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Prilagodba sekvence na novu industriju</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad imaš sekvencu koja radi i želiš je prenijeti na drugu industriju.</div><pre class="p">Imam sekvencu koja radi za <span class="f">[POSTOJEĆA INDUSTRIJA</span>]:
+
+<span class="f">[ZALIJEPI SVA ČETIRI MAILA</span>]
+
+Prilagodi ju za <span class="f">[NOVA INDUSTRIJA</span>].
+
+Što mora ostati: struktura, duljina, ton, redoslijed (problem → pitanje → mehanizam → zatvaranje).
+Što se mijenja: bol, rječnik industrije, primjer rezultata, tipičan prigovor.
+
+Prije nego napišeš, reci mi:
+1. Koja je bol u novoj industriji drukčija od stare
+2. Koje riječi ljudi u toj industriji koriste, a ja bih ih možda pogriješio/pogriješila
+3. Koji prigovor je specifičan za njih
+
+Pa onda napiši sva četiri maila.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 2 je zlato. Pogrešan stručni termin u prvoj rečenici odaje da si vanjski, i mail je mrtav.</div></div></article><article class="item" data-cat="hladno" data-search="mail nakon sajma ili konferencije u roku 48 sati nakon događaja gdje ste se sreli. napiši mail osobi koju sam sreo/srela na [događaj].
+
+o čemu smo razgovarali: [konkretno, jedna do dvije stvari]
+što su rekli o svojoj situaciji: [što si zapamtio]
+što sam obećao/obećala poslati, ako jesam: [upiši ili ostavi prazno]
+
+pravila:
+- prva rečenica mora referirati konkretan detalj razgovora, ne sam događaj. ne &#x27;bilo mi je drago vidjeti vas na sajmu&#x27;.
+- najviše 5 rečenica.
+- ako sam nešto obećao/obećala — to je cijeli mail. pošalji to i ništa više ne traži.
+- ako nisam — jedan cta, kratak."><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Mail nakon sajma ili konferencije</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> U roku 48 sati nakon događaja gdje ste se sreli.</div><pre class="p">Napiši mail osobi koju sam sreo/srela na <span class="f">[DOGAĐAJ</span>].
+
+O čemu smo razgovarali: <span class="f">[KONKRETNO, jedna do dvije stvari</span>]
+Što su rekli o svojoj situaciji: <span class="f">[ŠTO SI ZAPAMTIO</span>]
+Što sam obećao/obećala poslati, ako jesam: <span class="f">[UPIŠI ili ostavi prazno</span>]
+
+Pravila:
+- Prva rečenica mora referirati konkretan detalj razgovora, ne sam događaj. Ne &#x27;bilo mi je drago vidjeti vas na sajmu&#x27;.
+- Najviše 5 rečenica.
+- Ako sam nešto obećao/obećala — to je cijeli mail. Pošalji to i ništa više ne traži.
+- Ako nisam — jedan CTA, kratak.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ovaj mail ide u 48 sati ili nikad. Nakon tjedna ljudi ne pamte razgovor i mail postaje hladan kontakt.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Follow-up</h4><article class="item" data-cat="followup" data-search="follow-up koji pita, ne ponavlja tri dana nakon prvog maila, bez odgovora. napiši follow-up na ovaj mail:
+
+[zalijepi prvi mail]
+
+pravila:
+- najviše tri rečenice.
+- ne ponavljaj sadržaj prvog maila.
+- postavi jedno konkretno pitanje koje traži broj — koliko puta, koliko dana, koliko ljudi.
+- bez &#x27;samo provjeravam&#x27; i bez &#x27;javljam se ponovno&#x27;.
+- bez isprike što se javljaš.
+
+daj tri varijante s različitim pitanjem."><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Follow-up koji pita, ne ponavlja</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Tri dana nakon prvog maila, bez odgovora.</div><pre class="p">Napiši follow-up na ovaj mail:
+
+<span class="f">[ZALIJEPI PRVI MAIL</span>]
+
+Pravila:
+- Najviše tri rečenice.
+- Ne ponavljaj sadržaj prvog maila.
+- Postavi jedno konkretno pitanje koje traži broj — koliko puta, koliko dana, koliko ljudi.
+- Bez &#x27;samo provjeravam&#x27; i bez &#x27;javljam se ponovno&#x27;.
+- Bez isprike što se javljaš.
+
+Daj tri varijante s različitim pitanjem.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Pitanje koje traži broj tjera na kratki mentalni izračun — a izračun je ono što uvjerava, ne tvoj tekst.</div></div></article><article class="item" data-cat="followup" data-search="breakup mail dvanaest dana nakon prvog kontakta, kao zadnji u sekvenci. napiši zadnji mail u sekvenci — zatvaram temu.
+
+kontekst: [što sam nudio/nudila, koliko sam se puta javio/javila]
+
+pravila:
+- najviše četiri rečenice.
+- bez pasivne agresije, bez ljutnje, bez &#x27;pretpostavljam da vas ne zanima&#x27;.
+- ne traži razlog i ne traži zadnju šansu.
+- zatvori temu jasno i ostavi vrata otvorena za budućnost.
+- bez ironije i bez šale.
+
+daj dvije varijante: jednu neutralnu i jednu malo osobniju."><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Breakup mail</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Dvanaest dana nakon prvog kontakta, kao zadnji u sekvenci.</div><pre class="p">Napiši zadnji mail u sekvenci — zatvaram temu.
+
+Kontekst: <span class="f">[što sam nudio/nudila, koliko sam se puta javio/javila</span>]
+
+Pravila:
+- Najviše četiri rečenice.
+- Bez pasivne agresije, bez ljutnje, bez &#x27;pretpostavljam da vas ne zanima&#x27;.
+- Ne traži razlog i ne traži zadnju šansu.
+- Zatvori temu jasno i ostavi vrata otvorena za budućnost.
+- Bez ironije i bez šale.
+
+Daj dvije varijante: jednu neutralnu i jednu malo osobniju.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ovo je mail s najvišom stopom odgovora u cijeloj sekvenci. Kad ljudima daš dopuštenje da kažu ne, često kažu pravi razlog — a ponekad i da.</div></div></article><article class="item" data-cat="followup" data-search="javljanje starom klijentu šest do dvanaest mjeseci nakon zadnje suradnje. napiši mail starom klijentu s kojim nismo radili [koliko] mjeseci.
+
+klijent: [ime, tvrtka]
+što smo radili: [projekt, otprilike kada]
+rezultat tada: [ako ga imaš]
+razlog javljanja sada: [novo što nudim / promjena na tržištu / sezona / regulativa]
+što nudim: [konkretno]
+
+pravila:
+- referiraj konkretan detalj prošle suradnje — dokaz da se sjećaš, ne da si otvorio/otvorila crm.
+- ponudi vrijednost odmah, ne traži sastanak u prvom mailu.
+- ton kao prema poznaniku, ne prodajni.
+- najviše 5 rečenica.
+- bez &#x27;samo da vidim kako ste&#x27; bez pravog razloga."><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Javljanje starom klijentu</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Šest do dvanaest mjeseci nakon zadnje suradnje.</div><pre class="p">Napiši mail starom klijentu s kojim nismo radili <span class="f">[KOLIKO</span>] mjeseci.
+
+Klijent: <span class="f">[ime, tvrtka</span>]
+Što smo radili: <span class="f">[projekt, otprilike kada</span>]
+Rezultat tada: <span class="f">[ako ga imaš</span>]
+Razlog javljanja sada: <span class="f">[novo što nudim / promjena na tržištu / sezona / regulativa</span>]
+Što nudim: <span class="f">[konkretno</span>]
+
+Pravila:
+- Referiraj konkretan detalj prošle suradnje — dokaz da se sjećaš, ne da si otvorio/otvorila CRM.
+- Ponudi vrijednost odmah, ne traži sastanak u prvom mailu.
+- Ton kao prema poznaniku, ne prodajni.
+- Najviše 5 rečenica.
+- Bez &#x27;samo da vidim kako ste&#x27; bez pravog razloga.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Stari klijenti konvertiraju višestruko bolje od hladnih kontakata. Javljaj se svakih 6-12 mjeseci, ali uvijek s razlogom.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">LinkedIn</h4><article class="item" data-cat="linkedin" data-search="prva linkedin poruka nakon što su prihvatili pozivnicu, ne prije. napiši linkedin poruku osobi koju ne poznajem.
+
+osoba: [ime, pozicija, tvrtka]
+što sam vidio/vidjela na njihovom profilu ili u objavi: [konkretno]
+moj cilj: [kratki razgovor / podijeliti resurs / dobiti odgovor]
+vrijednost koju mogu donijeti: [jedna rečenica]
+
+pravila:
+- najviše 3-4 rečenice. linkedin poruka nije mail.
+- počni s njima i s konkretnom referencom.
+- bez &#x27;drago mi je povezati se&#x27; i bez copy-paste tona.
+- bez emojija.
+- jedan cta.
+- ne prodaji u prvoj poruci. otvori razgovor."><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Prva LinkedIn poruka</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Nakon što su prihvatili pozivnicu, ne prije.</div><pre class="p">Napiši LinkedIn poruku osobi koju ne poznajem.
+
+Osoba: <span class="f">[ime, pozicija, tvrtka</span>]
+Što sam vidio/vidjela na njihovom profilu ili u objavi: <span class="f">[KONKRETNO</span>]
+Moj cilj: <span class="f">[kratki razgovor / podijeliti resurs / dobiti odgovor</span>]
+Vrijednost koju mogu donijeti: <span class="f">[jedna rečenica</span>]
+
+Pravila:
+- Najviše 3-4 rečenice. LinkedIn poruka nije mail.
+- Počni s njima i s konkretnom referencom.
+- Bez &#x27;Drago mi je povezati se&#x27; i bez copy-paste tona.
+- Bez emojija.
+- Jedan CTA.
+- Ne prodaji u prvoj poruci. Otvori razgovor.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Poruka poslana zajedno s pozivnicom izgleda kao automat. Pošalji pozivnicu bez teksta, poruku tek kad prihvate.</div></div></article><article class="item" data-cat="linkedin" data-search="komentar koji otvara razgovor na objavi potencijalnog klijenta, umjesto hladne poruke. napiši komentar na ovu objavu:
+
+[zalijepi objavu]
+
+kontekst: autor je [pozicija, tvrtka] i potencijalni je klijent za [što nudim].
+
+pravila:
+- dodaj nešto, ne slaži se. vlastito iskustvo, konkretan primjer, ili pitanje koje vodi dalje.
+- najviše 3 rečenice.
+- ne prodaji i ne spominji što radim.
+- bez &#x27;odlična objava!&#x27; i bez &#x27;slažem se u potpunosti&#x27;.
+- ne pokušavaj biti duhovit ako objava nije duhovita.
+
+daj tri varijante: jednu s iskustvom, jednu s pitanjem, jednu s konkretnim podatkom."><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Komentar koji otvara razgovor</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Na objavi potencijalnog klijenta, umjesto hladne poruke.</div><pre class="p">Napiši komentar na ovu objavu:
+
+<span class="f">[ZALIJEPI OBJAVU</span>]
+
+Kontekst: autor je <span class="f">[pozicija, tvrtka</span>] i potencijalni je klijent za <span class="f">[što nudim</span>].
+
+Pravila:
+- Dodaj nešto, ne slaži se. Vlastito iskustvo, konkretan primjer, ili pitanje koje vodi dalje.
+- Najviše 3 rečenice.
+- Ne prodaji i ne spominji što radim.
+- Bez &#x27;Odlična objava!&#x27; i bez &#x27;Slažem se u potpunosti&#x27;.
+- Ne pokušavaj biti duhovit ako objava nije duhovita.
+
+Daj tri varijante: jednu s iskustvom, jednu s pitanjem, jednu s konkretnim podatkom.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Tri dobra komentara kroz dva tjedna i poruka poslije toga nije hladna. Ovo je najpolaganiji i najuspješniji put na LinkedInu.</div></div></article><article class="item" data-cat="linkedin" data-search="poruka nakon što su pogledali profil kad vidiš da te je netko iz ciljne skupine pogledao. napiši kratku poruku osobi koja mi je pogledala profil.
+
+osoba: [ime, pozicija, tvrtka]
+zašto bi im moje usluge mogle biti relevantne: [jedna rečenica]
+
+pravila:
+- najviše tri rečenice.
+- ne spominji da su gledali profil. to je neugodno.
+- referiraj nešto s njihovog profila ili iz njihove industrije.
+- jedno lagano pitanje na kraju, bez pritiska.
+- bez prodaje."><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Poruka nakon što su pogledali profil</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad vidiš da te je netko iz ciljne skupine pogledao.</div><pre class="p">Napiši kratku poruku osobi koja mi je pogledala profil.
+
+Osoba: <span class="f">[ime, pozicija, tvrtka</span>]
+Zašto bi im moje usluge mogle biti relevantne: <span class="f">[jedna rečenica</span>]
+
+Pravila:
+- Najviše tri rečenice.
+- Ne spominji da su gledali profil. To je neugodno.
+- Referiraj nešto s njihovog profila ili iz njihove industrije.
+- Jedno lagano pitanje na kraju, bez pritiska.
+- Bez prodaje.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Nikad ne piši &#x27;vidio sam da ste gledali moj profil&#x27;. To zvuči kao nadzor i zatvara razgovor prije nego što počne.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Ponude</h4><article class="item" data-cat="ponuda" data-search="executive summary ponude nakon discovery razgovora, prije pisanja cijele ponude. napiši executive summary za ponudu — najviše tri rečenice.
+
+klijent: [tvrtka, industrija]
+što su rekli da im je problem, njihovim riječima: [citat ili parafraza]
+što predlažemo: [rješenje]
+očekivani ishod: [konkretno, s brojem ako ga imaš]
+cijena: [iznos]
+
+pravila:
+- prva rečenica mora pokazati da razumijem njihov problem, njihovim riječima.
+- druga: što predlažem.
+- treća: kakav ishod i do kada.
+- bez uvoda o našoj tvrtki. bez &#x27;zadovoljstvo nam je&#x27;.
+- bez riječi koje klijent nije upotrijebio u razgovoru."><div class="item-top"><div class="item-id"><span class="num">11</span><h3>Executive summary ponude</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Nakon discovery razgovora, prije pisanja cijele ponude.</div><pre class="p">Napiši executive summary za ponudu — najviše tri rečenice.
+
+Klijent: <span class="f">[tvrtka, industrija</span>]
+Što su rekli da im je problem, njihovim riječima: <span class="f">[CITAT ILI PARAFRAZA</span>]
+Što predlažemo: <span class="f">[rješenje</span>]
+Očekivani ishod: <span class="f">[konkretno, s brojem ako ga imaš</span>]
+Cijena: <span class="f">[IZNOS</span>]
+
+Pravila:
+- Prva rečenica mora pokazati da razumijem njihov problem, njihovim riječima.
+- Druga: što predlažem.
+- Treća: kakav ishod i do kada.
+- Bez uvoda o našoj tvrtki. Bez &#x27;zadovoljstvo nam je&#x27;.
+- Bez riječi koje klijent nije upotrijebio u razgovoru.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Executive summary pročita gotovo svaki primatelj, ostatak ponude manje od pola. Uloži polovicu vremena u tri rečenice.</div></div></article><article class="item" data-cat="ponuda" data-search="tri paketa iz jednog opsega kad znaš što treba napraviti, a ne znaš kako to cijeniti. imam opseg posla za klijenta:
+
+[opiši što treba napraviti]
+
+cijena koju sam mislio/mislila naplatiti: [iznos]
+
+napravi tri paketa — minimalni, preporučeni i prošireni.
+
+pravila:
+- preporučeni mora izgledati kao očiti odabir. objasni mi kojim mehanizmom to postižeš.
+- minimalni mora biti stvarno koristan, ne osakaćen mamac.
+- prošireni mora imati nešto što klijent stvarno želi, ne popunjavanje.
+- za svaki paket: što je uključeno, što nije, cijena, kome odgovara.
+- reci mi i gdje bih se mogao/mogla prenapregnuti u proširenom."><div class="item-top"><div class="item-id"><span class="num">12</span><h3>Tri paketa iz jednog opsega</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad znaš što treba napraviti, a ne znaš kako to cijeniti.</div><pre class="p">Imam opseg posla za klijenta:
+
+<span class="f">[OPIŠI ŠTO TREBA NAPRAVITI</span>]
+
+Cijena koju sam mislio/mislila naplatiti: <span class="f">[IZNOS</span>]
+
+Napravi tri paketa — minimalni, preporučeni i prošireni.
+
+Pravila:
+- Preporučeni mora izgledati kao očiti odabir. Objasni mi kojim mehanizmom to postižeš.
+- Minimalni mora biti stvarno koristan, ne osakaćen mamac.
+- Prošireni mora imati nešto što klijent stvarno želi, ne popunjavanje.
+- Za svaki paket: što je uključeno, što nije, cijena, kome odgovara.
+- Reci mi i gdje bih se mogao/mogla prenapregnuti u proširenom.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Zadnja rečenica je razlog da koristiš ovaj prompt. Prošireni paket je najčešći izvor projekata na kojima se izgubi novac.</div></div></article><article class="item" data-cat="ponuda" data-search="sažetak ponude za odbor kad tvoja kontakt osoba mora ponudu prezentirati nekome iznad sebe. iz ove ponude napravi jednu stranicu koju moja kontakt osoba može poslati upravi:
+
+[zalijepi ponudu]
+
+kontakt osoba je [pozicija]. odlučuje [pozicija ili tijelo].
+
+pravila:
+- piši za nekoga tko nije bio u razgovoru i nema vremena.
+- prvo: problem i što košta ako se ne rješava.
+- drugo: predloženo rješenje u tri točke.
+- treće: investicija, rok, i što se traži od uprave da odluči.
+- bez tehničkih detalja. bez našeg predstavljanja.
+- najviše 250 riječi."><div class="item-top"><div class="item-id"><span class="num">13</span><h3>Sažetak ponude za odbor</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad tvoja kontakt osoba mora ponudu prezentirati nekome iznad sebe.</div><pre class="p">Iz ove ponude napravi jednu stranicu koju moja kontakt osoba može poslati upravi:
+
+<span class="f">[ZALIJEPI PONUDU</span>]
+
+Kontakt osoba je <span class="f">[pozicija</span>]. Odlučuje <span class="f">[pozicija ili tijelo</span>].
+
+Pravila:
+- Piši za nekoga tko nije bio u razgovoru i nema vremena.
+- Prvo: problem i što košta ako se ne rješava.
+- Drugo: predloženo rješenje u tri točke.
+- Treće: investicija, rok, i što se traži od uprave da odluči.
+- Bez tehničkih detalja. Bez našeg predstavljanja.
+- Najviše 250 riječi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ovaj dokument je razlika između &#x27;moram se posavjetovati&#x27; i odluke. Daj svom championu materijal kojim može dobro nastupiti.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Prigovori</h4><article class="item" data-cat="prigovori" data-search="odgovor na &#x27;preskupo je&#x27; kad je cijena izgovorena i klijent je reagirao. klijent kaže da je preskupo.
+
+naša usluga: [naziv, kratki opis]
+cijena: [iznos]
+što klijent dobiva: [tri ključne koristi]
+što je alternativa ako ne uzme nas: [status quo / konkurent / interni rad]
+roi ako ga znam: [npr. štedi 10h tjedno]
+
+napiši:
+1. odgovor koji priznaje prigovor bez spuštanja cijene
+2. pitanje kojim otkrivam s čim uspoređuju
+3. odgovor koji preusmjerava na vrijednost, ne na cijenu
+4. alternativu — manji opseg, faze, drukčiji uvjeti plaćanja
+5. što ne reći
+
+sve u govornom jeziku, kao za razgovor, ne kao za mail."><div class="item-top"><div class="item-id"><span class="num">14</span><h3>Odgovor na &#x27;preskupo je&#x27;</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad je cijena izgovorena i klijent je reagirao.</div><pre class="p">Klijent kaže da je preskupo.
+
+Naša usluga: <span class="f">[NAZIV, kratki opis</span>]
+Cijena: <span class="f">[IZNOS</span>]
+Što klijent dobiva: <span class="f">[tri ključne koristi</span>]
+Što je alternativa ako ne uzme nas: <span class="f">[status quo / konkurent / interni rad</span>]
+ROI ako ga znam: <span class="f">[npr. štedi 10h tjedno</span>]
+
+Napiši:
+1. Odgovor koji priznaje prigovor bez spuštanja cijene
+2. Pitanje kojim otkrivam s čim uspoređuju
+3. Odgovor koji preusmjerava na vrijednost, ne na cijenu
+4. Alternativu — manji opseg, faze, drukčiji uvjeti plaćanja
+5. Što NE reći
+
+Sve u govornom jeziku, kao za razgovor, ne kao za mail.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Prigovor na cijenu je gotovo uvijek prigovor na vrijednost ili usporedba s nečim što nije ekvivalent. Prvo saznaj s čim uspoređuju.</div></div></article><article class="item" data-cat="prigovori" data-search="odgovor na &#x27;moramo se posavjetovati&#x27; kad ti kontakt osoba kaže da odluka nije samo njihova. klijent kaže da se mora posavjetovati s [partner / uprava / tim].
+
+naša usluga: [naziv]
+gdje smo u procesu: [početak / nakon ponude / pred potpisom]
+
+napiši:
+1. odgovor koji poštuje to, ali ostaje u razgovoru
+2. pitanje kojim otkrivam tko stvarno odlučuje i što je toj osobi važno
+3. prijedlog da se odlučitelj uključi u sljedeći razgovor — formuliran tako da ne uvrijedi moju kontakt osobu
+4. što poslati kao materijal koji moj champion može prezentirati
+5. kako dogovoriti konkretan rok za odluku, bez pritiska
+
+govorni jezik."><div class="item-top"><div class="item-id"><span class="num">15</span><h3>Odgovor na &#x27;moramo se posavjetovati&#x27;</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad ti kontakt osoba kaže da odluka nije samo njihova.</div><pre class="p">Klijent kaže da se mora posavjetovati s <span class="f">[partner / uprava / tim</span>].
+
+Naša usluga: <span class="f">[NAZIV</span>]
+Gdje smo u procesu: <span class="f">[početak / nakon ponude / pred potpisom</span>]
+
+Napiši:
+1. Odgovor koji poštuje to, ali ostaje u razgovoru
+2. Pitanje kojim otkrivam tko stvarno odlučuje i što je toj osobi važno
+3. Prijedlog da se odlučitelj uključi u sljedeći razgovor — formuliran tako da ne uvrijedi moju kontakt osobu
+4. Što poslati kao materijal koji moj champion može prezentirati
+5. Kako dogovoriti konkretan rok za odluku, bez pritiska
+
+Govorni jezik.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ovo je najčešće pristojan način da se kaže &#x27;nisam siguran&#x27;. Cilj razgovora je saznati je li prigovor pravi ili je to izlaz.</div></div></article><article class="item" data-cat="prigovori" data-search="odgovor na &#x27;sada nije trenutak&#x27; kad interes postoji, ali odluka se odgađa. klijent kaže da sada nije pravi trenutak.
+
+naša usluga: [naziv]
+što propuštaju ako čekaju: [konkretna posljedica, ako postoji]
+
+napiši tri različita odgovora:
+1. onaj koji prihvaća odgodu, ali parkira interes s konkretnim rokom i razlogom da se javimo
+2. onaj koji pokazuje da naše rješenje štedi vrijeme, a ne oduzima ga
+3. onaj koji provjerava je li &#x27;nema vremena&#x27; pravi prigovor ili pristojan izlaz
+
+plus: predloži manji korak koji ne traži puno — kratki poziv, primjer na njihovim podacima, kratak dokument.
+
+bez izmišljene hitnosti i bez lažnih rokova."><div class="item-top"><div class="item-id"><span class="num">16</span><h3>Odgovor na &#x27;sada nije trenutak&#x27;</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad interes postoji, ali odluka se odgađa.</div><pre class="p">Klijent kaže da sada nije pravi trenutak.
+
+Naša usluga: <span class="f">[NAZIV</span>]
+Što propuštaju ako čekaju: <span class="f">[konkretna posljedica, ako postoji</span>]
+
+Napiši tri različita odgovora:
+1. Onaj koji prihvaća odgodu, ali parkira interes s konkretnim rokom i razlogom da se javimo
+2. Onaj koji pokazuje da naše rješenje štedi vrijeme, a ne oduzima ga
+3. Onaj koji provjerava je li &#x27;nema vremena&#x27; pravi prigovor ili pristojan izlaz
+
+Plus: predloži manji korak koji ne traži puno — kratki poziv, primjer na njihovim podacima, kratak dokument.
+
+Bez izmišljene hitnosti i bez lažnih rokova.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ako rješavaš problem nedostatka vremena, &#x27;nemam vremena&#x27; je kontradikcija — ali je nikad ne izgovaraj tako. Pokaži ROI vremena.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Istraživanje</h4><article class="item" data-cat="istrazivanje" data-search="priprema na jednu tvrtku petnaest minuta prije poziva ili pisanja maila. pripremi me za kontakt s ovom tvrtkom.
+
+tvrtka: [naziv, web]
+osoba: [ime, pozicija]
+što nudim: [kratko]
+
+daj mi:
+1. što tvrtka radi, u dvije rečenice, njihovim rječnikom
+2. tri stvari iz njihove komunikacije koje pokazuju kako se pozicioniraju
+3. dva mjesta gdje bi bol koju rješavam mogla postojati kod njih, s obrazloženjem
+4. jedna konkretna rečenica koju mogu upotrijebiti kao dokaz da sam ih pogledao/pogledala
+5. tri pitanja za prvi razgovor
+6. što ne spominjati
+
+pravila:
+- razdvoji ono što si našao/našla u izvorima od svoje interpretacije. označi jasno.
+- za svaku činjeničnu tvrdnju navedi izvor.
+- ako o nečemu nemaš podatak, napiši da nemaš. ne pretpostavljaj veličinu, prihod ni broj zaposlenih."><div class="item-top"><div class="item-id"><span class="num">17</span><h3>Priprema na jednu tvrtku</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Petnaest minuta prije poziva ili pisanja maila.</div><pre class="p">Pripremi me za kontakt s ovom tvrtkom.
+
+Tvrtka: <span class="f">[NAZIV, web</span>]
+Osoba: <span class="f">[ime, pozicija</span>]
+Što nudim: <span class="f">[kratko</span>]
+
+Daj mi:
+1. Što tvrtka radi, u dvije rečenice, njihovim rječnikom
+2. Tri stvari iz njihove komunikacije koje pokazuju kako se pozicioniraju
+3. Dva mjesta gdje bi bol koju rješavam mogla postojati kod njih, s obrazloženjem
+4. Jedna konkretna rečenica koju mogu upotrijebiti kao dokaz da sam ih pogledao/pogledala
+5. Tri pitanja za prvi razgovor
+6. Što NE spominjati
+
+Pravila:
+- Razdvoji ono što si našao/našla u izvorima od svoje interpretacije. Označi jasno.
+- Za svaku činjeničnu tvrdnju navedi izvor.
+- Ako o nečemu nemaš podatak, napiši da nemaš. Ne pretpostavljaj veličinu, prihod ni broj zaposlenih.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Koristi alat s pretraživanjem weba za ovaj prompt. Bez izvora dobiješ uvjerljivo napisane pretpostavke — a to je gore od ničega.</div></div></article><article class="item" data-cat="istrazivanje" data-search="prevođenje značajke u korist kad tvoj tekst zvuči tehnički, a klijent ne reagira. evo kako opisujem što nudim:
+
+[zalijepi svoj opis]
+
+za svaku značajku napravi tablicu s tri stupca:
+značajka | što to znači za klijenta | koji broj ili primjer to dokazuje
+
+pravila:
+- srednji stupac piši u drugom licu i u njihovom jeziku, ne u našem.
+- treći stupac ne izmišljaj. ako nemam broj, napiši &#x27;treba podatak&#x27; — to je onda moj zadatak.
+- na kraju označi tri značajke koje bih trebao/trebala izbaciti iz komunikacije jer nikoga ne zanimaju."><div class="item-top"><div class="item-id"><span class="num">18</span><h3>Prevođenje značajke u korist</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad tvoj tekst zvuči tehnički, a klijent ne reagira.</div><pre class="p">Evo kako opisujem što nudim:
+
+<span class="f">[ZALIJEPI SVOJ OPIS</span>]
+
+Za svaku značajku napravi tablicu s tri stupca:
+ZNAČAJKA | ŠTO TO ZNAČI ZA KLIJENTA | KOJI BROJ ILI PRIMJER TO DOKAZUJE
+
+Pravila:
+- Srednji stupac piši u drugom licu i u njihovom jeziku, ne u našem.
+- Treći stupac ne izmišljaj. Ako nemam broj, napiši &#x27;treba podatak&#x27; — to je onda moj zadatak.
+- Na kraju označi tri značajke koje bih trebao/trebala izbaciti iz komunikacije jer nikoga ne zanimaju.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Zadnja rečenica je pola vrijednosti. Većina prodajnih tekstova je predugačka jer nabraja sve, a ne ono što odlučuje.</div></div></article><article class="item" data-cat="istrazivanje" data-search="analiza zašto je posao izgubljen nakon svakog izgubljenog posla, dok je svježe. izgubio/izgubila sam posao. pomozi mi razumjeti zašto.
+
+klijent: [tvrtka, industrija, veličina]
+što sam ponudio/ponudila i po kojoj cijeni: [upiši]
+kako je išao proces: [ključni koraci i datumi]
+što su rekli kad su odbili: [doslovno, ako imam]
+tko je dobio posao, ako znam: [upiši]
+
+daj mi:
+1. najvjerojatniji stvarni razlog — ne onaj koji su izgovorili
+2. tri mjesta u procesu gdje se odluka vjerojatno okrenula
+3. što bih napravio/napravila drukčije, konkretno
+4. je li ovo bio posao koji sam ikad mogao/mogla dobiti — i ako ne, po čemu se to moglo znati ranije
+5. jedno pitanje koje bih trebao/trebala postaviti ranije u procesu
+
+budi direktan. ne tješi me."><div class="item-top"><div class="item-id"><span class="num">19</span><h3>Analiza zašto je posao izgubljen</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Nakon svakog izgubljenog posla, dok je svježe.</div><pre class="p">Izgubio/izgubila sam posao. Pomozi mi razumjeti zašto.
+
+Klijent: <span class="f">[tvrtka, industrija, veličina</span>]
+Što sam ponudio/ponudila i po kojoj cijeni: <span class="f">[UPIŠI</span>]
+Kako je išao proces: <span class="f">[ključni koraci i datumi</span>]
+Što su rekli kad su odbili: <span class="f">[DOSLOVNO, ako imam</span>]
+Tko je dobio posao, ako znam: <span class="f">[UPIŠI</span>]
+
+Daj mi:
+1. Najvjerojatniji stvarni razlog — ne onaj koji su izgovorili
+2. Tri mjesta u procesu gdje se odluka vjerojatno okrenula
+3. Što bih napravio/napravila drukčije, konkretno
+4. Je li ovo bio posao koji sam ikad mogao/mogla dobiti — i ako ne, po čemu se to moglo znati ranije
+5. Jedno pitanje koje bih trebao/trebala postaviti ranije u procesu
+
+Budi direktan. Ne tješi me.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 4 je najkorisnija. Dio izgubljenih poslova nikad nije bio dobiv — a to se moglo znati u prvom razgovoru i uštedjeti dane.</div></div></article><article class="item" data-cat="istrazivanje" data-search="simulacija skeptičnog kupca dan prije važnog poziva. postaješ moj potencijalni klijent i ostaješ u ulozi dok ne napišem &#x27;izlazak iz uloge&#x27;.
+
+tvoja uloga: [pozicija] u [tip tvrtke]. karakter: skeptičan, ima malo vremena, već je imao/imala loše iskustvo s dobavljačem u ovom području.
+što ti prodajem: [opis]
+cijena: [iznos]
+
+kao ta osoba:
+- pitaj ono što bi ta osoba stvarno pitala, ne ono što je meni lako.
+- pritisni na cijenu, na rok i na to zašto ne bi izabrao/izabrala nekoga drugog.
+- ako moj odgovor ne odgovara na tvoje pitanje, kaži mi to i ponovi pitanje.
+- nemoj mi olakšavati i nemoj pristati prerano.
+
+kad napišem &#x27;izlazak iz uloge&#x27;, daj mi: tri odgovora koje moram prepisati, jednu rečenicu koju bih trebao/trebala naučiti napamet, i pitanje na koje nisam imao/imala odgovor."><div class="item-top"><div class="item-id"><span class="num">20</span><h3>Simulacija skeptičnog kupca</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Dan prije važnog poziva.</div><pre class="p">Postaješ moj potencijalni klijent i ostaješ u ulozi dok ne napišem &#x27;izlazak iz uloge&#x27;.
+
+Tvoja uloga: <span class="f">[POZICIJA</span>] u <span class="f">[TIP TVRTKE</span>]. Karakter: skeptičan, ima malo vremena, već je imao/imala loše iskustvo s dobavljačem u ovom području.
+Što ti prodajem: <span class="f">[OPIS</span>]
+Cijena: <span class="f">[IZNOS</span>]
+
+Kao ta osoba:
+- Pitaj ono što bi ta osoba stvarno pitala, ne ono što je meni lako.
+- Pritisni na cijenu, na rok i na to zašto ne bi izabrao/izabrala nekoga drugog.
+- Ako moj odgovor ne odgovara na tvoje pitanje, kaži mi to i ponovi pitanje.
+- Nemoj mi olakšavati i nemoj pristati prerano.
+
+Kad napišem &#x27;izlazak iz uloge&#x27;, daj mi: tri odgovora koje moram prepisati, jednu rečenicu koju bih trebao/trebala naučiti napamet, i pitanje na koje nisam imao/imala odgovor.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Deset minuta ovoga vrijedi više od sata čitanja o prodaji. Prigovor koji prvi put čuješ u simulaciji ne košta te posao.</div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Četiri fraze koje odaju AI u prodajnom mailu</h2><p>Ako ih vidiš u izlazu, izbaci ih rukom &mdash; ili ih dodaj u zabrane svog projekta.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <ul class="ticks">
+      <li><b>&bdquo;U današnjem dinamičnom poslovnom okruženju&hellip;&ldquo;</b> &mdash; nula informacije, tri sekunde pažnje potrošene.</li>
+      <li><b>&bdquo;Značajno poboljšavamo učinkovitost&ldquo;</b> &mdash; koliko? U čemu? Bez broja je prazno.</li>
+      <li><b>&bdquo;Nadam se da vas ovaj mail nalazi dobro&ldquo;</b> &mdash; nitko to ne piše osim automata i loših prijevoda.</li>
+      <li><b>&bdquo;Radujemo se vašem odgovoru!&ldquo;</b> &mdash; uskličnik u hladnom mailu je potpis robota.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Test naglas</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Jedini test koji ti treba prije slanja: pročitaj mail naglas.</p>
+      <p>Ako se negdje zapneš, ako neku rečenicu ne bi izgovorio/izgovorila telefonom, ako zvuči kao brošura &mdash; ta rečenica ide van.</p>
+      <p>Mail koji dobiva odgovore zvuči kao poruka čovjeka koji je nešto primijetio i ima jedno pitanje. Ništa više.</p>
+    </div>
+    <div class="note"><strong>Povezano:</strong> predlošci sekvenci su u materijalu 03, a lista kojoj šalješ se definiše u materijalu 01. Tekst je treći po važnosti &mdash; lista i ponuda su prve dvije.</div>
+  </div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || it.getAttribute('data-search').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':(n>=2&&n<=4?' rezultata':' rezultata'));
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>

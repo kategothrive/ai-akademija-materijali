@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Agent Planning Canvas &mdash; Sve AI tajne, Modul 3</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 3</div>
+<h1>AI Agent Planning Canvas</h1>
+<p class="lede">Agenti ne padaju na tehnologiji &mdash; padaju na tome što nisu bili definirani prije gradnje. Osam blokova, provjera spremnosti i gotov canvas koji možeš predati implementatoru.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>8 blokova</span><span>Provjera spremnosti</span><span>Generira canvas</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Razlika između chatbota i agenta</h2></div></div>
+<div class="grid g3">
+  <div class="card">
+    <h4>Chatbot</h4>
+    <div class="prose" style="font-size:.94rem"><p>Čeka da ga pitaš. Odgovara tekstom. Zaboravi.</p><p>Ti si okidač, ti si ulaz i ti si onaj koji nešto napravi s odgovorom.</p></div>
+  </div>
+  <div class="card">
+    <h4>Asistent s kontekstom</h4>
+    <div class="prose" style="font-size:.94rem"><p>Zna tvoju tvrtku, pravila i dokumente. Custom GPT ili Claude Project.</p><p>Još uvijek ti pokrećeš, ali ne objašnjavaš kontekst.</p></div>
+  </div>
+  <div class="card hero">
+    <h4>Agent</h4>
+    <div class="prose" style="font-size:.94rem"><p>Ima okidač, ulaz, zadatak, granice i <b>odredište</b>. Rezultat ide nekamo &mdash; u tablicu, u mail, u sustav.</p><p>Pokreće se bez tebe. Zato mora imati granice.</p></div>
+  </div>
+</div>
+<div class="note em" style="margin-top:16px"><strong>Praktična definicija:</strong> agent je proces koji ima <em>okidač</em> i <em>odredište</em>. Sve ostalo je asistent. Ako ti na kraju moraš kopirati rezultat negdje &mdash; to je asistent, i to je potpuno u redu kao prva faza.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Provjera spremnosti</h2><p>Osam uvjeta. Prije nego napraviš ijednog agenta, prođi kroz njih za konkretan proces.</p></div></div>
+<div class="card">
+  <div class="item-badges"><h4 style="flex:1 1 auto">Je li ovaj proces spreman za agenta</h4><span class="count" id="glab"></span></div>
+  <div class="progressbar"><i id="gbar"></i></div>
+  <div><label class="chk"><input type="checkbox" class="gchk"><span class="t"><b>Odradio/odradila si to ručno najmanje 20 puta</b><span>Ako nisi, ne znaš gdje su iznimke. Agent koji ne poznaje iznimke griši u nizu.</span></span></label><label class="chk"><input type="checkbox" class="gchk"><span class="t"><b>Postupak je dokumentiran kao SOP</b><span>Nedokumentiran proces se ne može automatizirati — možeš automatizirati samo ono što možeš opisati.</span></span></label><label class="chk"><input type="checkbox" class="gchk"><span class="t"><b>Ulaz je uvijek u istom obliku</b><span>Ili barem znaš što agent radi kad nije. Neuredan ulaz je razlog broj jedan za neuspjeh.</span></span></label><label class="chk"><input type="checkbox" class="gchk"><span class="t"><b>Izlaz ima fiksni format</b><span>Ako svaki put izgleda drukčije, ne možeš ni provjeriti ni nadograditi.</span></span></label><label class="chk"><input type="checkbox" class="gchk"><span class="t"><b>Zna se što se dogodi kad agent pogriješi</b><span>Tko primijeti, koliko brzo, i što se poništava.</span></span></label><label class="chk"><input type="checkbox" class="gchk"><span class="t"><b>Postoji čovjek koji odgovara za agenta</b><span>Agent bez vlasnika za tri mjeseca radi pogrešno, a nitko ne zna.</span></span></label><label class="chk"><input type="checkbox" class="gchk"><span class="t"><b>Faza 1 je izvediva bez programiranja</b><span>Bez Azurea, bez API ključa, bez skripte. Ako nije — prekomplicirao/prekomplicirala si prvu verziju.</span></span></label><label class="chk"><input type="checkbox" class="gchk"><span class="t"><b>Vrijedi truda</b><span>Mjesečna ušteda je veća od vremena postavljanja i održavanja.</span></span></label></div>
+  <div class="note" id="gverdict"></div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Kućno pravilo &mdash; dvije faze</h2><p>Ovo je pravilo po kojem u GoThriveu isporučujemo svakog agenta. Vrijedi i za tebe.</p></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <h4>Faza 1 &mdash; bez programiranja</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Prva verzija agenta mora se dati postaviti u sat vremena, <b>bez ijedne integracije, bez API ključa, bez skripte i bez nove pretplate</b>.</p>
+      <p>Čovjek smije lijepiti i klikati. To nije poraz &mdash; to je faza u kojoj otkrivaš sve iznimke koje bi ti automatizacija sakrila.</p>
+      <p>Većina agenata u Fazi 1 stane u ono što već plaćaš: Excel i SharePoint popis, Power Automate sa standardnim konektorima, zajednički sandučić, Claude Project.</p>
+    </div>
+    <div class="note ru"><strong>Test za Fazu 1:</strong> može li je postaviti vlasnik biznisa, sam, u jedno poslijepodne? Ako ne &mdash; napravio/napravila si Fazu 2 i nazvao/nazvala je Fazom 1.</div>
+  </div>
+  <div class="card">
+    <h4>Faza 2 &mdash; za implementatora</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Ovdje idu Make ili Zapier scenariji, API pozivi, automatski dohvat ulaza i upis u sustav.</p>
+      <p>Faza 2 se ne pokreće prije nego što Faza 1 radi <b>dva mjeseca</b>. Do tada ne znaš koje iznimke automatizacija mora pokriti.</p>
+    </div>
+    <ul class="ticks">
+      <li>Faza 1 ti pokaže <b>gdje proces stvarno puča</b>, na tvojim podacima.</li>
+      <li>Faza 2 onda automatizira postupak koji znaš da radi &mdash; a ne onaj koji si pretpostavio/pretpostavila.</li>
+      <li>Pola agenata nikad ne treba Fazu 2. To je dobra vijest, ne loša.</li>
+    </ul>
+    <div class="note em"><strong>Skriveni trošak Faze 2:</strong> svaka integracija je nešto što se može pokvariti a da to ne primijetiš. Automatizacija bez nadzora je gora od ručnog rada.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Canvas</h2><p>Popuni osam blokova. Canvas se sastavlja u stvarnom vremenu &mdash; kopiraj ga i predaj implementatoru ili zadrži kao svoju dokumentaciju.</p></div></div>
+<div class="note ru">Ništa ne izlazi iz tvog preglednika i ne sprema se. Kopiraj rezultat prije nego što zatvoriš stranicu.</div>
+<div class="grid g2" style="margin-top:18px;align-items:start">
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="card"><h3>1. Posao</h3><div class="prose" style="font-size:.92rem"><p>Što agent radi i za koga. Ako ovo ne možeš napisati u jednoj rečenici, agent je preširok.</p></div><div class="field"><label for="aname">Naziv agenta</label><div class="hint">Po poslu koji radi, ne po alatu.</div><input type="text" id="aname" data-f="aname" placeholder="npr. Zapisničar sastanaka"></div><div class="field"><label for="job">Posao u jednoj rečenici</label><input type="text" id="job" data-f="job" placeholder="npr. iz transkripta sastanka izvlači odluke i zadatke s nositeljima i rokovima i upisuje ih u registar"></div><div class="field"><label for="owner">Vlasnik agenta</label><div class="hint">Jedna osoba koja odgovara da radi. Ne 'tim'.</div><input type="text" id="owner" data-f="owner" placeholder="npr. ja / vođa prodaje / šef ureda"></div><div class="field"><label for="manual">Koliko puta si to odradio/odradila ručno</label><div class="hint">Broj. Ako je ispod 20, još nije vrijeme za agenta.</div><input type="text" id="manual" data-f="manual" placeholder="npr. 25 puta u zadnja dva mjeseca"></div></div><div class="card"><h3>2. Okidač</h3><div class="prose" style="font-size:.92rem"><p>Što pokreće agenta. Agent bez jasnog okidača nikad se ne pokrene.</p></div><div class="field"><label for="trigger">Okidač</label><div class="hint">Vrijeme, dolazak dokumenta, novi red u tablici, primljen mail, ručno pokretanje.</div><textarea id="trigger" data-f="trigger" rows="3" placeholder="npr. svaki radni dan u 8:00 / kad u mapu dođe novi transkript / kad ja kliknem"></textarea></div><div class="field"><label for="freq">Koliko često</label><input type="text" id="freq" data-f="freq" placeholder="npr. 2-3 puta dnevno, oko 40 puta mjesečno"></div></div><div class="card"><h3>3. Ulaz</h3><div class="prose" style="font-size:.92rem"><p>Što agent dobiva. Nestrukturiran ulaz je razlog broj jedan zašto agenti ne rade.</p></div><div class="field"><label for="input">Ulazni podaci</label><div class="hint">Odakle dolaze i u kojem obliku.</div><textarea id="input" data-f="input" rows="3" placeholder="npr. transkript sastanka iz Teamsa, tekstualna datoteka, 2000-6000 riječi"></textarea></div><div class="field"><label for="quality">Koliko je ulaz čist</label><div class="hint">Je li format uvijek isti? Što se dogodi kad nije?</div><textarea id="quality" data-f="quality" rows="3" placeholder="npr. format je uglavnom isti; ponekad nema imena govornika — tada agent traži da mu se dopuni"></textarea></div></div><div class="card"><h3>4. Znanje</h3><div class="prose" style="font-size:.92rem"><p>Što agent mora znati da bi odlučio ispravno. Ovo su datoteke, ne upute.</p></div><div class="field"><label for="knowledge">Dokumenti i pravila</label><div class="hint">Brand dokument, cjenik, FAQ, SOP, prošli primjeri.</div><textarea id="knowledge" data-f="knowledge" rows="3" placeholder="npr. Brand Document, SOP za vođenje sastanaka, popis projekata i nositelja"></textarea></div></div><div class="card"><h3>5. Zadatak i izlaz</h3><div class="prose" style="font-size:.92rem"><p>Fiksni format. Ako izlaz nije uvijek isti, ne može se ni provjeriti ni automatizirati.</p></div><div class="field"><label for="steps">Koraci koje agent radi</label><div class="hint">Jedan po retku.</div><textarea id="steps" data-f="steps" rows="3" placeholder="Pročitaj transkript
+Izvuci odluke
+Izvuci zadatke s nositeljem i rokom
+Označi što je ostalo otvoreno
+Sastavi mail sažetak"></textarea></div><div class="field"><label for="output">Format izlaza</label><div class="hint">Točno kako izgleda rezultat.</div><textarea id="output" data-f="output" rows="3" placeholder="npr. tablica ZADATAK | NOSITELJ | ROK + mail sažetak do 150 riječi"></textarea></div><div class="field"><label for="dest">Gdje izlaz ide</label><div class="hint">U koji sustav, kome, u kojem obliku.</div><textarea id="dest" data-f="dest" rows="3" placeholder="npr. novi redovi u SharePoint popis + mail sa zajedničkog sandučića sudionicima"></textarea></div></div><div class="card"><h3>6. Granice</h3><div class="prose" style="font-size:.92rem"><p>Najvažniji blok. Agent bez granica je rizik, ne pomoć.</p></div><div class="field"><label for="never">Što agent nikad ne radi</label><div class="hint">Jedno po retku.</div><textarea id="never" data-f="never" rows="3" placeholder="Ne izmišljaj nositelja ni rok koji nisu izgovoreni
+Ne šalje mail izvan tvrtke bez moje potvrde
+Ne upisuje u registar zadatak bez nositelja"></textarea></div><div class="field"><label for="escalate">Kad staje i pita čovjeka</label><textarea id="escalate" data-f="escalate" rows="3" placeholder="npr. kad nositelj nije određen, kad se spominje iznos veći od 5.000 EUR, kad je transkript kraći od 300 riječi"></textarea></div><div class="field"><label for="gate">Kapija potvrde</label><div class="hint">Što čovjek mora odobriti prije nego što ide dalje. Za sve što ide prema van — obavezno.</div><textarea id="gate" data-f="gate" rows="3" placeholder="npr. zadaci se upisuju sa statusom ZA POTVRDU; ja ih prebacujem u POTVRDJENO; podsjetnici gledaju samo potvrđene"></textarea></div></div><div class="card"><h3>7. Mjerenje</h3><div class="prose" style="font-size:.92rem"><p>Ako ne znaš po čemu mjeriš uspjeh, nećeš znati je li agent vrijedan.</p></div><div class="field"><label for="metric">Po čemu znaš da radi</label><div class="hint">Jedan broj koji možeš izmjeriti.</div><input type="text" id="metric" data-f="metric" placeholder="npr. sažetak poslan u roku 2h nakon sastanka u 90% slučajeva"></div><div class="field"><label for="saving">Koliko vremena štedi</label><div class="hint">Realno, po jednom izvođenju i mjesečno.</div><input type="text" id="saving" data-f="saving" placeholder="npr. 25 min po sastanku × 40 sastanaka = ~16h mjesečno"></div><div class="field"><label for="cost">Što košta</label><div class="hint">Alati, licence, vrijeme postavljanja.</div><input type="text" id="cost" data-f="cost" placeholder="npr. postojeći M365 + 1h postavljanja + Claude pretplata"></div></div><div class="card"><h3>8. Dvije faze</h3><div class="prose" style="font-size:.92rem"><p>Kućno pravilo: Faza 1 mora biti izvediva bez programiranja i bez nove pretplate.</p></div><div class="field"><label for="faza1">Faza 1 — bez programiranja</label><div class="hint">Što radi sam bez ijedne integracije. Čovjek smije lijepiti i klikati.</div><textarea id="faza1" data-f="faza1" rows="3" placeholder="npr. ja lijepim transkript u Claude Project, kopiram tablicu u SharePoint popis, Power Automate šalje podsjetnike standardnim konektorima"></textarea></div><div class="field"><label for="faza2">Faza 2 — za implementatora</label><div class="hint">Što se automatizira tek kad Faza 1 radi dva mjeseca.</div><textarea id="faza2" data-f="faza2" rows="3" placeholder="npr. transkript se dohvaća sam, poziv na Claude API, automatski upis u popis"></textarea></div></div>
+    <button class="btn ghost" type="button" id="clr">Očisti sva polja</button>
+  </div>
+  <div class="card" style="position:sticky;top:16px">
+    <div class="item-badges"><h4 style="flex:1 1 auto">Tvoj Agent Canvas</h4><span class="badge em">Live</span></div>
+    <div class="progressbar"><i id="pbar"></i></div>
+    <div class="count" id="plab"></div>
+    <pre class="p" id="out" style="max-height:500px;overflow:auto"></pre>
+    <div class="actions"><button class="copybtn" type="button" data-target="#out">Kopiraj canvas</button></div>
+    <div class="note"><strong>Blok koji se najčešće preskoči:</strong> br. 6, granice. To je i jedini blok zbog kojeg agent može napraviti stvarnu štetu &mdash; poslati pogrešan mail klijentu, upisati izmišljen rok, obećati popust.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">05</div><div class="txt"><h2>Prije puštanja u rad</h2><p>Test na dvadeset stvarnih slučajeva. Bez iznimke.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Kako se testira</h4>
+    <ol class="steps">
+      <li>Uzmi <b>dvadeset stvarnih slučajeva iz arhive</b> &mdash; ne izmišljenih. Iz pošte, iz transkripata, iz tablice.</li>
+      <li>Među njih namjerno ubaci pet <b>rubnih</b>: nepotpun ulaz, neuobičajen format, slučaj koji bi trebao eskalirati.</li>
+      <li>Pusti agenta i <b>zapiši svaki promašaj</b>. Ne popravljaj u hodu &mdash; prvo skupi sve.</li>
+      <li>Svaki promašaj riješi <b>rečenicom u granicama ili u znanju</b>, ne ručnim ispravkom.</li>
+      <li>Ponovi na istih dvadeset. Kad prođe osamnaest od dvadeset, pusti u rad s kapijom potvrde.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h4>Četiri načina na koje agenti propadaju</h4>
+    <ul class="ticks">
+      <li><b>Preopćenito zadan.</b> &bdquo;Agent za prodaju&ldquo; nije agent. &bdquo;Kvalificira upite s weba po pet kriterija i usmjerava ih&ldquo; je agent.</li>
+      <li><b>Bez granica.</b> Radi i kad ne bi trebao. Prvi put kad izmisli rok, izgubiš povjerenje tima i agent umire.</li>
+      <li><b>Bez vlasnika.</b> Radi tri mjeseca, pa se nešto promijeni u ulazu i tiho počne raditi pogrešno.</li>
+      <li><b>Prerano automatiziran.</b> Faza 2 bez Faze 1 znači da si automatizirao/automatizirala proces koji ne poznaješ.</li>
+    </ul>
+    <div class="note ru"><strong>Matematika ne ide kroz jezični model.</strong> Ako agent treba računati &mdash; rokove, iznose, marže &mdash; taj korak radi tablica ili automatizacija, ne AI. Jezični model odlučuje i piše; ne zbraja.</div>
+  </div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+var SPEC = [["1. Posao", [["aname", "Naziv agenta"], ["job", "Posao u jednoj re\u010denici"], ["owner", "Vlasnik agenta"], ["manual", "Koliko puta si to odradio/odradila ru\u010dno"]]], ["2. Okida\u010d", [["trigger", "Okida\u010d"], ["freq", "Koliko \u010desto"]]], ["3. Ulaz", [["input", "Ulazni podaci"], ["quality", "Koliko je ulaz \u010dist"]]], ["4. Znanje", [["knowledge", "Dokumenti i pravila"]]], ["5. Zadatak i izlaz", [["steps", "Koraci koje agent radi"], ["output", "Format izlaza"], ["dest", "Gdje izlaz ide"]]], ["6. Granice", [["never", "\u0160to agent nikad ne radi"], ["escalate", "Kad staje i pita \u010dovjeka"], ["gate", "Kapija potvrde"]]], ["7. Mjerenje", [["metric", "Po \u010demu zna\u0161 da radi"], ["saving", "Koliko vremena \u0161tedi"], ["cost", "\u0160to ko\u0161ta"]]], ["8. Dvije faze", [["faza1", "Faza 1 \u2014 bez programiranja"], ["faza2", "Faza 2 \u2014 za implementatora"]]]];
+(function(){
+  var out=document.getElementById('out'),bar=document.getElementById('pbar'),lab=document.getElementById('plab');
+  var all=[].slice.call(document.querySelectorAll('[data-f]'));
+  function strip(s){return s.replace(/&#\d+;/g,'').replace(/&[a-z]+;/g,'')}
+  function val(id){var e=document.getElementById(id);return e?e.value.trim():''}
+  function render(){
+    var nm=val('aname')||'[NAZIV AGENTA]';
+    var t='AGENT CANVAS — '+nm+'\n';
+    t+='Izrađeno: '+new Date().toLocaleDateString('hr-HR')+'\n';
+    t+='\n'+'='.repeat(64)+'\n';
+    SPEC.forEach(function(sec){
+      t+='\n\n'+strip(sec[0]).toUpperCase()+'\n'+'-'.repeat(64)+'\n';
+      sec[1].forEach(function(f){
+        var v=val(f[0]);
+        t+='\n'+strip(f[1])+':\n'+(v?v:'[nije definirano]')+'\n';
+      });
+    });
+    t+='\n\n'+'='.repeat(64)+'\n';
+    t+='PRAVILO: Faza 1 se ne pušta u rad prije testa na 20 stvarnih slučajeva.\n';
+    out.textContent=t;
+    var done=all.filter(function(e){return e.value.trim().length>0}).length;
+    if(bar)bar.style.width=(done/all.length*100)+'%';
+    if(lab)lab.textContent=done+' od '+all.length+' polja definirano';
+  }
+  all.forEach(function(e){e.addEventListener('input',render)});
+  var c=document.getElementById('clr');
+  if(c)c.addEventListener('click',function(){all.forEach(function(e){e.value=''});render()});
+  render();
+
+  var g=[].slice.call(document.querySelectorAll('.gchk')),gb=document.getElementById('gbar'),
+      gl=document.getElementById('glab'),gv=document.getElementById('gverdict');
+  function gp(){
+    var n=g.filter(function(c){return c.checked}).length;
+    if(gb)gb.style.width=(n/g.length*100)+'%';
+    if(gl)gl.textContent=n+' od '+g.length;
+    if(gv){
+      if(n===g.length){gv.className='note em';gv.innerHTML='<strong>Spremno.</strong> Svih osam uvjeta je zadovoljeno — kreni u Fazu 1 i testiraj na 20 slučajeva prije puštanja u rad.'}
+      else if(n>=6){gv.className='note';gv.innerHTML='<strong>Blizu.</strong> Riješi ono što je ostalo neoznačeno prije nego što počneš graditi — svaka od tih točaka se poslije plaća dvostruko.'}
+      else {gv.className='note ru';gv.innerHTML='<strong>Još ne.</strong> Manje od šest zadovoljenih uvjeta znači da agent nije problem koji treba rješavati sada. Vrati se na ručno izvođenje i na SOP.'}
+    }
+  }
+  g.forEach(function(c){c.addEventListener('change',gp)});gp();
+})();
+</script>
+
+</div>
+</body>
+</html>

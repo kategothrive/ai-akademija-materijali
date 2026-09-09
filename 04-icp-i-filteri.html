@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Idealan profil klijenta &mdash; Sve AI tajne, Modul 4</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 4</div>
+<h1>Idealan profil klijenta</h1>
+<p class="lede">Lista prije teksta. Savršen mail pogrešnoj osobi vrijedi ništa, a osrednji mail pravoj osobi donosi sastanak. Ovdje definišeš kome uopće pišeš &mdash; i dobivaš gotov recept za pretragu.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>5 sekcija</span><span>10 filtera</span><span>Generira ICP</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Zašto ovo dolazi prije svega ostalog</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <div class="prose" style="font-size:.96rem">
+      <p>Kad kampanja ne radi, prvo se prepravlja tekst. Gotovo uvijek pogrešno.</p>
+      <p>Redoslijed po kojem se gubi ili dobiva odgovor: <b>lista, pa ponuda, pa poruka, pa postavke</b>. Tekst je treći po važnosti, a mijenja se prvi jer je najlakši.</p>
+      <p>Sat vremena uložen ovdje vrijedi više od deset sati prepravljanja subject linea.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Kako prepoznati da ICP nije dobar</h4>
+    <ul class="ticks">
+      <li><b>Odgovori su pristojni, ali nezainteresirani.</b> Pogodio/pogodila si čovjeka, promašio/promašila problem.</li>
+      <li><b>&bdquo;To nije za mene, probajte s&hellip;&ldquo;</b> &mdash; ciljao/ciljala si pogrešnu poziciju u pravoj tvrtki.</li>
+      <li><b>Zanimanje ima, ali nema budžeta.</b> Tvrtke su premale. Podigni donju granicu.</li>
+      <li><b>Nitko ne odgovara, a adrese su žive.</b> Bol koju opisuješ ne postoji kod njih.</li>
+    </ul>
+    <div class="note em">Svaki od ova četiri signala govori ti točno koji filter promijeniti. Zato se odgovori čitaju, a ne samo broje.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Definiraj svoj ICP</h2><p>Pet sekcija. Dokument se sastavlja u stvarnom vremenu i na kraju daje gotov recept za pretragu.</p></div></div>
+<div class="note ru">Ništa ne izlazi iz preglednika i ne sprema se. Kopiraj rezultat prije zatvaranja.</div>
+<div class="grid g2" style="margin-top:18px;align-items:start">
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="card"><h3>A. Tvrtka</h3><div class="prose" style="font-size:.92rem"><p>Tko je tvrtka, ne osoba. Ovo su filteri kojima sužavaš popis.</p></div><div class="field"><label for="industrija">Industrija ili djelatnost</label><div class="hint">Konkretno. 'B2B' nije industrija.</div><textarea id="industrija" data-f="industrija" rows="2" placeholder="npr. metaloprerađivačka industrija i strojogradnja"></textarea></div><div class="field"><label for="velicina">Broj zaposlenih</label><div class="hint">Raspon. Ispod donje granice nema budžeta, iznad gornje odlučuje odbor.</div><input type="text" id="velicina" data-f="velicina" placeholder="npr. 20-150 zaposlenih"></div><div class="field"><label for="lokacija">Lokacija i tržište</label><input type="text" id="lokacija" data-f="lokacija" placeholder="npr. Hrvatska, Slovenija, BiH — sjedište u regiji"></div><div class="field"><label for="signali">Signali da su spremni</label><div class="hint">Što se u tvrtki dogodilo da im to sada treba.</div><textarea id="signali" data-f="signali" rows="4" placeholder="npr. otvorili novi pogon
+zapošljavaju u administraciji
+dobili veći ugovor ili EU projekt
+objavili oglas za posao koji opisuje ručni rad"></textarea></div></div><div class="card"><h3>B. Osoba</h3><div class="prose" style="font-size:.92rem"><p>Tko unutar te tvrtke potpisuje, a tko priprema odluku.</p></div><div class="field"><label for="titule">Titule odlučitelja</label><div class="hint">Napiši ih onako kako stvarno pišu na LinkedInu, uključujući hrvatske varijante.</div><textarea id="titule" data-f="titule" rows="3" placeholder="npr. vlasnik, direktor, član uprave, voditelj proizvodnje, COO, operations manager"></textarea></div><div class="field"><label for="priprema">Tko priprema odluku</label><div class="hint">Osoba koja osjeća bol, ali ne potpisuje. Često je bolji prvi kontakt.</div><textarea id="priprema" data-f="priprema" rows="2" placeholder="npr. voditelj administracije, šef smjene, asistentica uprave"></textarea></div><div class="field"><label for="neodlucuje">Tko definitivno ne odlučuje</label><div class="hint">Da ne trošiš vrijeme.</div><textarea id="neodlucuje" data-f="neodlucuje" rows="2" placeholder="npr. IT podrška, referenti, praktikanti"></textarea></div></div><div class="card"><h3>C. Bol i ponuda</h3><div class="prose" style="font-size:.92rem"><p>Ovo je dio koji ide u prvu rečenicu maila.</p></div><div class="field"><label for="bol">Bol, njihovim riječima</label><div class="hint">Ne 'neefikasnost procesa'. Kako bi to rekao čovjek u toj firmi.</div><textarea id="bol" data-f="bol" rows="3" placeholder="npr. &#x27;nitko ne zna gdje je koji nalog dok ne prošeta do pogona&#x27;"></textarea></div><div class="field"><label for="kosta">Što ih to košta</label><div class="hint">Sati, kune, propušteni poslovi. Ako ne znaš — to je prvo što trebaš saznati.</div><textarea id="kosta" data-f="kosta" rows="2" placeholder="npr. 6 sati tjedno voditelju proizvodnje + kašnjenja koja se ne evidentiraju"></textarea></div><div class="field"><label for="nudimo">Što nudimo, u jednoj rečenici</label><div class="hint">Ishod, ne alat.</div><textarea id="nudimo" data-f="nudimo" rows="2" placeholder="npr. da se u svakom trenutku zna gdje je koji nalog, bez obilaska pogona"></textarea></div><div class="field"><label for="cijena">Cjenovni raspon</label><input type="text" id="cijena" data-f="cijena" placeholder="npr. 2.500-6.000 EUR postavljanje + mjesečno održavanje"></div></div><div class="card"><h3>D. Tko NIJE</h3><div class="prose" style="font-size:.92rem"><p>Negativni ICP je jednako vrijedan kao pozitivni. Većina ga preskoči.</p></div><div class="field"><label for="nije">Tko nije naš klijent</label><div class="hint">Veličina, industrija, situacija, tip osobe.</div><textarea id="nije" data-f="nije" rows="4" placeholder="npr. tvrtke ispod 15 zaposlenih — nema budžeta
+tvrtke koje su prošle godine uvele novi ERP — neće ništa dirati
+svatko tko traži &#x27;nešto s AI-em&#x27; bez konkretnog procesa"></textarea></div><div class="field"><label for="crvene">Crvene zastavice u razgovoru</label><textarea id="crvene" data-f="crvene" rows="3" placeholder="npr. traži probni projekt bez naknade
+nema roka i ne zna tko odlučuje
+uspoređuje nas s freelancerom za 500 EUR"></textarea></div></div><div class="card"><h3>E. Gdje ih nalazim</h3><div class="prose" style="font-size:.92rem"><p>Kanal po kanalu, s konkretnim filterom ili izvorom.</p></div><div class="field"><label for="kanali">Izvori i filteri</label><div class="hint">Jedan po retku.</div><textarea id="kanali" data-f="kanali" rows="5" placeholder="Apollo: industrija + 20-150 zaposlenih + HR/SI/BiH + titule iz sekcije B
+LinkedIn Sales Navigator: isto + signal &#x27;nedavno zaposlili&#x27;
+Sudski registar i Bisnode za provjeru veličine
+Stručna udruženja i klasteri u industriji
+Sajmovi — popis izlagača je gotova lista"></textarea></div></div>
+    <button class="btn ghost" type="button" id="clr">Očisti sva polja</button>
+  </div>
+  <div class="card" style="position:sticky;top:16px">
+    <div class="item-badges"><h4 style="flex:1 1 auto">Tvoj ICP</h4><span class="badge em">Live</span></div>
+    <div class="progressbar"><i id="pbar"></i></div>
+    <div class="count" id="plab"></div>
+    <pre class="p" id="out" style="max-height:500px;overflow:auto"></pre>
+    <div class="actions"><button class="copybtn" type="button" data-target="#out">Kopiraj ICP</button></div>
+    <div class="note"><strong>Sekcija D je ona koja štedi najviše.</strong> Većina ljudi napiše tko im je klijent i stane. Popis onih tko <em>nije</em> je ono što te čuva od tri mjeseca lošeg posla.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Filteri</h2><p>Nazivi su iz Apolla, ali ista logika vrijedi u Sales Navigatoru i svugdje drugdje. Četiri označena postavi prije ostalih.</p></div></div>
+<div class="tbl-scroll"><table><thead><tr><th>Filter</th><th>Što radi</th><th>Kako ga koristiti</th></tr></thead><tbody><tr><td class="k">Job Titles</td><td class="k">Titule na koje ciljaš</td><td>Upiši i hrvatske i engleske varijante — u regiji ljudi pišu i &#x27;direktor&#x27; i &#x27;CEO&#x27; i &#x27;Managing Director&#x27;. Jedna varijanta znači da propuštaš pola liste. <span class="badge solid">Postavi prvo</span></td></tr><tr><td class="k">Seniority</td><td class="k">Razina odgovornosti</td><td>Owner, Founder, C-Suite, VP, Director, Head. Kod tvrtki s 20-150 ljudi obično je dovoljno Owner + C-Suite + Director. <span class="badge solid">Postavi prvo</span></td></tr><tr><td class="k">Employee count</td><td class="k">Broj zaposlenih</td><td>Najvažniji filter za kvalifikaciju budžeta. Postavi ga prije svih ostalih i suzi popis odmah. <span class="badge solid">Postavi prvo</span></td></tr><tr><td class="k">Location</td><td class="k">Lokacija</td><td>Filtriraj po sjedištu tvrtke, ne po lokaciji osobe — inače hvataš ljude koji rade iz regije za strane tvrtke.</td></tr><tr><td class="k">Industry &amp; Keywords</td><td class="k">Industrija i ključne riječi</td><td>Industrija sama je gruba. Dodaj ključne riječi iz opisa tvrtke — tako nalaziš niše koje nemaju svoju kategoriju.</td></tr><tr><td class="k">Technologies</td><td class="k">Tehnologije koje koriste</td><td>Zlato za tvoju ponudu: tvrtke koje već koriste određeni ERP, CRM ili alat imaju i procese oko njega.</td></tr><tr><td class="k">Job Postings</td><td class="k">Aktivni oglasi za posao</td><td>Tvrtka koja zapošljava u administraciji ima rastući ručni posao. To je signal, ne slučajnost. <span class="badge solid">Postavi prvo</span></td></tr><tr><td class="k">Funding / Revenue</td><td class="k">Financiranje i prihod</td><td>U regiji često nepotpuno. Koristi kao dodatnu potvrdu, nikad kao jedini kriterij.</td></tr><tr><td class="k">Buying intent</td><td class="k">Signali namjere</td><td>Korisno, ali nemoj graditi cijelu strategiju na tome. Provjeri uvijek ručno prije nego što napišeš mail.</td></tr><tr><td class="k">Email status</td><td class="k">Status adrese</td><td>Filtriraj samo na provjerene adrese. Ovo najviše čuva isporučivost — jedan mail na nepostojeću adresu šteti svima ostalima. <span class="badge solid">Postavi prvo</span></td></tr></tbody></table></div>
+<div class="note ru" style="margin-top:14px"><strong>Regionalna napomena:</strong> baze podataka su za hrvatsko, slovensko i bosansko tržište osjetno slabije nego za američko. Broj zaposlenih zna biti star, industrija pogrešno svrstana, a titule napisane na tri jezika. Računaj da ćeš svaki popis morati ručno pročistiti &mdash; i uvrsti to u procjenu vremena.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Test od pedeset kontakata</h2><p>Prije nego pošalješ ijedan mail. Traje dvadeset minuta i spašava tjedne.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Postupak</h4>
+    <ol class="steps">
+      <li>Postavi filtere po svom ICP-u i izvuci <b>pedeset</b> kontakata. Ne pet stotina.</li>
+      <li>Nasumično odaberi <b>deset</b> i otvori im LinkedIn profil i web tvrtke.</li>
+      <li>Za svakog odgovori: je li ovo prava tvrtka, prava osoba, i ima li opisanu bol.</li>
+      <li>Broji koliko ih prođe sva tri pitanja.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h4>Što znači rezultat</h4>
+    <ul class="ticks">
+      <li><b>8-10 od 10</b> &mdash; filteri su dobri. Povećaj popis i kreni.</li>
+      <li><b>5-7 od 10</b> &mdash; jedan filter je preširok. Najčešće industrija ili titula.</li>
+      <li><b>Ispod 5</b> &mdash; ne šalji ništa. Vrati se na sekciju A i suzi.</li>
+    </ul>
+    <div class="note em"><strong>Važno:</strong> ako test padne, problem je u filterima, a ne u poruci. Ne prepravljaj mailove &mdash; prepravi listu.</div>
+  </div>
+</div>
+<div class="note" style="margin-top:16px"><strong>Sljedeći korak:</strong> kad ICP prođe test, idi na <em>Cold Email Template Pack</em> (materijal 03) i odaberi sekvencu koja odgovara industriji &mdash; ili napiši svoju po istoj strukturi.</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+var SPEC = [["A. Tvrtka", [["industrija", "Industrija ili djelatnost"], ["velicina", "Broj zaposlenih"], ["lokacija", "Lokacija i tr\u017ei\u0161te"], ["signali", "Signali da su spremni"]]], ["B. Osoba", [["titule", "Titule odlu\u010ditelja"], ["priprema", "Tko priprema odluku"], ["neodlucuje", "Tko definitivno ne odlu\u010duje"]]], ["C. Bol i ponuda", [["bol", "Bol, njihovim rije\u010dima"], ["kosta", "\u0160to ih to ko\u0161ta"], ["nudimo", "\u0160to nudimo, u jednoj re\u010denici"], ["cijena", "Cjenovni raspon"]]], ["D. Tko NIJE", [["nije", "Tko nije na\u0161 klijent"], ["crvene", "Crvene zastavice u razgovoru"]]], ["E. Gdje ih nalazim", [["kanali", "Izvori i filteri"]]]];
+(function(){
+  var out=document.getElementById('out'),bar=document.getElementById('pbar'),lab=document.getElementById('plab');
+  var all=[].slice.call(document.querySelectorAll('[data-f]'));
+  function strip(s){return s.replace(/&#\d+;/g,'').replace(/&[a-z]+;/g,'')}
+  function v(id){var e=document.getElementById(id);return e?e.value.trim():''}
+  function render(){
+    var t='IDEALAN PROFIL KLIJENTA (ICP)\n';
+    t+=(v('industrija')||'[INDUSTRIJA]').split('\n')[0]+'\n';
+    t+='Zadnja izmjena: '+new Date().toLocaleDateString('hr-HR')+'\n';
+    t+='\n'+'='.repeat(64)+'\n';
+    SPEC.forEach(function(sec){
+      t+='\n\n'+strip(sec[0]).toUpperCase()+'\n'+'-'.repeat(64)+'\n';
+      sec[1].forEach(function(f){
+        t+='\n'+strip(f[1])+':\n'+(v(f[0])||'[nije definirano]')+'\n';
+      });
+    });
+    t+='\n\n'+'='.repeat(64)+'\n';
+    t+='RECEPT ZA PRETRAGU\n';
+    t+='Titule: '+(v('titule')||'[titule]')+'\n';
+    t+='Zaposlenih: '+(v('velicina')||'[raspon]')+'\n';
+    t+='Lokacija: '+(v('lokacija')||'[tržišta]')+'\n';
+    t+='Industrija: '+(v('industrija')||'[industrija]').replace(/\n/g,'; ')+'\n';
+    t+='Status adrese: samo provjerene\n';
+    t+='Isključi: '+(v('nije')||'[tko nije]').replace(/\n/g,'; ')+'\n';
+    t+='\nTEST PRIJE SLANJA: izvuci 50 kontakata i ručno provjeri 10.\n';
+    t+='Ako više od dva ne pripadaju — filteri nisu dobri, ne poruka.\n';
+    out.textContent=t;
+    var done=all.filter(function(e){return e.value.trim().length>0}).length;
+    if(bar)bar.style.width=(done/all.length*100)+'%';
+    if(lab)lab.textContent=done+' od '+all.length+' polja ispunjeno';
+  }
+  all.forEach(function(e){e.addEventListener('input',render)});
+  var c=document.getElementById('clr');
+  if(c)c.addEventListener('click',function(){all.forEach(function(e){e.value=''});render()});
+  render();
+})();
+</script>
+
+</div>
+</body>
+</html>

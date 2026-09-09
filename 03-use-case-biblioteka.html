@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentic AI Use Case Library &mdash; Sve AI tajne, Modul 3</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 3</div>
+<h1>Use Case Library</h1>
+<p class="lede">Dvadeset četiri agenta koje mali i srednji biznisi stvarno grade &mdash; s okidačem, ulazom, izlazom, alatima za prvu fazu i realnom procjenom uštede. Većina ih se postavlja bez ijedne integracije.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>24 slučajeva</span><span>17 bez integracije</span><span>8 funkcija</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Kako čitati ovu biblioteku</h2></div></div>
+<div class="grid g3">
+  <div class="card">
+    <div class="item-badges"><h4 style="flex:1 1 auto">Faza 1</h4><span class="badge em">17</span></div>
+    <div class="prose" style="font-size:.93rem"><p>Postavljaš sam/sama u sat vremena. Bez integracije, bez API ključa, bez nove pretplate. Čovjek smije lijepiti i klikati.</p><p><b>Odavde počni.</b></p></div>
+  </div>
+  <div class="card">
+    <div class="item-badges"><h4 style="flex:1 1 auto">Jedna integracija</h4><span class="badge am">7</span></div>
+    <div class="prose" style="font-size:.93rem"><p>Faza 1 radi ručno i vrijedi. Puna verzija traži jedan scenarij ili izvoz &mdash; Moduli 7 i 8.</p></div>
+  </div>
+  <div class="card">
+    <div class="item-badges"><h4 style="flex:1 1 auto">Za implementatora</h4><span class="badge ru">0</span></div>
+    <div class="prose" style="font-size:.93rem"><p>Više integracija, API pozivi, pristupi sustavima. Ovo se ne gura vlasniku biznisa &mdash; radi IT osoba ili vanjski partner.</p></div>
+  </div>
+</div>
+<div class="note ru" style="margin-top:16px"><strong>Pravilo prije nego što bilo što odabereš:</strong> uzmi <b>jedan</b> agent, iz razine Faza 1, za proces koji si već odradio/odradila najmanje dvadeset puta ručno. Jedan agent koji radi vrijedi više od pet koje si počeo/počela i nisi dovršio/dovršila. Procjena spremnosti je u <em>AI Agent Planning Canvasu</em>.</div>
+<div class="note em" style="margin-top:12px"><strong>O procjenama uštede:</strong> brojevi u tablicama su okvirni, iz prakse malih i srednjih firmi &mdash; ne obećanje. Tvoja ušteda ovisi o tome koliko taj proces stvarno radiš. Zato u Canvasu i postoji polje &bdquo;koliko puta si to odradio/odradila ručno&ldquo; &mdash; to je jedini pošten temelj za procjenu.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Biblioteka</h2><p>Filtriraj po funkciji ili traži po ključnoj riječi. Unutar svake funkcije agenti bez integracije su prvi.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži &mdash; npr. ponuda, sastanak, račun, natječaj, sadržaj&hellip;" aria-label="Traži slučaj">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Sve<span class="n">24</span></button><button class="chip" data-cat="prodaja" aria-pressed="false">Prodaja<span class="n">4</span></button><button class="chip" data-cat="podrska" aria-pressed="false">Podrška<span class="n">4</span></button><button class="chip" data-cat="ops" aria-pressed="false">Operacije<span class="n">6</span></button><button class="chip" data-cat="financije" aria-pressed="false">Financije<span class="n">2</span></button><button class="chip" data-cat="sadrzaj" aria-pressed="false">Sadržaj<span class="n">2</span></button><button class="chip" data-cat="nabava" aria-pressed="false">Nabava<span class="n">2</span></button><button class="chip" data-cat="hr" aria-pressed="false">Ljudi<span class="n">2</span></button><button class="chip" data-cat="strategija" aria-pressed="false">Strategija<span class="n">2</span></button></div>
+</div>
+<article class="item" data-cat="prodaja" data-search="provjera konkurencije skuplja što se promijenilo u ponudi i komunikaciji konkurencije i javlja što je relevantno. web, linkedin, recenzije → sažetak promjena + tri poteza faza 1: ručno skupljanje + claude za analizu automatsko praćenje je faza 2 i rijetko se isplati kod male konkurencije."><div class="item-top"><div class="item-id"><h3>Provjera konkurencije</h3></div><div class="item-badges"><span class="badge am">Jedna integracija</span><span class="badge gy">Prodaja</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Skuplja što se promijenilo u ponudi i komunikaciji konkurencije i javlja što je relevantno.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Kvartalno</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Web, LinkedIn, recenzije → sažetak promjena + tri poteza</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Faza 1: ručno skupljanje + Claude za analizu</td></tr><tr><td class="k">Procjena uštede</td><td>3-4 h po kvartalu</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Automatsko praćenje je Faza 2 i rijetko se isplati kod male konkurencije.</div></div></article><article class="item" data-cat="prodaja" data-search="kvalifikacija upita ocjenjuje upit po pet kriterija, prepoznaje crvene zastavice, dodjeljuje razred i predlaže tri pitanja prije ponude. tekst upita + odgovori iz obrasca → razred a/b/c/d + obrazloženje obrazac + tablica + claude project gotov template je deliverable br. 2 ovog modula."><div class="item-top"><div class="item-id"><h3>Kvalifikacija upita</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Prodaja</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Ocjenjuje upit po pet kriterija, prepoznaje crvene zastavice, dodjeljuje razred i predlaže tri pitanja prije ponude.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Novi upit s weba ili maila</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Tekst upita + odgovori iz obrasca → razred A/B/C/D + obrazloženje</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Obrazac + tablica + Claude Project</td></tr><tr><td class="k">Procjena uštede</td><td>2-4 h mjesečno na ponudama koje nisu imale smisla</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Gotov template je deliverable br. 2 ovog modula.</div></div></article><article class="item" data-cat="prodaja" data-search="priprema ponude iz razgovora iz bilješki razgovora sastavlja nacrt ponude u tvom formatu, s tri paketa i s onim što nije uključeno. bilješke razgovora → nacrt ponude po tvom predlošku claude project s predloškom ponude i cjenikom nikad ne šalji nacrt bez čitanja. model ne zna što si obećao usmeno."><div class="item-top"><div class="item-id"><h3>Priprema ponude iz razgovora</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Prodaja</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Iz bilješki razgovora sastavlja nacrt ponude u tvom formatu, s tri paketa i s onim što nije uključeno.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Nakon discovery razgovora</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Bilješke razgovora → nacrt ponude po tvom predlošku</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project s predloškom ponude i cjenikom</td></tr><tr><td class="k">Procjena uštede</td><td>1-2 h po ponudi</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Nikad ne šalji nacrt bez čitanja. Model ne zna što si obećao usmeno.</div></div></article><article class="item" data-cat="prodaja" data-search="priprema za sastanak priprema pitanja, moguće prigovore s odgovorima, otvaranje i zatvaranje — pa odigra klijenta u simulaciji. podaci o sugovorniku → priprema + simulacija razgovora claude project system prompt br. 6 iz modula 2. prigovor koji prvi put čuješ od modela ne košta te ništa."><div class="item-top"><div class="item-id"><h3>Priprema za sastanak</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Prodaja</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Priprema pitanja, moguće prigovore s odgovorima, otvaranje i zatvaranje — pa odigra klijenta u simulaciji.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Dan prije sastanka</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Podaci o sugovorniku → priprema + simulacija razgovora</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project</td></tr><tr><td class="k">Procjena uštede</td><td>Bolji ishod, ne ušteda vremena</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> System prompt br. 6 iz Modula 2. Prigovor koji prvi put čuješ od modela ne košta te ništa.</div></div></article><article class="item" data-cat="podrska" data-search="mjesečni izvještaj za klijenta iz podataka o odrađenom sastavlja izvještaj u tvom formatu, s nalazima i preporukama. podaci iz mjeseca → izvještaj po predlošku faza 1: izvoz u tablicu + claude project s predloškom kod agencija i konzultanata s više klijenata ovo se množi. deset klijenata je dan i pol mjesečno."><div class="item-top"><div class="item-id"><h3>Mjesečni izvještaj za klijenta</h3></div><div class="item-badges"><span class="badge am">Jedna integracija</span><span class="badge gy">Podrška</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Iz podataka o odrađenom sastavlja izvještaj u tvom formatu, s nalazima i preporukama.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Prvi radni dan u mjesecu</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Podaci iz mjeseca → izvještaj po predlošku</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Faza 1: izvoz u tablicu + Claude Project s predloškom</td></tr><tr><td class="k">Procjena uštede</td><td>1-2 h po klijentu mjesečno</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Kod agencija i konzultanata s više klijenata ovo se množi. Deset klijenata je dan i pol mjesečno.</div></div></article><article class="item" data-cat="podrska" data-search="onboarding novog klijenta šalje niz poruka po planu, prati što klijent treba dostaviti i javlja ti što još čeka. potpisan ugovor → niz poruka + lista onoga što čekamo faza 1: predlošci u claudeu + tablica. faza 2: automatizirani niz organiziranost u prvom tjednu postavlja ton cijele suradnje."><div class="item-top"><div class="item-id"><h3>Onboarding novog klijenta</h3></div><div class="item-badges"><span class="badge am">Jedna integracija</span><span class="badge gy">Podrška</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Šalje niz poruka po planu, prati što klijent treba dostaviti i javlja ti što još čeka.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Nakon potpisa</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Potpisan ugovor → niz poruka + lista onoga što čekamo</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Faza 1: predlošci u Claudeu + tablica. Faza 2: automatizirani niz</td></tr><tr><td class="k">Procjena uštede</td><td>1-2 h po klijentu</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Organiziranost u prvom tjednu postavlja ton cijele suradnje.</div></div></article><article class="item" data-cat="podrska" data-search="prva linija podrške odgovara na ponavljajuća pitanja iz faq-a i cjenika, ostalo eskalira po matrici. upit klijenta → predloženi odgovor + interna bilješka claude project s faq-om i cjenikom gotov template je deliverable br. 1 ovog modula. prvo asistent, pa agent."><div class="item-top"><div class="item-id"><h3>Prva linija podrške</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Podrška</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Odgovara na ponavljajuća pitanja iz FAQ-a i cjenika, ostalo eskalira po matrici.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Novi upit klijenta</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Upit klijenta → predloženi odgovor + interna bilješka</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project s FAQ-om i cjenikom</td></tr><tr><td class="k">Procjena uštede</td><td>5-10 h mjesečno</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Gotov template je deliverable br. 1 ovog modula. Prvo asistent, pa agent.</div></div></article><article class="item" data-cat="podrska" data-search="analiza povratnih informacija iz recenzija i nps komentara izvlači teme, frekvencije, citate za marketing i crvene zastavice. recenzije i komentari → nalazi + pet citata + što popraviti claude project crvene zastavice su razlog da se ovo radi mjesečno, ne godišnje."><div class="item-top"><div class="item-id"><h3>Analiza povratnih informacija</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Podrška</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Iz recenzija i NPS komentara izvlači teme, frekvencije, citate za marketing i crvene zastavice.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Mjesečno ili kad se nakupi 20+</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Recenzije i komentari → nalazi + pet citata + što popraviti</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project</td></tr><tr><td class="k">Procjena uštede</td><td>2-3 h mjesečno</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Crvene zastavice su razlog da se ovo radi mjesečno, ne godišnje.</div></div></article><article class="item" data-cat="ops" data-search="zapisničar sastanaka iz transkripta izvlači odluke, zadatke s nositeljima i rokovima, otvorena pitanja i sastavlja mail sažetak sudionicima. transkript sastanka → tablica zadataka + mail sažetak do 150 riječi claude project + excel ili sharepoint popis najbrža pobjeda za većinu ljudi. radi od prvog dana bez ijedne integracije. kapija potvrde je obavezna — zadatak ide sa statusom za potvrdu."><div class="item-top"><div class="item-id"><h3>Zapisničar sastanaka</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Operacije</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Iz transkripta izvlači odluke, zadatke s nositeljima i rokovima, otvorena pitanja i sastavlja mail sažetak sudionicima.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Nakon sastanka, ručno</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Transkript sastanka → tablica zadataka + mail sažetak do 150 riječi</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project + Excel ili SharePoint popis</td></tr><tr><td class="k">Procjena uštede</td><td>20-30 min po sastanku</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Najbrža pobjeda za većinu ljudi. Radi od prvog dana bez ijedne integracije. Kapija potvrde je obavezna — zadatak ide sa statusom ZA POTVRDU.</div></div></article><article class="item" data-cat="ops" data-search="trijaža inboxa svrstava poruke u odmah / danas / ovaj tjedan / ne treba odgovor i piše nacrte za prve dvije skupine. poruke → prioritetna lista + nacrti odgovora claude project, ili s mail konektorom bez copy-pastea system prompt br. 7 iz modula 2. nakon tri dana odsutnosti ovo je razlika između pola dana i pola sata."><div class="item-top"><div class="item-id"><h3>Trijaža inboxa</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Operacije</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Svrstava poruke u odmah / danas / ovaj tjedan / ne treba odgovor i piše nacrte za prve dvije skupine.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Ujutro ili nakon odsutnosti</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Poruke → prioritetna lista + nacrti odgovora</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project, ili s mail konektorom bez copy-pastea</td></tr><tr><td class="k">Procjena uštede</td><td>3-5 h tjedno</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> System prompt br. 7 iz Modula 2. Nakon tri dana odsutnosti ovo je razlika između pola dana i pola sata.</div></div></article><article class="item" data-cat="ops" data-search="analiza ugovora prije potpisa prolazi kroz dvanaest standardnih točaka rizika i javlja koje su za tebe loše, s predloženom izmjenom. ugovor → popis rizičnih klauzula + tri koje tražiti da se mijenjaju claude project s tvojim standardnim uvjetima ne zamjenjuje pravnika — skraćuje mu posao. dođeš s pitanjima umjesto s cijelim ugovorom."><div class="item-top"><div class="item-id"><h3>Analiza ugovora prije potpisa</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Operacije</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Prolazi kroz dvanaest standardnih točaka rizika i javlja koje su za tebe loše, s predloženom izmjenom.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Kad dođe ugovor</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Ugovor → popis rizičnih klauzula + tri koje tražiti da se mijenjaju</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project s tvojim standardnim uvjetima</td></tr><tr><td class="k">Procjena uštede</td><td>1-3 h po ugovoru, plus izbjegnuta šteta</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Ne zamjenjuje pravnika — skraćuje mu posao. Dođeš s pitanjima umjesto s cijelim ugovorom.</div></div></article><article class="item" data-cat="ops" data-search="pisanje sop-ova iz opisa iz tvog nepovezanog opisa postavlja pitanja i sastavlja sop s koracima, greškama i eskalacijom. opis procesa → gotov sop claude project svaki sop je i budući agent. nedokumentiran proces se ne može automatizirati."><div class="item-top"><div class="item-id"><h3>Pisanje SOP-ova iz opisa</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Operacije</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Iz tvog nepovezanog opisa postavlja pitanja i sastavlja SOP s koracima, greškama i eskalacijom.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Kad proces radiš treći put isto</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Opis procesa → gotov SOP</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project</td></tr><tr><td class="k">Procjena uštede</td><td>2-3 h po SOP-u</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Svaki SOP je i budući agent. Nedokumentiran proces se ne može automatizirati.</div></div></article><article class="item" data-cat="ops" data-search="čišćenje baze kontakata nalazi duplikate, nekonzistentne formate, nemoguće vrijednosti i predlaže popravke — uz tvoje odobrenje. izvoz kontakata → dijagnoza + očišćena verzija + popis promjena claude ili chatgpt s analizom podataka traži i formulu ili skript za isti postupak — sljedeći izvoz čistiš bez modela."><div class="item-top"><div class="item-id"><h3>Čišćenje baze kontakata</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Operacije</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Nalazi duplikate, nekonzistentne formate, nemoguće vrijednosti i predlaže popravke — uz tvoje odobrenje.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Prije svake kampanje</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Izvoz kontakata → dijagnoza + očišćena verzija + popis promjena</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude ili ChatGPT s analizom podataka</td></tr><tr><td class="k">Procjena uštede</td><td>2-5 h po čišćenju</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Traži i formulu ili skript za isti postupak — sljedeći izvoz čistiš bez modela.</div></div></article><article class="item" data-cat="ops" data-search="sažetak dugog email threada izvlači o čemu se radilo, što je dogovoreno, što je otvoreno i što je tvoj zadatak. email thread → sažetak + tvoji zadaci + otvorena pitanja claude project razdvaja &#x27;netko je predložio&#x27; od &#x27;dogovorili smo&#x27;. to je cijela vrijednost."><div class="item-top"><div class="item-id"><h3>Sažetak dugog email threada</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Operacije</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Izvlači o čemu se radilo, što je dogovoreno, što je otvoreno i što je tvoj zadatak.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Kad ti proslijede thread s 30 poruka</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Email thread → sažetak + tvoji zadaci + otvorena pitanja</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project</td></tr><tr><td class="k">Procjena uštede</td><td>20-40 min po threadu</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Razdvaja &#x27;netko je predložio&#x27; od &#x27;dogovorili smo&#x27;. To je cijela vrijednost.</div></div></article><article class="item" data-cat="financije" data-search="podsjetnici na neplaćene račune provjerava što je dospjelo, sastavlja podsjetnik u odgovarajućem tonu po tome koliko kasni. popis dospjelih → nacrti podsjetnika po razini kašnjenja faza 1: izvoz iz knjigovodstva + tablica + power automate za slanje ovaj korak nema ai poziv u izračunu — samo u tekstu poruke. iznose i datume gleda tablica."><div class="item-top"><div class="item-id"><h3>Podsjetnici na neplaćene račune</h3></div><div class="item-badges"><span class="badge am">Jedna integracija</span><span class="badge gy">Financije</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Provjerava što je dospjelo, sastavlja podsjetnik u odgovarajućem tonu po tome koliko kasni.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Tjedno, po dospijeću</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Popis dospjelih → nacrti podsjetnika po razini kašnjenja</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Faza 1: izvoz iz knjigovodstva + tablica + Power Automate za slanje</td></tr><tr><td class="k">Procjena uštede</td><td>1-2 h tjedno, plus brže plaćanje</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Ovaj korak nema AI poziv u izračunu — samo u tekstu poruke. Iznose i datume gleda tablica.</div></div></article><article class="item" data-cat="financije" data-search="nalaz iz financijskih podataka iz izvještaja izvlači tri nalaza, trend, anomalije i pitanja za knjigovođu. financijski izvještaj → nalazi + pitanja za računovodstvo claude project ili chatgpt s analizom podataka za izračun ključne izračune uvijek provjeri u excelu. ai interpretira, tablica računa."><div class="item-top"><div class="item-id"><h3>Nalaz iz financijskih podataka</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Financije</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Iz izvještaja izvlači tri nalaza, trend, anomalije i pitanja za knjigovođu.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Mjesečno, nakon zatvaranja</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Financijski izvještaj → nalazi + pitanja za računovodstvo</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project ili ChatGPT s analizom podataka za izračun</td></tr><tr><td class="k">Procjena uštede</td><td>2-4 h mjesečno</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Ključne izračune uvijek provjeri u Excelu. AI interpretira, tablica računa.</div></div></article><article class="item" data-cat="sadrzaj" data-search="sadržaj iz jednog izvora u deset formata jedan članak, webinar ili transkript pretvara u post, caption, thread, newsletter i tri video ideje. jedan dugi sadržaj → deset komada za različite kanale claude project s brand voice dokumentom radi samo s brand voice dokumentom. bez njega dobiješ deset generičnih komada umjesto jednog dobrog."><div class="item-top"><div class="item-id"><h3>Sadržaj iz jednog izvora u deset formata</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Sadržaj</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Jedan članak, webinar ili transkript pretvara u post, caption, thread, newsletter i tri video ideje.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Nakon svakog dužeg sadržaja</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Jedan dugi sadržaj → deset komada za različite kanale</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project s Brand Voice dokumentom</td></tr><tr><td class="k">Procjena uštede</td><td>4-6 h tjedno kod onih koji objavljuju redovno</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Radi samo s Brand Voice dokumentom. Bez njega dobiješ deset generičnih komada umjesto jednog dobrog.</div></div></article><article class="item" data-cat="sadrzaj" data-search="tjedni plan objava na temelju tvojih tema i ciljeva predlaže plan po danima, s hookom i formatom za svaki. teme i cilj tjedna → plan pon-pet s hookovima claude project vrijedi samo ako imaš definirane content pillare. inače je to slučajan raspored slučajnih ideja."><div class="item-top"><div class="item-id"><h3>Tjedni plan objava</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Sadržaj</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Na temelju tvojih tema i ciljeva predlaže plan po danima, s hookom i formatom za svaki.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Petkom za sljedeći tjedan</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Teme i cilj tjedna → plan pon-pet s hookovima</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project</td></tr><tr><td class="k">Procjena uštede</td><td>1-2 h tjedno</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Vrijedi samo ako imaš definirane content pillare. Inače je to slučajan raspored slučajnih ideja.</div></div></article><article class="item" data-cat="nabava" data-search="radar javnih nabavki i natječaja pregledava nove objave, filtrira po tvojim kriterijima i javlja samo ono što ima smisla, s rokom i procjenom uklapanja. nove objave → kratka lista s rokom i ocjenom relevantnosti faza 1: ručni pregled + claude za ocjenu uklapanja. faza 2: automatski dohvat faza 1 je realna: ti pregledaš, claude ocjenjuje uklapanje po tvojim kriterijima. automatski dohvat je faza 2."><div class="item-top"><div class="item-id"><h3>Radar javnih nabavki i natječaja</h3></div><div class="item-badges"><span class="badge am">Jedna integracija</span><span class="badge gy">Nabava i natječaji</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Pregledava nove objave, filtrira po tvojim kriterijima i javlja samo ono što ima smisla, s rokom i procjenom uklapanja.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Svaki radni dan ujutro</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Nove objave → kratka lista s rokom i ocjenom relevantnosti</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Faza 1: ručni pregled + Claude za ocjenu uklapanja. Faza 2: automatski dohvat</td></tr><tr><td class="k">Procjena uštede</td><td>3-5 h tjedno kod onih koji prate nabave</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Faza 1 je realna: ti pregledaš, Claude ocjenjuje uklapanje po tvojim kriterijima. Automatski dohvat je Faza 2.</div></div></article><article class="item" data-cat="nabava" data-search="predlagač narudžbe na temelju potrošnje i zaliha predlaže što naručiti i koliko, s obrazloženjem po artiklu. izvoz zaliha i potrošnje → predložena narudžba za potvrdu faza 1: izvoz u tablicu + claude za obrazloženje. izračun radi tablica matematika ne ide kroz jezični model. količine računa tablica, claude piše obrazloženje i uočava anomalije."><div class="item-top"><div class="item-id"><h3>Predlagač narudžbe</h3></div><div class="item-badges"><span class="badge am">Jedna integracija</span><span class="badge gy">Nabava i natječaji</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Na temelju potrošnje i zaliha predlaže što naručiti i koliko, s obrazloženjem po artiklu.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Tjedno ili kad zaliha padne</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Izvoz zaliha i potrošnje → predložena narudžba za potvrdu</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Faza 1: izvoz u tablicu + Claude za obrazloženje. Izračun radi tablica</td></tr><tr><td class="k">Procjena uštede</td><td>2-4 h tjedno</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Matematika ne ide kroz jezični model. Količine računa tablica, Claude piše obrazloženje i uočava anomalije.</div></div></article><article class="item" data-cat="hr" data-search="pregled prijava za posao ocjenjuje prijave po kriterijima koje si zadao, s dokazom iz životopisa, i predlaže pitanja za razgovor. životopisi → rangirana lista + pitanja po kandidatu claude project s opisom pozicije nikad ne odbijaj kandidata na osnovi ocjene modela bez ljudskog pregleda. koristi za redoslijed, ne za odluku."><div class="item-top"><div class="item-id"><h3>Pregled prijava za posao</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Ljudi</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Ocjenjuje prijave po kriterijima koje si zadao, s dokazom iz životopisa, i predlaže pitanja za razgovor.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Kad se nakupe prijave</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Životopisi → rangirana lista + pitanja po kandidatu</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project s opisom pozicije</td></tr><tr><td class="k">Procjena uštede</td><td>3-5 h po natječaju</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Nikad ne odbijaj kandidata na osnovi ocjene modela bez ljudskog pregleda. Koristi za redoslijed, ne za odluku.</div></div></article><article class="item" data-cat="hr" data-search="onboarding novog zaposlenika odgovara na pitanja iz internih dokumenata i sop-ova umjesto da ti odgovaraš istih dvadeset pitanja. pitanje novog kolege → odgovor iz internih dokumenata claude project sa sop-ovima i internim pravilnikom radi samo ako sop-ovi postoje. ako ne postoje, ovo je razlog da ih napišeš."><div class="item-top"><div class="item-id"><h3>Onboarding novog zaposlenika</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Ljudi</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Odgovara na pitanja iz internih dokumenata i SOP-ova umjesto da ti odgovaraš istih dvadeset pitanja.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Prvi dan</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Pitanje novog kolege → odgovor iz internih dokumenata</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude Project sa SOP-ovima i internim pravilnikom</td></tr><tr><td class="k">Procjena uštede</td><td>4-8 h po novom zaposleniku</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Radi samo ako SOP-ovi postoje. Ako ne postoje, ovo je razlog da ih napišeš.</div></div></article><article class="item" data-cat="strategija" data-search="tjedni pregled industrije skuplja što je novo u tvojoj industriji i javlja samo ono što se tebe tiče, s izvorima. vijesti i objave → kratki pregled s izvorima faza 1: perplexity ili chatgpt scheduled task ovaj je iznimka: chatgpt scheduled tasks ovo rješavaju bez ijednog scenarija."><div class="item-top"><div class="item-id"><h3>Tjedni pregled industrije</h3></div><div class="item-badges"><span class="badge am">Jedna integracija</span><span class="badge gy">Strategija</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Skuplja što je novo u tvojoj industriji i javlja samo ono što se tebe tiče, s izvorima.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Ponedjeljkom ujutro</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Vijesti i objave → kratki pregled s izvorima</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Faza 1: Perplexity ili ChatGPT scheduled task</td></tr><tr><td class="k">Procjena uštede</td><td>1-2 h tjedno</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> Ovaj je iznimka: ChatGPT scheduled tasks ovo rješavaju bez ijednog scenarija.</div></div></article><article class="item" data-cat="strategija" data-search="red team za veće odluke napada tvoj plan: najvjerojatniji način propadanja, nedokazane pretpostavke, što si preskočio. opis odluke → scenarij propadanja + najmanji test claude, jedan razgovor system prompt br. 13 iz modula 2. koristi ga i kad ti se ne sviđa što ćeš pročitati."><div class="item-top"><div class="item-id"><h3>Red team za veće odluke</h3></div><div class="item-badges"><span class="badge em">Faza 1 — bez integracije</span><span class="badge gy">Strategija</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Napada tvoj plan: najvjerojatniji način propadanja, nedokazane pretpostavke, što si preskočio.</p></div><div class="tbl-scroll"><table><tbody><tr><td class="k">Okidač</td><td>Prije svake veće odluke</td></tr><tr><td class="k">Ulaz &rarr; izlaz</td><td>Opis odluke → scenarij propadanja + najmanji test</td></tr><tr><td class="k">Alati za Fazu 1</td><td>Claude, jedan razgovor</td></tr><tr><td class="k">Procjena uštede</td><td>Spašava odluke, ne sate</td></tr></tbody></table></div><div class="note"><strong>Napomena:</strong> System prompt br. 13 iz Modula 2. Koristi ga i kad ti se ne sviđa što ćeš pročitati.</div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi. Probaj kraću riječ.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Kojim redom</h2><p>Ako ne znaš odakle početi, ovo je redoslijed koji radi za većinu.</p></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <h4>Prvih 30 dana</h4>
+    <ol class="steps">
+      <li><b>Zapisničar sastanaka.</b> Radi od prvog dana, ušteda se vidi odmah, rizik je nula.</li>
+      <li><b>Trijaža inboxa.</b> Drugi najveći pojedač vremena u većini firmi.</li>
+      <li>Ništa treće. Dva agenta u prvom mjesecu je gornja granica ako oba treba da rade i za mjesec dana.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h4>Mjeseci 2 i 3</h4>
+    <ol class="steps">
+      <li><b>Prva linija podrške</b> ili <b>kvalifikacija upita</b> &mdash; ovisno o tome gdje ti više gori.</li>
+      <li>Prvi SOP napisan uz pomoć agenta &mdash; to je temelj za sve dalje.</li>
+      <li>Tek sada prva integracija, i to za agent koji ručno radi već dva mjeseca.</li>
+    </ol>
+    <div class="note em"><strong>Znak da ideš predobro:</strong> ako ti se učini da možeš postaviti pet agenata u tjedan &mdash; postavit ćeš pet stvari koje nitko neće koristiti. Jedan po mjesecu, do kraja godine ih imaš deset i svi rade.</div>
+  </div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || it.getAttribute('data-search').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':(n>=2&&n<=4?' rezultata':' rezultata'));
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>
