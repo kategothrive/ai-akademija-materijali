@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pet Zapova &mdash; Sve AI tajne, Modul 7</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"\2192";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 7</div>
+<h1>Pet Zapova</h1>
+<p class="lede">Pet gotovih recepata, korak po korak, s modulima i postavkama. Nisu datoteke za uvoz &mdash; Zapier se ne uvozi kao Make. Ovo su nacrti po kojima Zap složiš u pola sata.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>5 Zapova</span><span>korak po korak</span><span>Rujan 2026.</span></div>
+</header>
+
+<div class="note em" style="margin-top:28px"><strong>Zašto recepti, a ne datoteke:</strong> Zapier dijeli Zapove linkom na predložak, a ne datotekom kao Make. Predlošci vezani za tuđe račune i tablice ionako ne rade bez preslagivanja, pa je brže složiti Zap po receptu &mdash; a usput znaš što svaki korak radi.</div>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Četiri pravila prije prvog Zapa</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <h4>Nacrt, ne slanje</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Sve što ide prema klijentu završava kao <b>nacrt</b>, ne kao poslana poruka. Ti klikneš pošalji.</p>
+      <p>Puno automatsko slanje uvodiš tek kad tri mjeseca gledaš nacrte i ne mijenjaš ih. Do tada je jedan pogrešan mail skuplji od svih ušteđenih minuta.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Filter odmah iza okidača</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Svaki Zap koji se pokrene troši zadatak, i kad ne napravi ništa korisno. Filter odmah iza okidača je razlika između kvote koja traje mjesec i one koja nestane u tjedan.</p>
+    </div>
+    <div class="note"><strong>Provjera:</strong> koliko puta dnevno se okidač realno pokreće? Ako je više od par desetaka, postavi filter prije nego što uključiš Zap.</div>
+  </div>
+  <div class="card">
+    <h4>Računanje ide u tablicu</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>AI korak interpretira i piše. Ne zbraja, ne množi i ne uspoređuje iznose.</p>
+      <p>Ako Zap treba broj, izračunaj ga formulom u tablici pa ga proslijedi modelu kao gotov podatak.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Testiraj s deset stvarnih slučajeva</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Ne s jednim. Deset stvarnih upita, transkripata ili redova iz arhive &mdash; uključujući dva neuredna.</p>
+      <p>Zap koji radi na urednom primjeru, a pada na prvom stvarnom, gori je od ničega jer mu već vjeruješ.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Pet recepata</h2><p>Filtriraj po području. Nazivi modula su Zapierovi &mdash; u sučelju ih nađeš pod tim imenima.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži &mdash; npr. upit, nacrt, transkript, izvještaj&hellip;" aria-label="Traži Zap">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Svi<span class="n">5</span></button><button class="chip" data-cat="leadovi" aria-pressed="false">Leadovi</button><button class="chip" data-cat="podrska" aria-pressed="false">Podrška</button><button class="chip" data-cat="sadrzaj" aria-pressed="false">Sadržaj</button><button class="chip" data-cat="sastanci" aria-pressed="false">Sastanci</button><button class="chip" data-cat="izvjestaji" aria-pressed="false">Izvještaji</button></div>
+</div>
+<article class="item" data-cat="leadovi" data-search="kvalifikacija i usmjeravanje upita novi upit s weba dobije ocjenu i razred prije nego što dođe do tebe, a razred a i b pokrenu obavijest. novi red u tablici (google sheets) ili novi odgovor u obrascu google sheets — new spreadsheet row only continue if… ai step / chatgpt — conversation text — extract / split path a / path b slack ili email — pošalji obavijest google sheets — update row google sheets — update row"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Kvalifikacija i usmjeravanje upita</h3></div><div class="item-badges"><span class="badge em">Leadovi</span><span class="badge gy">oko 45 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Novi upit s weba dobije ocjenu i razred prije nego što dođe do tebe, a razred A i B pokrenu obavijest.</p></div><div class="note em"><strong>Okidač:</strong> Novi red u tablici (Google Sheets) ili novi odgovor u obrascu</div><div class="tbl-scroll"><table><thead><tr><th>Korak</th><th>Modul</th><th>Postavka</th></tr></thead><tbody><tr><td class="k">Trigger</td><td class="mono">Google Sheets — New Spreadsheet Row</td><td>Tablica u koju upisuje tvoj obrazac. Provjera svakih 15 minuta je dovoljna.</td></tr><tr><td class="k">Filter</td><td class="mono">Only continue if…</td><td>Polje s opisom upita nije prazno. Bez ovoga trošiš zadatke na prazne redove.</td></tr><tr><td class="k">AI korak</td><td class="mono">AI step / ChatGPT — Conversation</td><td>Prompt iz materijala 02, izlaz u fiksnom obliku s oznakama RAZRED, REZULTAT, PITANJA.</td></tr><tr><td class="k">Formatter</td><td class="mono">Text — Extract / Split</td><td>Izvuci samo razred iz odgovora, da ga možeš koristiti u putanjama.</td></tr><tr><td class="k">Paths</td><td class="mono">Path A / Path B</td><td>Path A: razred A ili B. Path B: sve ostalo.</td></tr><tr><td class="k">Path A akcija</td><td class="mono">Slack ili Email — pošalji obavijest</td><td>Cijela kvalifikacija, kontakt i upit. Prodaji, ne cijelom timu.</td></tr><tr><td class="k">Path A akcija 2</td><td class="mono">Google Sheets — Update Row</td><td>Upiši razred i status ZA POTVRDU.</td></tr><tr><td class="k">Path B akcija</td><td class="mono">Google Sheets — Update Row</td><td>Upiši razred i status NURTURE. Bez obavijesti.</td></tr></tbody></table></div><div class="note ru"><strong>Na što paziti:</strong> Ne dodaj automatski odgovor klijentu. Kvalifikacija je interni proces i klijent ne smije ni naslutiti da je ocijenjen brojem.</div></div></article><article class="item" data-cat="podrska" data-search="nacrt odgovora na upit upit koji stigne u zajednički sandučić dobije pripremljen nacrt odgovora — ali nacrt, ne poslanu poruku. novi mail u zajedničkom sandučiću za podršku gmail / outlook — new email only continue if… ai step — conversation path a / path b gmail / outlook — create draft slack ili task alat — kreiraj zadatak google sheets — add row"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Nacrt odgovora na upit</h3></div><div class="item-badges"><span class="badge em">Podrška</span><span class="badge gy">oko 40 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Upit koji stigne u zajednički sandučić dobije pripremljen nacrt odgovora — ali nacrt, ne poslanu poruku.</p></div><div class="note em"><strong>Okidač:</strong> Novi mail u zajedničkom sandučiću za podršku</div><div class="tbl-scroll"><table><thead><tr><th>Korak</th><th>Modul</th><th>Postavka</th></tr></thead><tbody><tr><td class="k">Trigger</td><td class="mono">Gmail / Outlook — New Email</td><td>Zajednički sandučić za podršku, nikad osobni.</td></tr><tr><td class="k">Filter</td><td class="mono">Only continue if…</td><td>Pošiljatelj nije s naše domene i mail nije automatska obavijest.</td></tr><tr><td class="k">AI korak</td><td class="mono">AI step — Conversation</td><td>Prompt s FAQ-om i cjenikom u kontekstu. Izlaz: nacrt odgovora + oznaka treba li eskalaciju.</td></tr><tr><td class="k">Paths</td><td class="mono">Path A / Path B</td><td>Path A: bez eskalacije. Path B: eskalacija.</td></tr><tr><td class="k">Path A akcija</td><td class="mono">Gmail / Outlook — Create Draft</td><td>NACRT, ne slanje. Ti otvoriš, pročitaš i pošalješ.</td></tr><tr><td class="k">Path B akcija</td><td class="mono">Slack ili task alat — kreiraj zadatak</td><td>Zadatak s rokom, ne mail koji se izgubi.</td></tr><tr><td class="k">Zadnji korak</td><td class="mono">Google Sheets — Add Row</td><td>Log: datum, pošiljatelj, tema, je li eskalirano. Ovo je tvoja statistika.</td></tr></tbody></table></div><div class="note ru"><strong>Na što paziti:</strong> Create Draft, nikad Send. Jedan pogrešan odgovor s izmišljenim rokom košta više od svih ušteđenih minuta.</div></div></article><article class="item" data-cat="sadrzaj" data-search="od teme u kalendaru do nacrta kad temu u kalendaru označiš kao spremnu, nacrt teksta te čeka u dokumentu. promjena statusa u tablici content kalendara google sheets — new or updated spreadsheet row only continue if… ai step — conversation google docs — create document from template google sheets — update row slack ili email"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Od teme u kalendaru do nacrta</h3></div><div class="item-badges"><span class="badge em">Sadržaj</span><span class="badge gy">oko 35 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Kad temu u kalendaru označiš kao spremnu, nacrt teksta te čeka u dokumentu.</p></div><div class="note em"><strong>Okidač:</strong> Promjena statusa u tablici content kalendara</div><div class="tbl-scroll"><table><thead><tr><th>Korak</th><th>Modul</th><th>Postavka</th></tr></thead><tbody><tr><td class="k">Trigger</td><td class="mono">Google Sheets — New or Updated Spreadsheet Row</td><td>Prati stupac Status.</td></tr><tr><td class="k">Filter</td><td class="mono">Only continue if…</td><td>Status je točno „za pisanje“.</td></tr><tr><td class="k">AI korak</td><td class="mono">AI step — Conversation</td><td>Prompt s Brand Voice dokumentom u kontekstu. Ulaz: tema, pillar, hook, platforma.</td></tr><tr><td class="k">Akcija</td><td class="mono">Google Docs — Create Document from Template</td><td>Nacrt u dokument, s nazivom koji sadrži datum i platformu.</td></tr><tr><td class="k">Akcija</td><td class="mono">Google Sheets — Update Row</td><td>Upiši link na dokument i status „nacrt spreman“.</td></tr><tr><td class="k">Akcija</td><td class="mono">Slack ili Email</td><td>Kratka obavijest da je nacrt spreman za pregled.</td></tr></tbody></table></div><div class="note ru"><strong>Na što paziti:</strong> Nacrt nije objava. Svaki tekst prođe test naglas prije nego što izađe — i uvijek kroz tvoje ruke.</div></div></article><article class="item" data-cat="sastanci" data-search="transkript u zadatke i sažetak transkript sastanka postaje strukturirane bilješke, zadaci u alatu i nacrt maila sudionicima. novi transkript u mapi ili novi mail s transkriptom google drive — new file in folder google drive — retrieve file content ai step — conversation text — split notion / monday / clickup — kreiraj zapis isti alat — kreiraj zadatke gmail — create draft"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Transkript u zadatke i sažetak</h3></div><div class="item-badges"><span class="badge em">Sastanci</span><span class="badge gy">oko 60 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Transkript sastanka postaje strukturirane bilješke, zadaci u alatu i nacrt maila sudionicima.</p></div><div class="note em"><strong>Okidač:</strong> Novi transkript u mapi ili novi mail s transkriptom</div><div class="tbl-scroll"><table><thead><tr><th>Korak</th><th>Modul</th><th>Postavka</th></tr></thead><tbody><tr><td class="k">Trigger</td><td class="mono">Google Drive — New File in Folder</td><td>Mapa u koju alat za sastanke sprema transkripte.</td></tr><tr><td class="k">Akcija</td><td class="mono">Google Drive — Retrieve File Content</td><td>Ako trigger ne vraća sadržaj datoteke.</td></tr><tr><td class="k">AI korak</td><td class="mono">AI step — Conversation</td><td>Prompt iz Modula 6, materijal 02. Fiksni izlaz: odluke, zadaci s nositeljima, otvoreno, rizici, mail sažetak.</td></tr><tr><td class="k">Formatter</td><td class="mono">Text — Split</td><td>Razdvoji sekcije po oznakama iz izlaza.</td></tr><tr><td class="k">Akcija</td><td class="mono">Notion / monday / ClickUp — kreiraj zapis</td><td>Sastanak kao zapis, sa svim sekcijama.</td></tr><tr><td class="k">Akcija</td><td class="mono">Isti alat — kreiraj zadatke</td><td>Svaki zadatak sa statusom ZA POTVRDU, nikad odmah aktivan.</td></tr><tr><td class="k">Akcija</td><td class="mono">Gmail — Create Draft</td><td>Mail sažetak kao nacrt za sudionike.</td></tr></tbody></table></div><div class="note ru"><strong>Na što paziti:</strong> Zadaci ulaze sa statusom ZA POTVRDU. Zadatak koji je model izvukao krivo, a ušao ravno u nečije obveze, ruši povjerenje u cijeli sustav.</div></div></article><article class="item" data-cat="izvjestaji" data-search="tjedni pregled bez ručnog slaganja ponedjeljkom ujutro sažetak prošlog tjedna iz tvojih tablica, u mailu. raspored — ponedjeljkom u 7:30 schedule by zapier — every week google sheets — lookup spreadsheet rows utilities — line itemizer ai step — conversation email — pošalji sebi google sheets — add row"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Tjedni pregled bez ručnog slaganja</h3></div><div class="item-badges"><span class="badge em">Izvještaji</span><span class="badge gy">oko 40 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Ponedjeljkom ujutro sažetak prošlog tjedna iz tvojih tablica, u mailu.</p></div><div class="note em"><strong>Okidač:</strong> Raspored — ponedjeljkom u 7:30</div><div class="tbl-scroll"><table><thead><tr><th>Korak</th><th>Modul</th><th>Postavka</th></tr></thead><tbody><tr><td class="k">Trigger</td><td class="mono">Schedule by Zapier — Every Week</td><td>Ponedjeljak, prije nego što počne radni dan.</td></tr><tr><td class="k">Akcija</td><td class="mono">Google Sheets — Lookup Spreadsheet Rows</td><td>Dohvati retke iz prošlog tjedna. Filtriraj po datumu.</td></tr><tr><td class="k">Formatter</td><td class="mono">Utilities — Line Itemizer</td><td>Složi retke u jedan tekst koji AI korak može pročitati.</td></tr><tr><td class="k">AI korak</td><td class="mono">AI step — Conversation</td><td>Prompt: tri nalaza, što odudara, tri pitanja. Bez izračuna — brojeve daje tablica.</td></tr><tr><td class="k">Akcija</td><td class="mono">Email — pošalji sebi</td><td>Sažetak u inbox prije prve kave.</td></tr><tr><td class="k">Akcija</td><td class="mono">Google Sheets — Add Row</td><td>Arhiva sažetaka, da se mogu usporediti kroz mjesece.</td></tr></tbody></table></div><div class="note ru"><strong>Na što paziti:</strong> Izračune radi tablica, ne AI korak. Model interpretira gotove brojeve — ako mu daš da zbraja, dobit ćeš uvjerljiv i pogrešan sažetak.</div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Kojim redom</h2><p>Ako gradiš prvi put, ovim redom.</p></div></div>
+<div class="card">
+<ol class="steps">
+  <li><b>Zap 5 &mdash; tjedni pregled.</b> Najmanji rizik, nema ništa prema klijentima, a vidiš kako sve funkcionira.</li>
+  <li><b>Zap 4 &mdash; sastanci.</b> Najveća ušteda po uloženom vremenu za većinu ljudi.</li>
+  <li><b>Zap 1 &mdash; leadovi.</b> Tek kad si model kvalifikacije ručno kalibrirao/kalibrirala dva mjeseca.</li>
+  <li><b>Zap 2 &mdash; podrška.</b> Traži napisan FAQ i pravila o povratu. Bez toga ne kreći.</li>
+  <li><b>Zap 3 &mdash; sadržaj.</b> Traži Brand Voice dokument, inače nacrti ne vrijede vremena pregleda.</li>
+</ol>
+<div class="note ru"><strong>Jedan Zap mjesečno.</strong> Pet uključenih u tjedan znači pet stvari koje ne pratiš i koje se tiho pokvare. Kad se nešto promijeni u ulazu, Zap i dalje radi &mdash; samo pogrešno.</div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || (it.getAttribute('data-search')||'').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':' rezultata');
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>

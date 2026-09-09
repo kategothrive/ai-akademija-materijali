@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Social media promptovi &mdash; Sve AI tajne, Modul 5</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 5</div>
+<h1>Social media &mdash; 30 promptova</h1>
+<p class="lede">Po platformama: LinkedIn, Instagram, kratke forme, newsletter, Facebook i planiranje. Svaki prompt traži tvoju publiku i tvoju tezu &mdash; jer bez toga svi izlazi zvuče isto.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>30 promptova</span><span>6 kategorija</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Tri stvari koje odlučuju više od prompta</h2></div></div>
+<div class="grid g3">
+  <div class="card hero">
+    <h4>Teza, ne tema</h4>
+    <div class="prose" style="font-size:.93rem"><p>Tema je &bdquo;automatizacija&ldquo;. Teza je &bdquo;automatizirati proces koji nisi odradio dvadeset puta ručno znači automatizirati vlastitu grešku&ldquo;.</p><p>Prompt s temom daje općenit tekst. Prompt s tezom daje tvoj tekst.</p></div>
+  </div>
+  <div class="card">
+    <h4>Publika, konkretno</h4>
+    <div class="prose" style="font-size:.93rem"><p>&bdquo;Poduzetnici&ldquo; nije publika. &bdquo;Vlasnik proizvodne firme s 30 zaposlenih koji sam potpisuje ponude&ldquo; jest.</p><p>Svaki prompt ovdje ima to polje. Ne preskoči ga.</p></div>
+  </div>
+  <div class="card">
+    <h4>Glas iz projekta</h4>
+    <div class="prose" style="font-size:.93rem"><p>Otvori Claude Project za sadržaj, uploadaj Brand Voice dokument i pet svojih najboljih objava.</p><p>Onda u promptu više ne moraš opisivati ton &mdash; ostaje samo tema i teza.</p></div>
+  </div>
+</div>
+<div class="note ru" style="margin-top:16px"><strong>Pravilo o brojevima vrijedi u svakom promptu:</strong> ako model treba broj koji mu nisi dao, traži da ostavi označeno polje i kaže ti što fali. Izmišljena statistika u objavi je jedina stvar koju će publika zapamtiti &mdash; i to u komentaru.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Biblioteka</h2><p>Filtriraj po platformi ili traži po ključnoj riječi.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži &mdash; npr. carousel, hook, newsletter, story, pillar&hellip;" aria-label="Traži prompt">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Sve<span class="n">30</span></button><button class="chip" data-cat="li" aria-pressed="false">LinkedIn<span class="n">8</span></button><button class="chip" data-cat="ig" aria-pressed="false">Instagram<span class="n">6</span></button><button class="chip" data-cat="vid" aria-pressed="false">Kratke forme<span class="n">5</span></button><button class="chip" data-cat="nl" aria-pressed="false">Newsletter<span class="n">4</span></button><button class="chip" data-cat="fb" aria-pressed="false">Facebook<span class="n">3</span></button><button class="chip" data-cat="plan" aria-pressed="false">Planiranje<span class="n">4</span></button></div>
+</div>
+<h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">LinkedIn</h4><article class="item" data-cat="li" data-search="post iz jedne teze kad imaš jednu misao koju možeš obraniti. napiši linkedin post na temu: [tema].
+
+teza koju branim, u jednoj rečenici: [teza]
+o meni: [pozicija, industrija, čime se bavim]
+publika: [kome pišem — pozicija, industrija, situacija]
+ton: [direktan / topao / stručan bez žargona]
+
+struktura:
+- hook (1-2 rečenice, mora zaustaviti scroll)
+- tijelo: 3-5 kratkih odlomaka, po 2-3 rečenice
+- zaključak + jedno pitanje za komentar
+- bez hashtagova u tekstu; tri na kraju
+
+pravila:
+- 150-250 riječi.
+- rečenice različite duljine. nikad tri jednako duge zaredom.
+- bez uskličnika. bez „u današnjem svijetu“. bez „slažete se?“
+- jedan konkretan broj, ime ili situacija — ako ga nemam, ostavi [broj] i reci mi."><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Post iz jedne teze</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad imaš jednu misao koju možeš obraniti.</div><pre class="p">Napiši LinkedIn post na temu: <span class="f">[TEMA</span>].
+
+Teza koju branim, u jednoj rečenici: <span class="f">[TEZA</span>]
+O meni: <span class="f">[pozicija, industrija, čime se bavim</span>]
+Publika: <span class="f">[kome pišem — pozicija, industrija, situacija</span>]
+Ton: <span class="f">[direktan / topao / stručan bez žargona</span>]
+
+Struktura:
+- Hook (1-2 rečenice, mora zaustaviti scroll)
+- Tijelo: 3-5 kratkih odlomaka, po 2-3 rečenice
+- Zaključak + jedno pitanje za komentar
+- Bez hashtagova u tekstu; tri na kraju
+
+Pravila:
+- 150-250 riječi.
+- Rečenice različite duljine. Nikad tri jednako duge zaredom.
+- Bez uskličnika. Bez „U današnjem svijetu“. Bez „Slažete se?“
+- Jedan konkretan broj, ime ili situacija — ako ga nemam, ostavi <span class="f">[BROJ</span>] i reci mi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Post s jednom tezom uvijek pobjeđuje post s tri. Ako imaš tri misli, to su tri posta.</div></div></article><article class="item" data-cat="li" data-search="post iz rezultata klijenta nakon završenog projekta, s brojkama. napiši linkedin post koji prikazuje rezultat rada s klijentom.
+
+klijent (sektor i veličina, bez naziva): [npr. logistička tvrtka s 30 zaposlenih]
+problem: [opiši]
+što smo napravili: [opiši]
+rezultat s brojem: [npr. administrativni rad manji 60%, 12 h tjedno]
+rok: [npr. 6 tjedana]
+
+struktura: počni rezultatom, ne problemom. zatim što je bilo prije, pa što smo napravili.
+završi pitanjem koje potiče komentar.
+
+pravila:
+- fokus na klijentov uspjeh, ne na moju stručnost.
+- bez naziva klijenta i bez ičega po čemu bi se prepoznao, osim ako imam pisano odobrenje.
+- bez izmišljanja brojeva. ako broj nemam, napiši post bez njega i reci mi da mi fali."><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Post iz rezultata klijenta</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Nakon završenog projekta, s brojkama.</div><pre class="p">Napiši LinkedIn post koji prikazuje rezultat rada s klijentom.
+
+Klijent (sektor i veličina, bez naziva): <span class="f">[npr. logistička tvrtka s 30 zaposlenih</span>]
+Problem: <span class="f">[OPIŠI</span>]
+Što smo napravili: <span class="f">[OPIŠI</span>]
+Rezultat s brojem: <span class="f">[npr. administrativni rad manji 60%, 12 h tjedno</span>]
+Rok: <span class="f">[npr. 6 tjedana</span>]
+
+Struktura: počni REZULTATOM, ne problemom. Zatim što je bilo prije, pa što smo napravili.
+Završi pitanjem koje potiče komentar.
+
+Pravila:
+- Fokus na klijentov uspjeh, ne na moju stručnost.
+- Bez naziva klijenta i bez ičega po čemu bi se prepoznao, osim ako imam pisano odobrenje.
+- Bez izmišljanja brojeva. Ako broj nemam, napiši post bez njega i reci mi da mi fali.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Uvijek počni ishodom. Čitatelj ostaje čitati kad vidi rezultat, ne kad vidi uvod u problem.</div></div></article><article class="item" data-cat="li" data-search="carousel od deset slajdova za korak-po-korak sadržaj. napiši sadržaj za linkedin carousel od 10 slajdova na temu: [tema].
+
+publika: [opiši]
+cilj: [educirati / izgraditi autoritet / generirati upite]
+
+za svaki slajd:
+- naslov (najviše 6 riječi, čita se kao headline)
+- tekst (najviše 30 riječi)
+- vizualni prijedlog
+
+struktura: slajd 1 hook s obećanjem, slajdovi 2-9 koraci ili ideje, slajd 10 zaključak i poziv na akciju.
+
+pravila:
+- slajd 1 mora imati obećanje i intrigu. bez njega nema swipea.
+- jedna ideja po slajdu. ako slajd ima „i“ u sredini, to su dva slajda.
+- bez teksta koji se ne može pročitati na mobitelu — kratko."><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Carousel od deset slajdova</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za korak-po-korak sadržaj.</div><pre class="p">Napiši sadržaj za LinkedIn carousel od 10 slajdova na temu: <span class="f">[TEMA</span>].
+
+Publika: <span class="f">[OPIŠI</span>]
+Cilj: <span class="f">[educirati / izgraditi autoritet / generirati upite</span>]
+
+Za svaki slajd:
+- Naslov (najviše 6 riječi, čita se kao headline)
+- Tekst (najviše 30 riječi)
+- Vizualni prijedlog
+
+Struktura: slajd 1 hook s obećanjem, slajdovi 2-9 koraci ili ideje, slajd 10 zaključak i poziv na akciju.
+
+Pravila:
+- Slajd 1 mora imati obećanje i intrigu. Bez njega nema swipea.
+- Jedna ideja po slajdu. Ako slajd ima „i“ u sredini, to su dva slajda.
+- Bez teksta koji se ne može pročitati na mobitelu — kratko.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Generiraj vizuale bez teksta (Vizualni Prompt Pack, Modul 1), tekst dodaj u Canvi. Tako mijenjaš riječi bez ponovnog generiranja.</div></div></article><article class="item" data-cat="li" data-search="post koji priznaje pogrešku kad želiš povjerenje, ne autoritet. napiši linkedin post o pogrešci koju sam napravio/napravila.
+
+pogreška: [što se dogodilo]
+što me to koštalo: [konkretno — novac, vrijeme, klijent]
+što sam naučio/naučila: [pouka]
+što danas radim drukčije: [konkretno]
+
+pravila:
+- bez lažne skromnosti. prava pogreška s pravom posljedicom.
+- bez pouke na kraju koja zvuči kao motivacijski citat.
+- bez poziva na akciju. ovaj post ne prodaje.
+- 150-200 riječi."><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Post koji priznaje pogrešku</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad želiš povjerenje, ne autoritet.</div><pre class="p">Napiši LinkedIn post o pogrešci koju sam napravio/napravila.
+
+Pogreška: <span class="f">[ŠTO SE DOGODILO</span>]
+Što me to koštalo: <span class="f">[konkretno — novac, vrijeme, klijent</span>]
+Što sam naučio/naučila: <span class="f">[POUKA</span>]
+Što danas radim drukčije: <span class="f">[KONKRETNO</span>]
+
+Pravila:
+- Bez lažne skromnosti. Prava pogreška s pravom posljedicom.
+- Bez pouke na kraju koja zvuči kao motivacijski citat.
+- Bez poziva na akciju. Ovaj post ne prodaje.
+- 150-200 riječi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ovo je post s najvišim angažmanom u većini niša — ali samo ako je pogreška stvarna i posljedica konkretna.</div></div></article><article class="item" data-cat="li" data-search="post sa stavom kad imaš mišljenje koje ide protiv struje. napiši linkedin post koji brani stav suprotan uvriježenom mišljenju.
+
+uvriježeno mišljenje: [što svi kažu]
+moj stav: [što ja mislim]
+zašto tako mislim: [tri argumenta iz prakse, s primjerima]
+što priznajem drugoj strani: [gdje uvriježeno mišljenje ima pravo]
+
+pravila:
+- napadaj ideju, ne ljude i ne konkurenciju po imenu.
+- zadnja točka je obavezna — post bez priznanja drugoj strani je provokacija, ne stav.
+- završi pitanjem koje poziva na neslaganje.
+- 180-250 riječi."><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Post sa stavom</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad imaš mišljenje koje ide protiv struje.</div><pre class="p">Napiši LinkedIn post koji brani stav suprotan uvriježenom mišljenju.
+
+Uvriježeno mišljenje: <span class="f">[ŠTO SVI KAŽU</span>]
+Moj stav: <span class="f">[ŠTO JA MISLIM</span>]
+Zašto tako mislim: <span class="f">[tri argumenta iz prakse, s primjerima</span>]
+Što priznajem drugoj strani: <span class="f">[gdje uvriježeno mišljenje ima pravo</span>]
+
+Pravila:
+- Napadaj ideju, ne ljude i ne konkurenciju po imenu.
+- Zadnja točka je obavezna — post bez priznanja drugoj strani je provokacija, ne stav.
+- Završi pitanjem koje poziva na neslaganje.
+- 180-250 riječi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Post koji nikoga ne može naljutiti nikoga neće ni zainteresirati. Ali stav bez argumenta je samo galama.</div></div></article><article class="item" data-cat="li" data-search="komentar koji otvara razgovor na objavi potencijalnog klijenta ili partnera. napiši komentar na ovu objavu:
+
+[zalijepi objavu]
+
+autor je [pozicija, tvrtka].
+
+pravila:
+- dodaj nešto: vlastito iskustvo, konkretan primjer, ili pitanje koje vodi dalje.
+- najviše tri rečenice.
+- ne spominji što radim i ne prodaji.
+- bez „odlična objava“ i bez „slažem se u potpunosti“.
+
+daj tri varijante: s iskustvom, s pitanjem, s konkretnim podatkom."><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Komentar koji otvara razgovor</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Na objavi potencijalnog klijenta ili partnera.</div><pre class="p">Napiši komentar na ovu objavu:
+
+<span class="f">[ZALIJEPI OBJAVU</span>]
+
+Autor je <span class="f">[pozicija, tvrtka</span>].
+
+Pravila:
+- Dodaj nešto: vlastito iskustvo, konkretan primjer, ili pitanje koje vodi dalje.
+- Najviše tri rečenice.
+- Ne spominji što radim i ne prodaji.
+- Bez „Odlična objava“ i bez „Slažem se u potpunosti“.
+
+Daj tri varijante: s iskustvom, s pitanjem, s konkretnim podatkom.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Tri dobra komentara kroz dva tjedna, pa poruka — i poruka više nije hladna.</div></div></article><article class="item" data-cat="li" data-search="prepravka posta koji nije prošao kad objava nema doseg ni komentare. ovaj post nije prošao dobro:
+
+[zalijepi post]
+
+broj reakcija: [x], komentara: [y], moja publika: [opiši]
+
+reci mi:
+1. je li problem u hooku, u temi ili u tome što nema stav
+2. tri nova hooka za isti sadržaj
+3. kako bih temu suzio/suzila da bude konkretnija
+4. je li ovo tema koja moju publiku uopće zanima — budi iskren
+
+zatim napiši prepravljenu verziju."><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Prepravka posta koji nije prošao</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad objava nema doseg ni komentare.</div><pre class="p">Ovaj post nije prošao dobro:
+
+<span class="f">[ZALIJEPI POST</span>]
+
+Broj reakcija: <span class="f">[X</span>], komentara: <span class="f">[Y</span>], moja publika: <span class="f">[OPIŠI</span>]
+
+Reci mi:
+1. Je li problem u hooku, u temi ili u tome što nema stav
+2. Tri nova hooka za isti sadržaj
+3. Kako bih temu suzio/suzila da bude konkretnija
+4. Je li ovo tema koja moju publiku uopće zanima — budi iskren
+
+Zatim napiši prepravljenu verziju.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 4 je važnija od ostalih tri. Najčešći razlog niskog dosega nije hook nego tema koja nikoga ne dira.</div></div></article><article class="item" data-cat="li" data-search="serija od pet postova iz jedne teme kad želiš mjesec dana sadržaja iz jedne teme. iz ove teme napravi seriju od pet linkedin postova: [tema]
+
+publika: [opiši]
+
+za svaki post: naslov teme, hook, ključna poruka u jednoj rečenici, poziv na akciju, i u kojem tjednu objaviti.
+
+pravila:
+- svaki post mora imati drugu tezu, ne drugo pakiranje iste.
+- prvi post postavlja problem, zadnji daje rješenje. sredina su koraci.
+- ako tema nema pet različitih teza, reci mi koliko ih ima i predloži manje."><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Serija od pet postova iz jedne teme</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad želiš mjesec dana sadržaja iz jedne teme.</div><pre class="p">Iz ove teme napravi seriju od pet LinkedIn postova: <span class="f">[TEMA</span>]
+
+Publika: <span class="f">[OPIŠI</span>]
+
+Za svaki post: naslov teme, hook, ključna poruka u jednoj rečenici, poziv na akciju, i u kojem tjednu objaviti.
+
+Pravila:
+- Svaki post mora imati DRUGU tezu, ne drugo pakiranje iste.
+- Prvi post postavlja problem, zadnji daje rješenje. Sredina su koraci.
+- Ako tema nema pet različitih teza, reci mi koliko ih ima i predloži manje.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Zadnje pravilo je ono što ovaj prompt čini korisnim. Serija od pet postova o istoj stvari je recikliranje i publika to prepozna.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Instagram</h4><article class="item" data-cat="ig" data-search="edukativni caption za post koji nešto uči. napiši instagram caption za edukativni post na temu: [tema].
+
+publika: [opiši ciljnu skupinu konkretno]
+niša: [tvoja niša]
+
+struktura:
+1. hook — prva rečenica mora zaustaviti scroll. pitanje na koje je odgovor „da“ ili konkretna izjava.
+2. vrijednost — 3-5 točaka s konkretnim koracima
+3. poziv na akciju — spremi / komentiraj / pošalji nekome
+4. 8-12 hashtagova: tri velika, tri srednja, tri iz niše
+
+pravila: 150-200 riječi bez hashtagova. najviše tri emojija. bez uskličnika u nizu."><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Edukativni caption</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za post koji nešto uči.</div><pre class="p">Napiši Instagram caption za edukativni post na temu: <span class="f">[TEMA</span>].
+
+Publika: <span class="f">[OPIŠI ciljnu skupinu konkretno</span>]
+Niša: <span class="f">[TVOJA NIŠA</span>]
+
+Struktura:
+1. Hook — prva rečenica mora zaustaviti scroll. Pitanje na koje je odgovor „da“ ili konkretna izjava.
+2. Vrijednost — 3-5 točaka s konkretnim koracima
+3. Poziv na akciju — spremi / komentiraj / pošalji nekome
+4. 8-12 hashtagova: tri velika, tri srednja, tri iz niše
+
+Pravila: 150-200 riječi bez hashtagova. Najviše tri emojija. Bez uskličnika u nizu.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Hook s pitanjem na koje je odgovor „da“ zadržava čitatelja automatski — ali pitanje mora biti specifično za njegovu svakodnevicu.</div></div></article><article class="item" data-cat="ig" data-search="carousel za instagram za vizualni korak-po-korak. napiši sadržaj za instagram carousel od [7 ili 10] slajdova: [tema]
+
+publika: [opiši]
+
+za svaki slajd: naslov (do 5 riječi), tekst (do 25 riječi), vizualni prijedlog.
+plus caption za post i 10 hashtagova.
+
+pravila:
+- slajd 1 je naslovnica — obećanje i intriga, bez objašnjavanja.
+- zadnji slajd: poziv na akciju i jedan razlog da te prate.
+- tekst mora biti čitljiv na mobitelu: kratko, bez podrečenica."><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Carousel za Instagram</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za vizualni korak-po-korak.</div><pre class="p">Napiši sadržaj za Instagram carousel od <span class="f">[7 ili 10</span>] slajdova: <span class="f">[TEMA</span>]
+
+Publika: <span class="f">[OPIŠI</span>]
+
+Za svaki slajd: naslov (do 5 riječi), tekst (do 25 riječi), vizualni prijedlog.
+Plus caption za post i 10 hashtagova.
+
+Pravila:
+- Slajd 1 je naslovnica — obećanje i intriga, bez objašnjavanja.
+- Zadnji slajd: poziv na akciju i jedan razlog da te prate.
+- Tekst mora biti čitljiv na mobitelu: kratko, bez podrečenica.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Sedam slajdova prolazi bolje od deset. Ljudi rijetko dođu do desetog — stavi poziv na akciju i na osmi.</div></div></article><article class="item" data-cat="ig" data-search="story niz za dnevni sadržaj bez pripreme. napiši niz od pet instagram storyja na temu: [tema].
+
+publika: [opiši]
+cilj: [angažman / najava / prodaja / pitanje publici]
+
+za svaki story: tekst na ekranu (najviše 12 riječi), što se snima ili prikazuje, i interaktivni element (anketa, pitanje, kvíz, klizač).
+
+pravila:
+- prvi story mora dati razlog da se gleda dalje.
+- najmanje dva interaktivna elementa u nizu.
+- zadnji story: jedan jasan poziv na akciju."><div class="item-top"><div class="item-id"><span class="num">11</span><h3>Story niz</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za dnevni sadržaj bez pripreme.</div><pre class="p">Napiši niz od pet Instagram Storyja na temu: <span class="f">[TEMA</span>].
+
+Publika: <span class="f">[OPIŠI</span>]
+Cilj: <span class="f">[angažman / najava / prodaja / pitanje publici</span>]
+
+Za svaki story: tekst na ekranu (najviše 12 riječi), što se snima ili prikazuje, i interaktivni element (anketa, pitanje, kvíz, klizač).
+
+Pravila:
+- Prvi story mora dati razlog da se gleda dalje.
+- Najmanje dva interaktivna elementa u nizu.
+- Zadnji story: jedan jasan poziv na akciju.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Anketa u drugom storyju drži gledanost cijelog niza. Ljudi koji kliknu ostaju do kraja.</div></div></article><article class="item" data-cat="ig" data-search="quote grafika s kontekstom za sadržaj o vrijednostima i stavu. napiši pet citata iz mog iskustva koji bi mogli ići na quote grafiku.
+
+moja tema i stav: [opiši]
+publika: [opiši]
+
+za svaki: sam citat (najviše 15 riječi) i caption od 80-120 riječi koji ga objašnjava kroz konkretnu situaciju.
+
+pravila:
+- bez motivacijskih fraza. citat mora biti nešto što bih stvarno rekao/rekla.
+- bez citata koji zvuče kao da su nečiji drugi.
+- caption mora imati konkretnu situaciju, ne apstrakciju."><div class="item-top"><div class="item-id"><span class="num">12</span><h3>Quote grafika s kontekstom</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za sadržaj o vrijednostima i stavu.</div><pre class="p">Napiši pet citata iz mog iskustva koji bi mogli ići na quote grafiku.
+
+Moja tema i stav: <span class="f">[OPIŠI</span>]
+Publika: <span class="f">[OPIŠI</span>]
+
+Za svaki: sam citat (najviše 15 riječi) i caption od 80-120 riječi koji ga objašnjava kroz konkretnu situaciju.
+
+Pravila:
+- Bez motivacijskih fraza. Citat mora biti nešto što bih stvarno rekao/rekla.
+- Bez citata koji zvuče kao da su nečiji drugi.
+- Caption mora imati konkretnu situaciju, ne apstrakciju.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Citat bez captiona koji ga objašnjava je prazan. Kontekst je ono što se dijeli, ne rečenica.</div></div></article><article class="item" data-cat="ig" data-search="prilagodba linkedin posta na instagram kad imaš dobar post i želiš ga prenijeti. prilagodi ovaj linkedin post za instagram:
+
+[zalijepi post]
+
+što se mijenja: duljina, ritam, otvaranje, poziv na akciju, hashtagovi.
+što ostaje: teza, ton, konkretni podaci.
+
+pravila:
+- instagram caption je kraći i osobniji. 120-150 riječi.
+- prvi red mora funkcionirati sam, prije nego što se caption otvori.
+- bez poslovnog registra — instagram trpi manje formalnosti.
+- dodaj 10 hashtagova."><div class="item-top"><div class="item-id"><span class="num">13</span><h3>Prilagodba LinkedIn posta na Instagram</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad imaš dobar post i želiš ga prenijeti.</div><pre class="p">Prilagodi ovaj LinkedIn post za Instagram:
+
+<span class="f">[ZALIJEPI POST</span>]
+
+Što se mijenja: duljina, ritam, otvaranje, poziv na akciju, hashtagovi.
+Što ostaje: teza, ton, konkretni podaci.
+
+Pravila:
+- Instagram caption je kraći i osobniji. 120-150 riječi.
+- Prvi red mora funkcionirati sam, prije nego što se caption otvori.
+- Bez poslovnog registra — Instagram trpi manje formalnosti.
+- Dodaj 10 hashtagova.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ne prevodi — prepiši. Skraćeni LinkedIn post na Instagramu se prepozna i preskoči.</div></div></article><article class="item" data-cat="ig" data-search="profil bio i istaknute priče kad profil ne pretvara posjetitelje u praćenje. napiši instagram bio i strukturu istaknutih priča.
+
+čime se bavim: [opiši]
+kome pomažem: [publika]
+rezultat koji donosim: [konkretno]
+poziv na akciju: [što želim da urade]
+
+daj:
+1. tri varijante bija (do 150 znakova svaka)
+2. predloženih šest istaknutih priča s nazivima (do 12 znakova)
+3. što ide u svaku
+4. što bih trebao/trebala maknuti s profila
+
+pravila: bez „strast za“, bez emojija u nizu, bez nabrajanja titula."><div class="item-top"><div class="item-id"><span class="num">14</span><h3>Profil bio i istaknute priče</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad profil ne pretvara posjetitelje u praćenje.</div><pre class="p">Napiši Instagram bio i strukturu istaknutih priča.
+
+Čime se bavim: <span class="f">[OPIŠI</span>]
+Kome pomažem: <span class="f">[PUBLIKA</span>]
+Rezultat koji donosim: <span class="f">[KONKRETNO</span>]
+Poziv na akciju: <span class="f">[što želim da urade</span>]
+
+Daj:
+1. Tri varijante bija (do 150 znakova svaka)
+2. Predloženih šest istaknutih priča s nazivima (do 12 znakova)
+3. Što ide u svaku
+4. Što bih trebao/trebala maknuti s profila
+
+Pravila: bez „strast za“, bez emojija u nizu, bez nabrajanja titula.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Bio mora reći kome pomažeš i s čime. Titule idu u istaknute priče, ne u prvi red.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Kratke forme</h4><article class="item" data-cat="vid" data-search="skripta za 60 sekundi za reels, shorts i tiktok. napiši skriptu za video od 60 sekundi na temu: [tema].
+
+o meni: [pozicija, zašto sam relevantan/relevantna za ovu temu]
+publika: [opiši]
+
+format:
+- 0-5 s: hook — konkretna izjava, kontroverzan stav ili pitanje
+- 5-50 s: vrijednost — tri točke, po 15 s
+- 50-60 s: poziv na akciju
+
+pravila:
+- kratke rečenice, najviše 10 riječi. govorni jezik.
+- jedan odlomak = jedna izgovorena rečenica.
+- bez „hej svima, dobrodošli“. počni usred stvari.
+- napiši i tekst za ekran (do 8 riječi po kadru)."><div class="item-top"><div class="item-id"><span class="num">15</span><h3>Skripta za 60 sekundi</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za Reels, Shorts i TikTok.</div><pre class="p">Napiši skriptu za video od 60 sekundi na temu: <span class="f">[TEMA</span>].
+
+O meni: <span class="f">[pozicija, zašto sam relevantan/relevantna za ovu temu</span>]
+Publika: <span class="f">[OPIŠI</span>]
+
+Format:
+- 0-5 s: HOOK — konkretna izjava, kontroverzan stav ili pitanje
+- 5-50 s: VRIJEDNOST — tri točke, po 15 s
+- 50-60 s: POZIV NA AKCIJU
+
+Pravila:
+- Kratke rečenice, najviše 10 riječi. Govorni jezik.
+- Jedan odlomak = jedna izgovorena rečenica.
+- Bez „Hej svima, dobrodošli“. Počni usred stvari.
+- Napiši i tekst za ekran (do 8 riječi po kadru).</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Prve tri sekunde odlučuju sve. Ako u njima nema konkretne tvrdnje, ostatak nitko ne vidi.</div></div></article><article class="item" data-cat="vid" data-search="deset hookova za isti video kad video ne zadržava gledatelje. generiraj 10 hookova za video na temu: [tema].
+
+niša: [upiši]
+publika: [opiši]
+
+za svaki: sam hook (1-2 rečenice), tip (pitanje / šok / obećanje / priča / pogreška / broj), i zašto radi.
+
+pravila:
+- bez „ovo moraš znati“ i bez „nećeš vjerovati“.
+- svaki hook mora biti specifičan za moju nišu — ne generički.
+- bez izmišljenih brojeva.
+
+poredaj od najboljeg i objasni prve tri."><div class="item-top"><div class="item-id"><span class="num">16</span><h3>Deset hookova za isti video</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad video ne zadržava gledatelje.</div><pre class="p">Generiraj 10 hookova za video na temu: <span class="f">[TEMA</span>].
+
+Niša: <span class="f">[UPIŠI</span>]
+Publika: <span class="f">[OPIŠI</span>]
+
+Za svaki: sam hook (1-2 rečenice), tip (pitanje / šok / obećanje / priča / pogreška / broj), i zašto radi.
+
+Pravila:
+- Bez „Ovo moraš znati“ i bez „Nećeš vjerovati“.
+- Svaki hook mora biti specifičan za moju nišu — ne generički.
+- Bez izmišljenih brojeva.
+
+Poredaj od najboljeg i objasni prve tri.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Snimi isti video s tri različita hooka i objavi ih odvojeno. To je jedini pouzdan test.</div></div></article><article class="item" data-cat="vid" data-search="video iz pitanja klijenta najbolji izvor tema koji imaš. klijent me pitao ovo: [pitanje]
+
+napravi od toga skriptu za video od 45-60 sekundi.
+
+struktura:
+- hook: postavi to pitanje onako kako ga ljudi stvarno postavljaju
+- kratak odgovor u prve 10 sekundi — ne odugovlači
+- zatim objašnjenje u tri točke
+- poziv na akciju
+
+pravila:
+- odgovori na pitanje odmah. video koji odgovor drži za kraj ljudi ne dogledaju.
+- govorni jezik, kratke rečenice."><div class="item-top"><div class="item-id"><span class="num">17</span><h3>Video iz pitanja klijenta</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Najbolji izvor tema koji imaš.</div><pre class="p">Klijent me pitao ovo: <span class="f">[PITANJE</span>]
+
+Napravi od toga skriptu za video od 45-60 sekundi.
+
+Struktura:
+- Hook: postavi to pitanje onako kako ga ljudi stvarno postavljaju
+- Kratak odgovor u prve 10 sekundi — ne odugovlači
+- Zatim objašnjenje u tri točke
+- Poziv na akciju
+
+Pravila:
+- Odgovori na pitanje odmah. Video koji odgovor drži za kraj ljudi ne dogledaju.
+- Govorni jezik, kratke rečenice.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Pitanja koja dobivaš su gotov content plan. Vodi popis — svako pitanje koje dobiješ dva puta je video.</div></div></article><article class="item" data-cat="vid" data-search="serija od pet videa za planiranje snimanja u seriji. napravi plan za pet videa na temu: [tema]. snimam ih sve u jednom danu.
+
+publika: [opiši]
+
+za svaki video: naslov, hook, tri točke, poziv na akciju, i što treba za snimanje (lokacija, rekviziti, tekst na ekranu).
+
+pravila:
+- svaki video mora stajati sam. nitko ne gleda seriju po redu.
+- zajednička vizualna nit da se prepozna da su iz iste serije.
+- redoslijed objave po tome što najviše zanima publiku, ne po logici teme."><div class="item-top"><div class="item-id"><span class="num">18</span><h3>Serija od pet videa</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za planiranje snimanja u seriji.</div><pre class="p">Napravi plan za pet videa na temu: <span class="f">[TEMA</span>]. Snimam ih sve u jednom danu.
+
+Publika: <span class="f">[OPIŠI</span>]
+
+Za svaki video: naslov, hook, tri točke, poziv na akciju, i što treba za snimanje (lokacija, rekviziti, tekst na ekranu).
+
+Pravila:
+- Svaki video mora stajati sam. Nitko ne gleda seriju po redu.
+- Zajednička vizualna nit da se prepozna da su iz iste serije.
+- Redoslijed objave po tome što najviše zanima publiku, ne po logici teme.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Snimanje u seriji je jedini način da se održi ritam. Pet videa u jednom danu je dva tjedna sadržaja.</div></div></article><article class="item" data-cat="vid" data-search="tekst na ekranu i opis kad video postoji, a nema pakiranje. za ovaj video napiši tekst na ekranu i opis:
+
+tema videa: [tema]
+što govorim: [sažetak ili transkript]
+platforma: [reels / shorts / tiktok]
+
+daj:
+1. tekst na ekranu po kadrovima — do 8 riječi po kadru
+2. naslov videa (do 60 znakova)
+3. opis (do 150 znakova za shorts, do 100 riječi za reels)
+4. 8 hashtagova
+5. predloženi kadar za naslovnicu
+
+pravila: tekst na ekranu ne ponavlja izgovoreno — dodaje ili naglašava."><div class="item-top"><div class="item-id"><span class="num">19</span><h3>Tekst na ekranu i opis</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad video postoji, a nema pakiranje.</div><pre class="p">Za ovaj video napiši tekst na ekranu i opis:
+
+Tema videa: <span class="f">[TEMA</span>]
+Što govorim: <span class="f">[SAŽETAK ILI TRANSKRIPT</span>]
+Platforma: <span class="f">[Reels / Shorts / TikTok</span>]
+
+Daj:
+1. Tekst na ekranu po kadrovima — do 8 riječi po kadru
+2. Naslov videa (do 60 znakova)
+3. Opis (do 150 znakova za Shorts, do 100 riječi za Reels)
+4. 8 hashtagova
+5. Predloženi kadar za naslovnicu
+
+Pravila: tekst na ekranu ne ponavlja izgovoreno — dodaje ili naglašava.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Tekst na ekranu koji ponavlja izgovoreno je izgubljena prilika. Neka naglašava broj, ime ili pouantu.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Newsletter</h4><article class="item" data-cat="nl" data-search="uvod newslettera za prvi odlomak koji odlučuje čita li se ostatak. napiši uvodni odlomak za newsletter.
+
+tema broja: [tema]
+ime newslettera: [ime]
+publika: [opiši pretplatnike]
+ton: [osoban / poluformalan / stručan]
+
+zahtjevi:
+- počni osobnom anegdotom, konkretnim podatkom ili pitanjem
+- najviše tri rečenice hooka
+- jasno najavi što čitatelj dobiva u ovom broju
+- bez „dragi čitatelji“ i bez „dobrodošli u novi broj“
+
+80-120 riječi."><div class="item-top"><div class="item-id"><span class="num">20</span><h3>Uvod newslettera</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za prvi odlomak koji odlučuje čita li se ostatak.</div><pre class="p">Napiši uvodni odlomak za newsletter.
+
+Tema broja: <span class="f">[TEMA</span>]
+Ime newslettera: <span class="f">[IME</span>]
+Publika: <span class="f">[OPIŠI pretplatnike</span>]
+Ton: <span class="f">[osoban / poluformalan / stručan</span>]
+
+Zahtjevi:
+- Počni osobnom anegdotom, konkretnim podatkom ili pitanjem
+- Najviše tri rečenice hooka
+- Jasno najavi što čitatelj dobiva u ovom broju
+- Bez „Dragi čitatelji“ i bez „Dobrodošli u novi broj“
+
+80-120 riječi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Piši kao da pišeš jednom čovjeku, ne listi. „Prošli tjedan mi se dogodilo nešto“ otvara bolje od svake najave.</div></div></article><article class="item" data-cat="nl" data-search="cijeli broj iz jedne teme za tjedni newsletter u jednom prolazu. napiši newsletter na temu: [tema].
+
+publika: [opiši]
+cilj broja: [educirati / graditi povjerenje / najaviti nešto]
+moja ponuda, ako je spominjem: [upiši ili ostavi prazno]
+
+struktura:
+- subject (tri varijante, mala slova, do 6 riječi)
+- preview text (do 90 znakova)
+- uvod: osobno, tri rečenice
+- glavni dio: jedna teza razvijena kroz tri točke, s konkretnim primjerom u svakoj
+- jedan praktičan korak koji čitatelj može napraviti danas
+- zaključak i poziv na odgovor
+
+300-500 riječi. bez prodaje u prve dvije trećine."><div class="item-top"><div class="item-id"><span class="num">21</span><h3>Cijeli broj iz jedne teme</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za tjedni newsletter u jednom prolazu.</div><pre class="p">Napiši newsletter na temu: <span class="f">[TEMA</span>].
+
+Publika: <span class="f">[OPIŠI</span>]
+Cilj broja: <span class="f">[educirati / graditi povjerenje / najaviti nešto</span>]
+Moja ponuda, ako je spominjem: <span class="f">[UPIŠI ili ostavi prazno</span>]
+
+Struktura:
+- Subject (tri varijante, mala slova, do 6 riječi)
+- Preview text (do 90 znakova)
+- Uvod: osobno, tri rečenice
+- Glavni dio: jedna teza razvijena kroz tri točke, s konkretnim primjerom u svakoj
+- Jedan praktičan korak koji čitatelj može napraviti danas
+- Zaključak i poziv na odgovor
+
+300-500 riječi. Bez prodaje u prve dvije trećine.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Newsletter u kojem tražiš odgovor gradi listu koja ti odgovara. Poziv „odgovori mi“ je najjači CTA u mailu.</div></div></article><article class="item" data-cat="nl" data-search="rubrika koja se ponavlja za strukturu koju čitatelji prepoznaju. predloži strukturu newslettera s rubrikama koje se ponavljaju svaki broj.
+
+čime se bavim: [opiši]
+publika: [opiši]
+ritam: [tjedno / dvotjedno / mjesečno]
+
+daj:
+1. četiri do pet rubrika s nazivima i opisom što ide u svaku
+2. koliko riječi po rubrici
+3. koliko mi vremena treba za jedan broj
+4. koja rubrika nosi najviše vrijednosti, a koju bih mogao/mogla izbaciti ako mi fali vremena
+
+pravila: struktura mora biti održiva u lošem tjednu, ne samo u dobrom."><div class="item-top"><div class="item-id"><span class="num">22</span><h3>Rubrika koja se ponavlja</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za strukturu koju čitatelji prepoznaju.</div><pre class="p">Predloži strukturu newslettera s rubrikama koje se ponavljaju svaki broj.
+
+Čime se bavim: <span class="f">[OPIŠI</span>]
+Publika: <span class="f">[OPIŠI</span>]
+Ritam: <span class="f">[tjedno / dvotjedno / mjesečno</span>]
+
+Daj:
+1. Četiri do pet rubrika s nazivima i opisom što ide u svaku
+2. Koliko riječi po rubrici
+3. Koliko mi vremena treba za jedan broj
+4. Koja rubrika nosi najviše vrijednosti, a koju bih mogao/mogla izbaciti ako mi fali vremena
+
+Pravila: struktura mora biti održiva u lošem tjednu, ne samo u dobrom.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 4 je ono što odlučuje hoćeš li izdržati godinu. Newsletter koji traži pet sati preskočiš u trećem mjesecu.</div></div></article><article class="item" data-cat="nl" data-search="reaktivacija mrtve liste kad lista mjesecima nije dobila mail. napiši mail za listu kojoj se nisam javio/javila [koliko] mjeseci.
+
+zašto se javljam sada: [pravi razlog]
+što nudim u nastavku: [opiši]
+koliko ih je: [broj, ako znam]
+
+struktura:
+- priznaj tišinu u prvoj rečenici, bez isprike u tri odlomka
+- reci što se promijenilo i zašto se javljam
+- daj nešto korisno odmah, u ovom mailu
+- ponudi jednostavnu odjavu jednom rečenicom
+
+najviše 200 riječi."><div class="item-top"><div class="item-id"><span class="num">23</span><h3>Reaktivacija mrtve liste</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad lista mjesecima nije dobila mail.</div><pre class="p">Napiši mail za listu kojoj se nisam javio/javila <span class="f">[KOLIKO</span>] mjeseci.
+
+Zašto se javljam sada: <span class="f">[PRAVI RAZLOG</span>]
+Što nudim u nastavku: <span class="f">[OPIŠI</span>]
+Koliko ih je: <span class="f">[BROJ, ako znam</span>]
+
+Struktura:
+- Priznaj tišinu u prvoj rečenici, bez isprike u tri odlomka
+- Reci što se promijenilo i zašto se javljam
+- Daj nešto korisno odmah, u ovom mailu
+- Ponudi jednostavnu odjavu jednom rečenicom
+
+Najviše 200 riječi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ponudi odjavu izričito. Lista koja te ne želi šteti isporučivosti — bolje da odu sami.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Facebook i zajednica</h4><article class="item" data-cat="fb" data-search="post za angažman za stranicu ili grupu. napiši facebook post koji generira komentare.
+
+tema: [tema]
+zajednica: [kome se obraćam]
+ton: [topao / stručan / neformalan]
+
+zahtjevi:
+- počni osobnim iskustvom ili konkretnom situacijom
+- direktno pitanje na kraju na koje svatko može odgovoriti
+- najviše 150 riječi
+- najviše tri emojija, bez hashtagova
+
+pitanje mora biti dovoljno lako da odgovor ne traži razmišljanje od pet minuta."><div class="item-top"><div class="item-id"><span class="num">24</span><h3>Post za angažman</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za stranicu ili grupu.</div><pre class="p">Napiši Facebook post koji generira komentare.
+
+Tema: <span class="f">[TEMA</span>]
+Zajednica: <span class="f">[KOME SE OBRAĆAM</span>]
+Ton: <span class="f">[topao / stručan / neformalan</span>]
+
+Zahtjevi:
+- Počni osobnim iskustvom ili konkretnom situacijom
+- Direktno pitanje na kraju na koje svatko može odgovoriti
+- Najviše 150 riječi
+- Najviše tri emojija, bez hashtagova
+
+Pitanje mora biti dovoljno lako da odgovor ne traži razmišljanje od pet minuta.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Facebook nagrađuje komentare više od reakcija. Pitanje mora biti lako — prestručno pitanje ubija razgovor.</div></div></article><article class="item" data-cat="fb" data-search="najava eventa ili webinara za organsku najavu, bez plaćenog dosega. napiši najavu za [webinar / radionicu / event].
+
+naziv: [upiši]
+datum i vrijeme: [upiši]
+kome je: [publika]
+što će naučiti — tri stvari: [upiši]
+cijena ili besplatno: [upiši]
+poziv na akciju: [prijava, link]
+
+daj tri verzije: za facebook (do 150 riječi), za linkedin (do 200), i kratku za story (do 25 riječi).
+
+pravila:
+- prvo što polaznik dobiva, pa tek onda logistika.
+- bez „ne propustite“ i bez lažne hitnosti.
+- ako je besplatno, reci to jasno u prvoj polovici."><div class="item-top"><div class="item-id"><span class="num">25</span><h3>Najava eventa ili webinara</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Za organsku najavu, bez plaćenog dosega.</div><pre class="p">Napiši najavu za <span class="f">[webinar / radionicu / event</span>].
+
+Naziv: <span class="f">[UPIŠI</span>]
+Datum i vrijeme: <span class="f">[UPIŠI</span>]
+Kome je: <span class="f">[PUBLIKA</span>]
+Što će naučiti — tri stvari: <span class="f">[UPIŠI</span>]
+Cijena ili besplatno: <span class="f">[UPIŠI</span>]
+Poziv na akciju: <span class="f">[prijava, link</span>]
+
+Daj tri verzije: za Facebook (do 150 riječi), za LinkedIn (do 200), i kratku za Story (do 25 riječi).
+
+Pravila:
+- Prvo što polaznik dobiva, pa tek onda logistika.
+- Bez „ne propustite“ i bez lažne hitnosti.
+- Ako je besplatno, reci to jasno u prvoj polovici.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Datum i vrijeme nikad ne idu u prvu rečenicu. Prvo razlog da dođu, pa kad.</div></div></article><article class="item" data-cat="fb" data-search="odgovor na komentar koji nije prijateljski kad se pod objavom pojavi napad. napiši odgovor na ovaj komentar:
+
+[zalijepi komentar]
+
+kontekst objave: [opiši]
+je li kritika opravdana: [da / djelomično / ne]
+
+daj:
+1. miran odgovor koji ostavlja dobar dojam na sve koji čitaju
+2. kratku verziju (jedna rečenica) ako ne želim ulaziti u raspravu
+3. ocjenu je li bolje ne odgovarati
+
+pravila:
+- ne uzvraćaj tonom i ne ispravljaj sugovornika o tome što je rekao prije.
+- ako je kritika djelomično opravdana, priznaj taj dio prvo.
+- bez ironije."><div class="item-top"><div class="item-id"><span class="num">26</span><h3>Odgovor na komentar koji nije prijateljski</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad se pod objavom pojavi napad.</div><pre class="p">Napiši odgovor na ovaj komentar:
+
+<span class="f">[ZALIJEPI KOMENTAR</span>]
+
+Kontekst objave: <span class="f">[OPIŠI</span>]
+Je li kritika opravdana: <span class="f">[da / djelomično / ne</span>]
+
+Daj:
+1. Miran odgovor koji ostavlja dobar dojam na sve koji čitaju
+2. Kratku verziju (jedna rečenica) ako ne želim ulaziti u raspravu
+3. Ocjenu je li bolje ne odgovarati
+
+Pravila:
+- Ne uzvraćaj tonom i ne ispravljaj sugovornika o tome što je rekao prije.
+- Ako je kritika djelomično opravdana, priznaj taj dio prvo.
+- Bez ironije.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Odgovor pišeš za publiku koja čita, ne za osobu koja je komentirala. Zato ton odlučuje više od argumenta.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Planiranje</h4><article class="item" data-cat="plan" data-search="content pillari prije nego što napraviš prvi kalendar. pomozi mi definirati content pillare za sljedećih 12 mjeseci.
+
+što nudim: [upiši]
+kome: [publika]
+što me razlikuje: [upiši]
+cilj sadržaja: [upiti / autoritet / zajednica]
+
+daj:
+1. četiri pillara s nazivima i objašnjenjem zašto je svaki relevantan za ovu publiku
+2. preporučeni omjer u procentima
+3. pet konkretnih tema po pillaru
+4. koji pillar većina u mojoj niši preskače — i zašto je to prilika
+
+pravila: četiri pillara, ne šest. svaki mora imati vezu s onim što prodajem."><div class="item-top"><div class="item-id"><span class="num">27</span><h3>Content pillari</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Prije nego napraviš prvi kalendar.</div><pre class="p">Pomozi mi definirati content pillare za sljedećih 12 mjeseci.
+
+Što nudim: <span class="f">[UPIŠI</span>]
+Kome: <span class="f">[PUBLIKA</span>]
+Što me razlikuje: <span class="f">[UPIŠI</span>]
+Cilj sadržaja: <span class="f">[upiti / autoritet / zajednica</span>]
+
+Daj:
+1. Četiri pillara s nazivima i objašnjenjem zašto je svaki relevantan za ovu publiku
+2. Preporučeni omjer u procentima
+3. Pet konkretnih tema po pillaru
+4. Koji pillar većina u mojoj niši preskače — i zašto je to prilika
+
+Pravila: četiri pillara, ne šest. Svaki mora imati vezu s onim što prodajem.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Četvrta točka je često najvrjednija. Pillar koji nitko u tvojoj niši ne pokriva je najlakši način da se izdvojiš.</div></div></article><article class="item" data-cat="plan" data-search="tjedni plan objava petkom, za sljedeći tjedan. napravi plan objava za sljedeći tjedan.
+
+moji pillari: [upiši četiri]
+platforme: [linkedin / instagram / newsletter — odaberi]
+cilj tjedna: [upiti / doseg / zajednica]
+teme koje već imam: [upiši ili ostavi prazno]
+
+za svaki radni dan: pillar, platforma, format, tema, hook, poziv na akciju i optimalno vrijeme objave.
+
+pravila:
+- tri do četiri objave, ne pet. vikendom ništa.
+- nijedna dva dana zaredom iz istog pillara.
+- ostavi jedan dan prazan za ono što se dogodi."><div class="item-top"><div class="item-id"><span class="num">28</span><h3>Tjedni plan objava</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Petkom, za sljedeći tjedan.</div><pre class="p">Napravi plan objava za sljedeći tjedan.
+
+Moji pillari: <span class="f">[UPIŠI ČETIRI</span>]
+Platforme: <span class="f">[LinkedIn / Instagram / newsletter — odaberi</span>]
+Cilj tjedna: <span class="f">[upiti / doseg / zajednica</span>]
+Teme koje već imam: <span class="f">[UPIŠI ili ostavi prazno</span>]
+
+Za svaki radni dan: pillar, platforma, format, tema, hook, poziv na akciju i optimalno vrijeme objave.
+
+Pravila:
+- Tri do četiri objave, ne pet. Vikendom ništa.
+- Nijedna dva dana zaredom iz istog pillara.
+- Ostavi jedan dan prazan za ono što se dogodi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ostavljeni prazan dan je namjeran. Najbolji postovi nastaju iz pitanja u komentarima i iz nečega što se dogodilo u tjednu.</div></div></article><article class="item" data-cat="plan" data-search="analiza mjeseca prvog u mjesecu, s brojevima. analiziraj moj sadržaj iz prošlog mjeseca.
+
+podaci po objavi: [zalijepi — datum, platforma, pillar, tema, doseg, reakcije, komentari, upiti ako ih znam]
+
+daj:
+1. koji pillar je prošao najbolje, s brojem
+2. koji format je prošao najbolje
+3. tri objave koje su donijele najviše, i što im je zajedničko
+4. tri koje su pale, i što im je zajedničko
+5. što bih trebao/trebala objavljivati više, a što manje
+6. jedna stvar koju bih trebao/trebala prestati raditi
+
+pravila: mjeri upite i komentare, ne reakcije. ako podataka o upitima nema, reci da zaključak bez njih nije potpun."><div class="item-top"><div class="item-id"><span class="num">29</span><h3>Analiza mjeseca</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Prvog u mjesecu, s brojevima.</div><pre class="p">Analiziraj moj sadržaj iz prošlog mjeseca.
+
+Podaci po objavi: <span class="f">[ZALIJEPI — datum, platforma, pillar, tema, doseg, reakcije, komentari, upiti ako ih znam</span>]
+
+Daj:
+1. Koji pillar je prošao najbolje, s brojem
+2. Koji format je prošao najbolje
+3. Tri objave koje su donijele najviše, i što im je zajedničko
+4. Tri koje su pale, i što im je zajedničko
+5. Što bih trebao/trebala objavljivati više, a što manje
+6. Jedna stvar koju bih trebao/trebala prestati raditi
+
+Pravila: mjeri upite i komentare, ne reakcije. Ako podataka o upitima nema, reci da zaključak bez njih nije potpun.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Doseg je najmanje važan broj. Objava s malim dosegom i tri upita vrijedi više od one s velikim dosegom i nula.</div></div></article><article class="item" data-cat="plan" data-search="sadržaj iz prodajnih razgovora najbolji izvor tema koji većina ne koristi. iz mojih prodajnih razgovora izvuci teme za sadržaj.
+
+prigovori koje najčešće dobivam: [nabroji]
+pitanja koja klijenti postavljaju: [nabroji]
+nesporazumi koje moram razjašnjavati: [nabroji]
+
+daj:
+1. deset tema za sadržaj — svaka rješava jedan prigovor, pitanje ili nesporazum
+2. za svaku: koji pillar, koji format, i hook
+3. koje tri bih objavio/objavila prve i zašto
+4. koji prigovor je najbolje rješavati sadržajem, a koji samo u razgovoru
+
+pravila: svaka tema mora doći iz stvarnog razgovora, ne iz pretpostavke o publici."><div class="item-top"><div class="item-id"><span class="num">30</span><h3>Sadržaj iz prodajnih razgovora</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Najbolji izvor tema koji većina ne koristi.</div><pre class="p">Iz mojih prodajnih razgovora izvuci teme za sadržaj.
+
+Prigovori koje najčešće dobivam: <span class="f">[NABROJI</span>]
+Pitanja koja klijenti postavljaju: <span class="f">[NABROJI</span>]
+Nesporazumi koje moram razjašnjavati: <span class="f">[NABROJI</span>]
+
+Daj:
+1. Deset tema za sadržaj — svaka rješava jedan prigovor, pitanje ili nesporazum
+2. Za svaku: koji pillar, koji format, i hook
+3. Koje tri bih objavio/objavila prve i zašto
+4. Koji prigovor je najbolje rješavati sadržajem, a koji samo u razgovoru
+
+Pravila: svaka tema mora doći iz stvarnog razgovora, ne iz pretpostavke o publici.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Sadržaj koji unaprijed rješava prigovor skraćuje prodajni razgovor. Zadnja točka je važna — neke prigovore sadržaj samo pojača.</div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Redoslijed koji radi</h2><p>Ako ne znaš gdje početi, ovih pet promptova pokrivaju mjesec dana.</p></div></div>
+<div class="card">
+<ol class="steps">
+  <li><b>27 &mdash; Content pillari.</b> Bez njih je sve ostalo slučajno.</li>
+  <li><b>30 &mdash; Sadržaj iz prodajnih razgovora.</b> Odavde dolaze teme koje stvarno donose upite.</li>
+  <li><b>28 &mdash; Tjedni plan.</b> Petkom, deset minuta.</li>
+  <li><b>01 ili 09 &mdash; Post.</b> Ovisno o platformi na kojoj ti je publika.</li>
+  <li><b>29 &mdash; Analiza mjeseca.</b> Prvog u mjesecu. Bez ovoga četiri koraka gore ponavljaš slijepo.</li>
+</ol>
+<div class="note em"><strong>Povezani materijali:</strong> hookovi su u materijalu 06, kalendar u 01, a pretvaranje jednog izvora u deset formata u 04. Vizuali idu kroz Vizualni Prompt Pack iz Modula 1.</div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || it.getAttribute('data-search').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':(n>=2&&n<=4?' rezultata':' rezultata'));
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>

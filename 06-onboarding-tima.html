@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uvođenje AI-a u tim &mdash; Sve AI tajne, Modul 6</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"\2192";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 6</div>
+<h1>Uvođenje AI-a u tim</h1>
+<p class="lede">Dvadeset pet točaka kroz četiri faze &mdash; od pravila prije prvog pristupa do kvartalnog pregleda. Označi što je gotovo i vidi gdje stojiš.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>25 točaka</span><span>4 faze</span><span>6 grešaka</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Zašto uvođenja propadaju</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <div class="prose" style="font-size:.96rem">
+      <p>Uvođenje AI-a u tim rijetko propadne zbog alata. Propadne zbog tri stvari, i to redom.</p>
+      <p><b>Prvo:</b> uvede se previše odjednom, pa nitko ne nauči ništa do kraja.</p>
+      <p><b>Drugo:</b> pokazuje se što alat može, a ne što se smije &mdash; pa prvi klijentski podatak ode van u prvom tjednu.</p>
+      <p><b>Treće:</b> nema zajedničkog konteksta, pa svatko dobiva generičan izlaz i zaključi da AI ne razumije njihov posao.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Četiri odluke prije prvog pristupa</h4>
+    <ol class="steps">
+      <li><b>Jedan proces.</b> Onaj koji svi rade i koji svima smeta.</li>
+      <li><b>Jedna odgovorna osoba, po imenu.</b> Ne odjel, ne &bdquo;svi&ldquo;.</li>
+      <li><b>Napisano pravilo što se ne smije stavljati u modele.</b> Jedna stranica je dovoljna.</li>
+      <li><b>Dva broja koja mjeriš.</b> Zapisana prije uvođenja, inače rasprava završi na dojmovima.</li>
+    </ol>
+    <div class="note"><strong>Realan raspored:</strong> jedan alat, jedan proces, jedan mjesec. Tek onda drugi. Tim koji je u tri mjeseca dobro naučio dvije stvari je daleko ispred tima koji je površno vidio deset.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Checklista</h2><p>Četiri faze. Označavaj kako prolaziš &mdash; ocjena na dnu se sama ažurira.</p></div></div>
+<div class="card" style="margin-bottom:16px">
+  <div class="item-badges"><h4 style="flex:1 1 auto">Ukupan napredak</h4><span class="count" id="glab"></span></div>
+  <div class="progressbar"><i id="gbar"></i></div>
+  <div class="note" id="gv"></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px"><div class="card"><div class="item-badges"><h3 style="flex:1 1 auto">Prije nego itko dobije pristup</h3><span class="badge gy">8 točaka</span></div><div class="prose" style="font-size:.93rem"><p>Bez ovih osam nemoj uvoditi ništa. Svaka preskočena točka poslije košta desetostruko.</p></div><div><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Odabran jedan proces za početak</b><span>Ne pet. Jedan proces koji svi rade i koji svima smeta.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Napisano pravilo što se NE smije stavljati u AI alate</b><span>Osobni podaci klijenata, ugovori s imenima, nabavne cijene, pristupni podaci, medicinski i financijski podaci trećih.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Odabran plan i isključeno treniranje na našim podacima</b><span>Besplatni plan ne dolazi u obzir za klijentske podatke. Provjeri postavke, ne samo plan.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Određena jedna odgovorna osoba</b><span>Ime, ne „tim“. Ta osoba odgovara na pitanja i vodi popis alata.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Napisano tko plaća i koliko</b><span>Pretplate koje nitko ne prati su najtiši trošak u firmi.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Odlučeno što se mjeri</b><span>Prije uvođenja zapiši dva broja koja želiš promijeniti. Bez toga za tri mjeseca nitko ne zna je li vrijedilo.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Pripremljen Brand Document i barem jedan SOP</b><span>Bez konteksta AI daje generičan izlaz i tim brzo zaključi da „ne radi“.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Dogovoreno pravilo o provjeri</b><span>Ništa što izlazi prema klijentu ne ide bez ljudskog pregleda. Ovo se zapisuje, ne podrazumijeva.</span></span></label></div></div><div class="card"><div class="item-badges"><h3 style="flex:1 1 auto">Prvi tjedan</h3><span class="badge gy">6 točaka</span></div><div class="prose" style="font-size:.93rem"><p>Cilj nije da svi nauče sve. Cilj je da svatko jednom vidi da mu je nešto stvarno uštedjelo vrijeme.</p></div><div><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Zajednički sastanak od sat vremena</b><span>Što uvodimo, zašto, što se smije i što se ne smije. Ne demonstracija alata — pravila i razlog.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Svatko postavi Custom Instructions ili osobne postavke</b><span>Deset minuta po osobi, najveći učinak po uloženoj minuti.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Zajednički projekt s Brand Documentom i cjenikom</b><span>Svi rade iz istog konteksta, pa izlaz zvuči isto bez obzira tko piše.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Svatko odradi jedan stvarni zadatak iz svog posla</b><span>Ne vježbu. Stvaran mail, stvarnu ponudu, stvaran sažetak.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Otvoren kanal za pitanja i primjere</b><span>Jedno mjesto gdje se dijeli što je radilo i što nije. Bez toga svatko uči sam.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Prvi krug provjere</b><span>Odgovorna osoba pregleda što je izašlo i vrati komentar — u pravila, ne samo usmeno.</span></span></label></div></div><div class="card"><div class="item-badges"><h3 style="flex:1 1 auto">Prvi mjesec</h3><span class="badge gy">6 točaka</span></div><div class="prose" style="font-size:.93rem"><p>Ovdje se odlučuje hoće li ostati navika ili će se vratiti na staro.</p></div><div><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Tjedni kratki pregled, 15 minuta</b><span>Što je uštedjelo vrijeme, gdje je zapelo, što mijenjamo u uputama.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Svaki ponovljeni ispravak upisan u upute projekta</b><span>Ispravak u chatu vrijedi jednu poruku. Rečenica u uputama vrijedi zauvijek.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Prvi SOP dopunjen onim što se naučilo</b></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Popis alata s vlasnikom, planom i datumom obnove</b><span>Jedna tablica, dostupna svima.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Izmjereno prvo od dva odabrana broja</b><span>Usporedi s onim što si zapisao/zapisala prije uvođenja.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Odlučeno što se NE isplati</b><span>Barem jedna stvar. Tim koji čuje da je nešto odbačeno vjeruje i onome što je zadržano.</span></span></label></div></div><div class="card"><div class="item-badges"><h3 style="flex:1 1 auto">Kvartalno</h3><span class="badge gy">5 točaka</span></div><div class="prose" style="font-size:.93rem"><p>Petnaest minuta. Bez ovoga sustav tiho zastari.</p></div><div><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Pregled pristupa — tko još ima što</b></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Ukinuti pristupi ljudima koji su otišli</b><span>Isti dan odlaska, ne „kad se sjetimo“.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Provjerene postavke privatnosti na svakom alatu</b><span>Uvjeti se mijenjaju i postavke se ponekad resetiraju uz nove verzije.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Osvježeni cjenik i FAQ u projektima</b><span>Najčešći tihi problem — AI mjesecima širi stare cijene.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Pregled troška pretplata prema stvarnoj upotrebi</b></span></label></div></div></div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Pravilnik na jednoj stranici</h2><p>Šest redaka. Pošalji ih timu i stavi u onboarding novih ljudi.</p></div></div>
+<div class="tbl-scroll"><table><thead><tr><th>Pitanje</th><th>Pravilo</th></tr></thead><tbody><tr><td class="k">Što se smije</td><td>Radni tekstovi, sažeci, nacrti, analize javno dostupnih podataka, interni dokumenti bez osobnih podataka.</td></tr><tr><td class="k">Što se ne smije</td><td>Osobni podaci klijenata i zaposlenika, ugovori s imenima i iznosima, nabavne cijene i marže, pristupni podaci, zdravstveni i financijski podaci trećih.</td></tr><tr><td class="k">Kako se anonimizira</td><td>Imena zamijeni oznakama, iznose rasponima, nazive tvrtki opisom djelatnosti i veličine. Anonimiziran primjer radi jednako dobro.</td></tr><tr><td class="k">Tko odobrava novi alat</td><td>Odgovorna osoba, prije prve upotrebe. Alat ne ulazi u rad prije provjere postavki privatnosti.</td></tr><tr><td class="k">Što ide prema klijentu</td><td>Ništa bez ljudskog pregleda. Svaki broj, datum i naziv provjeren u izvoru.</td></tr><tr><td class="k">Što kad se pogriješi</td><td>Javi se odmah odgovornoj osobi. Cilj je ispraviti i zapisati u pravila, ne tražiti krivca.</td></tr></tbody></table></div>
+<div class="note em" style="margin-top:14px"><strong>Zadnji redak je najvažniji za kulturu.</strong> Ako se greška kažnjava, ljudi ju kriju &mdash; a skrivena greška s klijentskim podacima je jedina koja stvarno košta. Cilj je ispraviti i zapisati, ne pronaći krivca.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Šest načina da ovo propadne</h2><p>Sve viđeno više puta, redom po učestalosti.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><h3>Uvedeno pet alata odjednom</h3></div><div class="item-badges"><span class="badge ru">greška</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Što se dogodi:</b> Tim ne nauči nijedan i vrati se na staro u trećem tjednu.</p></div><div class="note em"><strong>Umjesto toga:</strong> Jedan alat, jedan proces, jedan mjesec.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Demonstracija umjesto pravila</h3></div><div class="item-badges"><span class="badge ru">greška</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Što se dogodi:</b> Svi vide što alat može, nitko ne zna što smije. Prvi klijentski podatak ode van u prvom tjednu.</p></div><div class="note em"><strong>Umjesto toga:</strong> Prvi sastanak je o pravilima, ne o mogućnostima.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Nema zajedničkog konteksta</h3></div><div class="item-badges"><span class="badge ru">greška</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Što se dogodi:</b> Svatko dobiva generičan izlaz i zaključi da AI ne razumije njihov posao.</p></div><div class="note em"><strong>Umjesto toga:</strong> Brand Document i cjenik u zajednički projekt, prije nego što itko počne.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Nitko ne odgovara za to</h3></div><div class="item-badges"><span class="badge ru">greška</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Što se dogodi:</b> Za tri mjeseca nitko ne zna tko plaća koju pretplatu ni tko ima pristup čemu.</p></div><div class="note em"><strong>Umjesto toga:</strong> Jedna osoba, po imenu, s popisom alata.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Ništa se ne mjeri</h3></div><div class="item-badges"><span class="badge ru">greška</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Što se dogodi:</b> Rasprava o tome je li vrijedilo završi na dojmovima.</p></div><div class="note em"><strong>Umjesto toga:</strong> Dva broja zapisana prije uvođenja.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Ispravci ostaju u razgovoru</h3></div><div class="item-badges"><span class="badge ru">greška</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Što se dogodi:</b> Isti problem se ponavlja svaki tjedan kod svake osobe.</p></div><div class="note em"><strong>Umjesto toga:</strong> Svaki ponovljeni ispravak ide u upute projekta.</div></div></article>
+<div class="note" style="margin-top:16px"><strong>Povezano:</strong> širi vodič za uvođenje &mdash; uloge, plan edukacije i mjerenje prihvaćanja &mdash; je u Modulu 9. Ova checklista je operativni dio istog posla.</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+(function(){
+  var c=[].slice.call(document.querySelectorAll('.kchk')),b=document.getElementById('gbar'),
+      l=document.getElementById('glab'),v=document.getElementById('gv');
+  function p(){
+    var n=c.filter(function(x){return x.checked}).length, t=c.length;
+    if(b)b.style.width=(n/t*100)+'%'; if(l)l.textContent=n+' od '+t;
+    if(v){
+      if(n===t){v.className='note em';v.innerHTML='<strong>Sve prođeno.</strong> Sada je najvažnije ono što se ne vidi na popisu — tjedni pregled od 15 minuta. Bez njega se sustav vrati na staro u trećem mjesecu.'}
+      else if(n>=Math.ceil(t*0.6)){v.className='note';v.innerHTML='<strong>Dobro ide.</strong> Prođi neoznačene točke iz prve faze prije nego što kreneš dalje — one nose najviše rizika.'}
+      else {v.className='note ru';v.innerHTML='<strong>Kreni od prve faze.</strong> Uvođenje bez pravila i bez odgovorne osobe je najčešći razlog zašto se tim vrati na staro.'}
+    }
+  }
+  c.forEach(function(x){x.addEventListener('change',p)});p();
+})();
+</script>
+</div>
+</body>
+</html>

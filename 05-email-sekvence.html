@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email sekvence &mdash; Sve AI tajne, Modul 5</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 5</div>
+<h1>Dvije email sekvence</h1>
+<p class="lede">Welcome sekvenca od pet mailova za nekoga tko je upravo ušao na listu, i prodajna od sedam za ponudu s rokom. Cijeli tekst, timing, i uz svaki mail što u njemu mijenjaš.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>5 + 7 mailova</span><span>Cijeli tekst</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Četiri pravila za oba niza</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <h4>Osamdeset posto vrijednosti, dvadeset posto pitanja</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Ako su prvi i drugi mail prodaja, treći nitko neće otvoriti. Welcome sekvenca prodaje tek u petom mailu &mdash; i zato taj peti radi.</p>
+      <p>Prodajna sekvenca je iznimka: tamo je prodaja najavljena u prvom mailu, pa je pošteno da je i ima. Ali čak i tamo prva tri maila daju prije nego što traže.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Odgovor je najjači poziv na akciju</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>&bdquo;Odgovori mi i reci gdje si stao/stala&ldquo; radi bolje od svakog gumba. Ne traži klik, ne traži formu, ne traži odluku.</p>
+      <p>Svaki odgovor je započet razgovor. Koristi ga u najmanje dva maila po sekvenci.</p>
+    </div>
+    <div class="note"><strong>Bonus:</strong> odgovori popravljaju i isporučivost. Lista koja odgovara završava u inboxu, lista koja ignorira u promocijama.</div>
+  </div>
+  <div class="card">
+    <h4>Odjava mora biti lako dostupna</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Jedna rečenica, jedan klik. Ne samo zbog zakona &mdash; ljudi koji ne žele tvoje mailove štete listi više nego što pomažu brojem.</p>
+      <p>U prodajnoj sekvenci ponudi i odjavu <em>samo od te serije</em>, ne od cijele liste. To čuva pretplatnika.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Rok mora biti stvaran</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Ako pišeš da se prijave zatvaraju u četvrtak, u četvrtak se moraju zatvoriti.</p>
+      <p>Lažna hitnost proradi jednom. Drugi put ne reagira nitko, a tvoja lista pamti dulje od tebe.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Welcome sekvenca</h2><p>Pet mailova kroz devet dana, za nekoga tko je preuzeo lead magnet ili se prijavio na listu.</p></div></div>
+<div class="note em">Cilj ove sekvence nije prodaja nego <b>da te počnu čitati</b>. Prva četiri maila samo daju. Peti prvi put nešto nudi &mdash; i zato ga ljudi otvore.</div>
+<div style="margin-top:16px"><article class="item" data-cat="welcome" data-search="isporuka i prvi uvid evo tvog [naziv lead magneta] [ime], evo materijala koji si zatražio/zatražila:
+
+[link]
+
+jedna stvar prije nego što ga otvoriš: većina ljudi presko&amp;či [konkretan korak iz materijala]. to je i najvažniji dio — bez njega ostatak ne radi.
+
+u sljedećih par dana poslat ću ti još tri maila: kako sam do ovoga došao/došla, jedan konkretan problem koji ovime rješavaš, i primjer iz prakse. ako ti to ne treba, odjava je jedan klik na dnu.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Isporuka i prvi uvid</h3></div><div class="item-badges"><span class="badge em">Dan 0</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono">evo tvog <span class="f">[NAZIV LEAD MAGNETA</span>]</td></tr><tr><td class="k">Preview text</td><td>Plus jedna stvar koju većina preskoči</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>], evo materijala koji si zatražio/zatražila:
+
+<span class="f">[LINK</span>]
+
+Jedna stvar prije nego što ga otvoriš: većina ljudi presko&amp;či <span class="f">[KONKRETAN KORAK IZ MATERIJALA</span>]. To je i najvažniji dio — bez njega ostatak ne radi.
+
+U sljedećih par dana poslat ću ti još tri maila: kako sam do ovoga došao/došla, jedan konkretan problem koji ovime rješavaš, i primjer iz prakse. Ako ti to ne treba, odjava je jedan klik na dnu.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Zamijeni naziv materijala, link i onaj jedan korak koji ljudi preskaču. Najava sljedećih mailova je obavezna — smanjuje odjave.</div></div></article><article class="item" data-cat="welcome" data-search="zašto ovo radim — povjerenje zašto sam ovo uopće napravio [ime],
+
+[konkretna situacija iz tvoje prakse — kada, gdje, što se dogodilo]
+
+tada mi je postalo jasno da [zaključak]. od tada radim na [čime se baviš] i to je razlog zašto postoji materijal koji si preuzeo/preuzela.
+
+nemam namjeru ti pisati svaki dan. sljedeći mail dolazi za dva dana i u njemu je jedan konkretan problem s kojim se najčešće susrećem — vjerojatno ga imaš i ti.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Zašto ovo radim — povjerenje</h3></div><div class="item-badges"><span class="badge em">Dan 2</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono">zašto sam ovo uopće napravio</td></tr><tr><td class="k">Preview text</td><td>Kratka priča, bez uljepšavanja</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+<span class="f">[KONKRETNA SITUACIJA IZ TVOJE PRAKSE — kada, gdje, što se dogodilo</span>]
+
+Tada mi je postalo jasno da <span class="f">[ZAKLJUČAK</span>]. Od tada radim na <span class="f">[ČIME SE BAVIŠ</span>] i to je razlog zašto postoji materijal koji si preuzeo/preuzela.
+
+Nemam namjeru ti pisati svaki dan. Sljedeći mail dolazi za dva dana i u njemu je jedan konkretan problem s kojim se najčešće susrećem — vjerojatno ga imaš i ti.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Ovo je jedini mail u sekvenci koji govori o tebi. Mora imati konkretnu situaciju s datumom i mjestom — apstraktna priča ne gradi povjerenje.</div></div></article><article class="item" data-cat="welcome" data-search="jedan problem, jedno rješenje [konkretan problem] i što s njim [ime],
+
+najčešći problem koji vidim kod [tvoja publika]: [opiši problem konkretno].
+
+ono što ga održava obično nije nedostatak alata, nego [pravi uzrok].
+
+tri koraka koja rješavaju većinu:
+1. [korak]
+2. [korak]
+3. [korak]
+
+prvi korak možeš napraviti danas i traje [vrijeme]. ako naiđeš na zid, odgovori na ovaj mail i reci gdje si stao/stala.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Jedan problem, jedno rješenje</h3></div><div class="item-badges"><span class="badge em">Dan 4</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono"><span class="f">[KONKRETAN PROBLEM</span>] i što s njim</td></tr><tr><td class="k">Preview text</td><td>Traje tri minute čitanja</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+Najčešći problem koji vidim kod <span class="f">[TVOJA PUBLIKA</span>]: <span class="f">[OPIŠI PROBLEM KONKRETNO</span>].
+
+Ono što ga održava obično nije nedostatak alata, nego <span class="f">[PRAVI UZROK</span>].
+
+Tri koraka koja rješavaju većinu:
+1. <span class="f">[KORAK</span>]
+2. <span class="f">[KORAK</span>]
+3. <span class="f">[KORAK</span>]
+
+Prvi korak možeš napraviti danas i traje <span class="f">[VRIJEME</span>]. Ako naiđeš na zid, odgovori na ovaj mail i reci gdje si stao/stala.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Poziv „odgovori i reci gdje si stao“ je najjači CTA u cijeloj sekvenci. Svaki odgovor je razgovor koji može postati posao.</div></div></article><article class="item" data-cat="welcome" data-search="dokaz [rezultat s brojem] [ime],
+
+primjer iz prakse, jer teorija je jedno.
+
+[klijent — sektor i veličina, bez naziva] imao je [problem]. prije: [stanje s brojem]. nakon [rok]: [stanje s brojem].
+
+što smo konkretno napravili:
+[tri do pet koraka]
+
+ono što je odlučilo nije bio alat, nego [što je stvarno odlučilo].
+
+ako ti se ovo poznato, odgovori mi u jednoj rečenici kako to danas rješavaš — javit ću ti što bih ja probao/probala prvo.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Dokaz</h3></div><div class="item-badges"><span class="badge em">Dan 6</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono"><span class="f">[REZULTAT S BROJEM</span>]</td></tr><tr><td class="k">Preview text</td><td>Kako je to išlo u praksi</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+Primjer iz prakse, jer teorija je jedno.
+
+<span class="f">[KLIJENT — sektor i veličina, bez naziva</span>] imao je <span class="f">[PROBLEM</span>]. Prije: <span class="f">[STANJE S BROJEM</span>]. Nakon <span class="f">[ROK</span>]: <span class="f">[STANJE S BROJEM</span>].
+
+Što smo konkretno napravili:
+<span class="f">[TRI DO PET KORAKA</span>]
+
+Ono što je odlučilo nije bio alat, nego <span class="f">[ŠTO JE STVARNO ODLUČILO</span>].
+
+Ako ti se ovo poznato, odgovori mi u jednoj rečenici kako to danas rješavaš — javit ću ti što bih ja probao/probala prvo.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Bez broja ovaj mail ne postoji. Ako ga nemaš, ispričaj slučaj bez brojeva ali reci koliko je trajalo — vrijeme je i broj.</div></div></article><article class="item" data-cat="welcome" data-search="prva ponuda ako želiš da to prođemo zajedno [ime],
+
+prošli mailovi su bili sve što mogu prenijeti u tekstu.
+
+ako želiš da to prođemo na tvom konkretnom slučaju, radim [što nudiš — format, trajanje, cijena ili „po dogovoru“].
+
+kako to izgleda:
+- [što dobiva]
+- [što dobiva]
+- [što dobiva]
+
+ako sada nije trenutak — potpuno u redu, materijal ostaje tvoj i mailovi prestaju ovdje. ako jest, odgovori s jednom rečenicom o svom slučaju i javim ti odgovara li ovo uopće.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Prva ponuda</h3></div><div class="item-badges"><span class="badge em">Dan 9</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono">ako želiš da to prođemo zajedno</td></tr><tr><td class="k">Preview text</td><td>Bez pritiska, samo opcija</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+Prošli mailovi su bili sve što mogu prenijeti u tekstu.
+
+Ako želiš da to prođemo na tvom konkretnom slučaju, radim <span class="f">[ŠTO NUDIŠ — format, trajanje, cijena ili „po dogovoru“</span>].
+
+Kako to izgleda:
+- <span class="f">[ŠTO DOBIVA</span>]
+- <span class="f">[ŠTO DOBIVA</span>]
+- <span class="f">[ŠTO DOBIVA</span>]
+
+Ako sada nije trenutak — potpuno u redu, materijal ostaje tvoj i mailovi prestaju ovdje. Ako jest, odgovori s jednom rečenicom o svom slučaju i javim ti odgovara li ovo uopće.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Ovo je jedini prodajni mail u sekvenci. Rečenica „ako sada nije trenutak, potpuno u redu“ diže broj odgovora, ne smanjuje ga.</div></div></article></div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Prodajna sekvenca</h2><p>Sedam mailova kroz jedanaest dana, za ponudu s rokom.</p></div></div>
+<div class="note ru">Ova sekvenca ide <b>samo</b> listi koja te već čita. Prodajna sekvenca na hladnu listu je najbrži način da izgubiš i listu i ugled.</div>
+<div style="margin-top:16px"><article class="item" data-cat="sales" data-search="najava otvaram [naziv ponude] [ime],
+
+u [datum] otvaram [naziv ponude].
+
+kome je: [opis — tri karakteristike]
+kome nije: [opis — dvije karakteristike]
+
+u sljedećih deset dana poslat ću ti šest mailova: koji problem ovo rješava, kako, s kojim rezultatima, koji su najčešći prigovori, što je uključeno i po kojoj cijeni.
+
+ako te ne zanima, odjava od ove serije je jedan klik. ostatak mailova nastavljaš dobivati.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Najava</h3></div><div class="item-badges"><span class="badge ru">Dan 0</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono">otvaram <span class="f">[NAZIV PONUDE</span>]</td></tr><tr><td class="k">Preview text</td><td>Kome je i kome nije</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+U <span class="f">[DATUM</span>] otvaram <span class="f">[NAZIV PONUDE</span>].
+
+Kome je: <span class="f">[OPIS — tri karakteristike</span>]
+Kome nije: <span class="f">[OPIS — dvije karakteristike</span>]
+
+U sljedećih deset dana poslat ću ti šest mailova: koji problem ovo rješava, kako, s kojim rezultatima, koji su najčešći prigovori, što je uključeno i po kojoj cijeni.
+
+Ako te ne zanima, odjava od ove serije je jedan klik. Ostatak mailova nastavljaš dobivati.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Sekcija „kome nije“ nije skromnost — ona diže konverziju jer ljudi koji ostanu znaju da su na pravom mjestu.</div></div></article><article class="item" data-cat="sales" data-search="problem i cijena nečinjenja što te to košta sada [ime],
+
+problem o kojem govorimo: [opiši konkretno, njihovim riječima].
+
+ono što ga čini skupim nije to što postoji, nego što se ne vidi u troškovima:
+- [posljedica s brojem]
+- [posljedica s brojem]
+- [posljedica s brojem]
+
+ako ti od ovoga ništa ne zvuči poznato — ova ponuda vjerojatno nije za tebe i to je u redu.
+
+sutra pišem o tome kako to rješavamo.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Problem i cijena nečinjenja</h3></div><div class="item-badges"><span class="badge ru">Dan 1</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono">što te to košta sada</td></tr><tr><td class="k">Preview text</td><td>Konkretno, s brojevima</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+Problem o kojem govorimo: <span class="f">[OPIŠI KONKRETNO, njihovim riječima</span>].
+
+Ono što ga čini skupim nije to što postoji, nego što se ne vidi u troškovima:
+- <span class="f">[POSLJEDICA S BROJEM</span>]
+- <span class="f">[POSLJEDICA S BROJEM</span>]
+- <span class="f">[POSLJEDICA S BROJEM</span>]
+
+Ako ti od ovoga ništa ne zvuči poznato — ova ponuda vjerojatno nije za tebe i to je u redu.
+
+Sutra pišem o tome kako to rješavamo.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Najteži mail za pisanje jer traži brojeve. Ako ih ne znaš, pitaj tri postojeća klijenta — dat će ti ih u jednoj rečenici.</div></div></article><article class="item" data-cat="sales" data-search="mehanizam kako to izgleda korak po korak [ime],
+
+kako to rješavamo, u [broj] koraka:
+
+1. [korak — što se radi i koliko traje]
+2. [korak]
+3. [korak]
+4. [korak]
+
+ono što je drukčije od uobičajenog pristupa: [ključna razlika].
+
+ovo nije teorija — svaki korak završava nečim konkretnim što imaš u ruci.
+
+za dva dana pišem o rezultatima.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Mehanizam</h3></div><div class="item-badges"><span class="badge ru">Dan 3</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono">kako to izgleda korak po korak</td></tr><tr><td class="k">Preview text</td><td>Bez magije, samo redoslijed</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+Kako to rješavamo, u <span class="f">[BROJ</span>] koraka:
+
+1. <span class="f">[KORAK — što se radi i koliko traje</span>]
+2. <span class="f">[KORAK</span>]
+3. <span class="f">[KORAK</span>]
+4. <span class="f">[KORAK</span>]
+
+Ono što je drukčije od uobičajenog pristupa: <span class="f">[KLJUČNA RAZLIKA</span>].
+
+Ovo nije teorija — svaki korak završava nečim konkretnim što imaš u ruci.
+
+Za dva dana pišem o rezultatima.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Mehanizam je mail koji pretvara interes u povjerenje. Ako ne možeš opisati korake, ponuda još nije spremna za prodaju.</div></div></article><article class="item" data-cat="sales" data-search="dokaz tri rezultata iz prakse [ime],
+
+tri primjera, bez naziva klijenata:
+
+[sektor, veličina] — [problem] → [rezultat s brojem] u [rok]
+[sektor, veličina] — [problem] → [rezultat s brojem] u [rok]
+[sektor, veličina] — [problem] → [rezultat s brojem] u [rok]
+
+što im je zajedničko: [što ih povezuje].
+što nije: [gdje se razlikuju — pokazuje da radi u različitim situacijama].
+
+ako želiš cijeli primjer jednog od ovih slučajeva, odgovori s brojem 1, 2 ili 3.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Dokaz</h3></div><div class="item-badges"><span class="badge ru">Dan 5</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono">tri rezultata iz prakse</td></tr><tr><td class="k">Preview text</td><td>S brojevima i rokovima</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+Tri primjera, bez naziva klijenata:
+
+<span class="f">[SEKTOR, VELIČINA</span>] — <span class="f">[PROBLEM</span>] → <span class="f">[REZULTAT S BROJEM</span>] u <span class="f">[ROK</span>]
+<span class="f">[SEKTOR, VELIČINA</span>] — <span class="f">[PROBLEM</span>] → <span class="f">[REZULTAT S BROJEM</span>] u <span class="f">[ROK</span>]
+<span class="f">[SEKTOR, VELIČINA</span>] — <span class="f">[PROBLEM</span>] → <span class="f">[REZULTAT S BROJEM</span>] u <span class="f">[ROK</span>]
+
+Što im je zajedničko: <span class="f">[ŠTO IH POVEZUJE</span>].
+Što nije: <span class="f">[GDJE SE RAZLIKUJU — pokazuje da radi u različitim situacijama</span>].
+
+Ako želiš cijeli primjer jednog od ovih slučajeva, odgovori s brojem 1, 2 ili 3.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Odgovori s brojem su najlakši CTA koji postoji i daju ti listu ljudi koje treba pozvati. Koristi ga.</div></div></article><article class="item" data-cat="sales" data-search="prigovori tri stvari koje me najčešće pitaju [ime],
+
+tri pitanja koja dobivam gotovo svaki put:
+
+„[prigovor 1]“
+[odgovor — kratko, bez opravdavanja]
+
+„[prigovor 2]“
+[odgovor]
+
+„[prigovor 3 — obično cijena]“
+[odgovor koji preusmjerava na vrijednost, bez spuštanja cijene]
+
+ako imaš pitanje kojeg nema ovdje, odgovori na ovaj mail. odgovaram na svaki.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Prigovori</h3></div><div class="item-badges"><span class="badge ru">Dan 7</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono">tri stvari koje me najčešće pitaju</td></tr><tr><td class="k">Preview text</td><td>Uključujući onu o cijeni</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+Tri pitanja koja dobivam gotovo svaki put:
+
+„<span class="f">[PRIGOVOR 1</span>]“
+<span class="f">[ODGOVOR — kratko, bez opravdavanja</span>]
+
+„<span class="f">[PRIGOVOR 2</span>]“
+<span class="f">[ODGOVOR</span>]
+
+„<span class="f">[PRIGOVOR 3 — obično cijena</span>]“
+<span class="f">[ODGOVOR koji preusmjerava na vrijednost, bez spuštanja cijene</span>]
+
+Ako imaš pitanje kojeg nema ovdje, odgovori na ovaj mail. Odgovaram na svaki.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Prigovori koje sam napišeš prije nego što ih čuješ skraćuju prodajni razgovor. Uzmi ih iz stvarnih razgovora, ne iz pretpostavke.</div></div></article><article class="item" data-cat="sales" data-search="što je uključeno i cijena što dobivaš i koliko [ime],
+
+sve na jednom mjestu.
+
+što je uključeno:
+- [stvar]
+- [stvar]
+- [stvar]
+- [stvar]
+
+što nije uključeno: [budi izričit — ovo sprječava nesporazume]
+
+cijena: [iznos]. [uvjeti plaćanja, ako ih ima]
+broj mjesta: [broj, ako je ograničen — samo ako je stvarno]
+prijave do: [datum]
+
+[link za prijavu]
+
+ako nešto nije jasno, odgovori — bolje je pitati sada nego se predomišljati poslije.
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Što je uključeno i cijena</h3></div><div class="item-badges"><span class="badge ru">Dan 9</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono">što dobivaš i koliko</td></tr><tr><td class="k">Preview text</td><td>Sve na jednom mjestu</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+Sve na jednom mjestu.
+
+Što je uključeno:
+- <span class="f">[STVAR</span>]
+- <span class="f">[STVAR</span>]
+- <span class="f">[STVAR</span>]
+- <span class="f">[STVAR</span>]
+
+Što nije uključeno: <span class="f">[BUDI IZRIČIT — ovo sprječava nesporazume</span>]
+
+Cijena: <span class="f">[IZNOS</span>]. <span class="f">[UVJETI PLAĆANJA, ako ih ima</span>]
+Broj mjesta: <span class="f">[BROJ, ako je ograničen — samo ako je stvarno</span>]
+Prijave do: <span class="f">[DATUM</span>]
+
+<span class="f">[LINK ZA PRIJAVU</span>]
+
+Ako nešto nije jasno, odgovori — bolje je pitati sada nego se predomišljati poslije.
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Sekcija „što nije uključeno“ je ono što razlikuje ozbiljnu ponudu od prodajne stranice. Nikad je ne izostavljaj.</div></div></article><article class="item" data-cat="sales" data-search="zatvaranje zatvaram prijave [datum] [ime],
+
+prijave se zatvaraju [datum i vrijeme].
+
+ako si se odlučio/odlučila: [link]
+ako nisi: nema problema, ovo je zadnji mail o ovoj temi. nastavljam ti pisati o [tema newslettera] kao i prije.
+
+jedna stvar, ako se dvojiš: [najčešći pravi razlog za dvojbu i kratak odgovor na njega].
+
+[potpis]"><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Zatvaranje</h3></div><div class="item-badges"><span class="badge ru">Dan 11</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Subject</td><td class="mono">zatvaram prijave <span class="f">[DATUM</span>]</td></tr><tr><td class="k">Preview text</td><td>Zadnji mail o ovome</td></tr></tbody></table></div><pre class="p"><span class="f">[IME</span>],
+
+Prijave se zatvaraju <span class="f">[DATUM I VRIJEME</span>].
+
+Ako si se odlučio/odlučila: <span class="f">[LINK</span>]
+Ako nisi: nema problema, ovo je zadnji mail o ovoj temi. Nastavljam ti pisati o <span class="f">[TEMA NEWSLETTERA</span>] kao i prije.
+
+Jedna stvar, ako se dvojiš: <span class="f">[NAJČEŠĆI PRAVI RAZLOG ZA DVOJBU I KRATAK ODGOVOR NA NJEGA</span>].
+
+<span class="f">[POTPIS</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj mail</button></div><div class="note"><strong>Što mijenjaš:</strong> Rok mora biti stvaran. Lažni rok proradi jednom, a lista ti to ne oprosti — sljedeći put ne reagira nitko.</div></div></article></div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Što mjeriš</h2><p>Tri broja po sekvenci. Ostalo je zanimljivo, ali ne mijenja odluke.</p></div></div>
+<div class="grid g3">
+  <div class="card hero"><h4>Stopa odgovora</h4><div class="prose" style="font-size:.93rem"><p>Koliko ljudi odgovori na mailove u kojima to tražiš. Ovo je jedini broj koji predviđa prodaju.</p></div></div>
+  <div class="card"><h4>Odjave po mailu</h4><div class="prose" style="font-size:.93rem"><p>Skok na jednom konkretnom mailu kaže ti točno koji mail ne radi. Prepiši taj, ne cijelu sekvencu.</p></div></div>
+  <div class="card"><h4>Konverzija cijele sekvence</h4><div class="prose" style="font-size:.93rem"><p>Koliko ih od ulaska u sekvencu dođe do željene radnje. Mjeri se po sekvenci, ne po mailu.</p></div></div>
+</div>
+<div class="note" style="margin-top:16px"><strong>Stopu otvaranja ne mjeri.</strong> Mail klijenti unaprijed učitavaju sadržaj i taj broj više ništa ne znači. Odgovori i odjave su stvarni signali.</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+</div>
+</body>
+</html>

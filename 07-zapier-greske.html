@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kad Zap ne radi &mdash; Sve AI tajne, Modul 7</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"\2192";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 7</div>
+<h1>Kad Zap ne radi</h1>
+<p class="lede">Dvanaest najčešćih problema, po skupinama. Za svaki simptom mogući uzroci i što konkretno napraviti &mdash; redom, ne sve odjednom.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>12 problema</span><span>4 skupine</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Prije nego bilo što mijenjaš</h2><p>Četiri koraka koji rješavaju većinu slučajeva brže od nagađanja.</p></div></div>
+<div class="card hero">
+<ol class="steps">
+  <li><b>Otvori povijest izvođenja</b> i nađi <b>prvo</b> neuspjelo izvođenje, ne zadnje. Uzrok je gotovo uvijek tamo, a sve poslije su posljedice.</li>
+  <li><b>Pogledaj izlaz svakog koraka redom.</b> Traži prvi korak čiji izlaz ne izgleda kako očekuješ &mdash; problem je u njemu ili prije njega, nikad poslije.</li>
+  <li><b>Mijenjaj jednu stvar odjednom.</b> Ako promijeniš pet postavki i proradi, ne znaš što je pomoglo &mdash; a sljedeći put nećeš znati što gledati.</li>
+  <li><b>Zapiši što je bilo i što je riješilo.</b> Isti problem će se vratiti za tri mjeseca, kod tebe ili kod kolege.</li>
+</ol>
+<div class="note ru"><strong>Najčešća greška u traženju kvara:</strong> gledanje zadnjeg neuspjelog izvođenja. Ono obično pokaže simptom, a ne uzrok &mdash; uzrok je u prvom, često od prije nekoliko dana.</div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Problemi</h2><p>Filtriraj po skupini ili traži po simptomu.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži simptom &mdash; npr. ne pokreće, duplikat, datum, prazno polje&hellip;" aria-label="Traži problem">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Sve<span class="n">12</span></button><button class="chip" data-cat="okidac" aria-pressed="false">Okidač<span class="n">3</span></button><button class="chip" data-cat="ai" aria-pressed="false">AI korak<span class="n">2</span></button><button class="chip" data-cat="podaci" aria-pressed="false">Podaci<span class="n">4</span></button><button class="chip" data-cat="logika" aria-pressed="false">Logika<span class="n">3</span></button></div>
+</div>
+<h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Okidač</h4><article class="item" data-cat="okidac" data-search="zap se uopće ne pokreće okidač ne vidi novi zapis, ili ga vidi tek nakon dugo vremena. okidači koji provjeravaju u razmacima ne rade odmah — provjere idu u intervalima ovisno o planu. novi red je dodan izvan zadnjeg popunjenog retka, pa ga sheets ne prepoznaje kao novi. prvi red tablice nije zaglavlje, ili ima prazan stupac između podataka. zap je uključen, ali okidač je testiran na starom zapisu i zapier ga smatra već obrađenim."><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Zap se uopće ne pokreće</h3></div><div class="item-badges"><span class="badge ru">često</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Okidač ne vidi novi zapis, ili ga vidi tek nakon dugo vremena.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Okidači koji provjeravaju u razmacima ne rade odmah — provjere idu u intervalima ovisno o planu.</li><li>Novi red je dodan izvan zadnjeg popunjenog retka, pa ga Sheets ne prepoznaje kao novi.</li><li>Prvi red tablice nije zaglavlje, ili ima prazan stupac između podataka.</li><li>Zap je uključen, ali okidač je testiran na starom zapisu i Zapier ga smatra već obrađenim.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Dodaj novi red rukom, potpuno ispod zadnjeg. Provjeri da zaglavlje nema praznih stupaca između. Ako i dalje ne radi, isključi pa uključi Zap — to resetira što smatra obrađenim.</div></div></article><article class="item" data-cat="okidac" data-search="zap se pokreće prečesto i troši zadatke kvota nestane u nekoliko dana, a većina izvođenja ne napravi ništa korisno. nema filtera odmah iza okidača. okidač je postavljen na svaku promjenu retka, a ne na novi redak — pa svaka izmjena pokreće zap. zap koji upisuje u istu tablicu koju gleda, pa sam sebe pokreće."><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Zap se pokreće prečesto i troši zadatke</h3></div><div class="item-badges"><span class="badge ru">često</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Kvota nestane u nekoliko dana, a većina izvođenja ne napravi ništa korisno.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Nema filtera odmah iza okidača.</li><li>Okidač je postavljen na svaku promjenu retka, a ne na novi redak — pa svaka izmjena pokreće Zap.</li><li>Zap koji upisuje u istu tablicu koju gleda, pa sam sebe pokreće.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Stavi Filter kao drugi korak, uvijek. Ako Zap piše u istu tablicu koju gleda, piši u drugi list ili koristi okidač koji gleda samo nove retke.</div></div></article><article class="item" data-cat="okidac" data-search="zap je isključen zbog grešaka dobiješ mail da je zap zaustavljen nakon niza neuspjelih izvođenja. veza s aplikacijom je istekla ili je lozinka promijenjena. aplikacija je vratila grešku više puta zaredom. polje koje zap očekuje je nestalo — netko je preimenovao stupac."><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Zap je isključen zbog grešaka</h3></div><div class="item-badges"><span class="badge ru">često</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Dobiješ mail da je Zap zaustavljen nakon niza neuspjelih izvođenja.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Veza s aplikacijom je istekla ili je lozinka promijenjena.</li><li>Aplikacija je vratila grešku više puta zaredom.</li><li>Polje koje Zap očekuje je nestalo — netko je preimenovao stupac.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Otvori povijest izvođenja i pogledaj prvo neuspjelo, ne zadnje. Uzrok je gotovo uvijek tamo. Provjeri veze i nazive stupaca prije nego što ponovno uključiš.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">AI korak</h4><article class="item" data-cat="ai" data-search="ai korak vraća drukčiji oblik nego prije zap je radio tjednima, a onda odjednom sljedeći korak dobiva prazno polje. prompt nema izričitu zabranu uvoda i zaključka, pa model povremeno doda rečenicu. temperatura nije postavljena na nulu. ulaz je bio neuobičajen — kraći, duži ili na drugom jeziku — pa je model odstupio od oblika."><div class="item-top"><div class="item-id"><span class="num">04</span><h3>AI korak vraća drukčiji oblik nego prije</h3></div><div class="item-badges"><span class="badge am">povremeno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Zap je radio tjednima, a onda odjednom sljedeći korak dobiva prazno polje.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Prompt nema izričitu zabranu uvoda i zaključka, pa model povremeno doda rečenicu.</li><li>Temperatura nije postavljena na nulu.</li><li>Ulaz je bio neuobičajen — kraći, duži ili na drugom jeziku — pa je model odstupio od oblika.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Vrati se na prompt, ne na Zap. Dodaj: „Odgovori samo u zadanom obliku, bez ijedne druge riječi.“ Postavi temperaturu na 0. Testiraj na deset ulaza, uključujući dva neuredna.</div></div></article><article class="item" data-cat="ai" data-search="ai korak izmišlja podatke u tablici se pojavi rok, iznos ili ime kojeg nije bilo u ulazu. prompt nema izričitu zabranu izmišljanja. polje je bilo prazno, a prompt ne kaže što u tom slučaju. model je zamoljen da &#x27;popuni&#x27; ili &#x27;dopuni&#x27; podatke."><div class="item-top"><div class="item-id"><span class="num">05</span><h3>AI korak izmišlja podatke</h3></div><div class="item-badges"><span class="badge ru">često</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>U tablici se pojavi rok, iznos ili ime kojeg nije bilo u ulazu.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Prompt nema izričitu zabranu izmišljanja.</li><li>Polje je bilo prazno, a prompt ne kaže što u tom slučaju.</li><li>Model je zamoljen da &#x27;popuni&#x27; ili &#x27;dopuni&#x27; podatke.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> U prompt dodaj: „Ako podatka nema, upiši točno: NEMA. Nikad ne pogađaj i ne dopunjuj iz konteksta.“ Ovo je jedina obrana — u automatizaciji nitko ne provjerava izlaz.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Podaci</h4><article class="item" data-cat="podaci" data-search="formatter izvlači krivi dio teksta ponekad izvuče ispravno, ponekad pola rečenice ili prazno. prompt ne vraća fiksne oznake, pa razdvajanje ovisi o rasporedu teksta. oznaka sadrži hrvatske znakove koje neki koraci drukčije obrađuju. razdvajanje po broju znakova umjesto po oznaci."><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Formatter izvlači krivi dio teksta</h3></div><div class="item-badges"><span class="badge am">povremeno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Ponekad izvuče ispravno, ponekad pola rečenice ili prazno.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Prompt ne vraća fiksne oznake, pa razdvajanje ovisi o rasporedu teksta.</li><li>Oznaka sadrži hrvatske znakove koje neki koraci drukčije obrađuju.</li><li>Razdvajanje po broju znakova umjesto po oznaci.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Vrati se na prompt i uvedi oznake u velikim slovima, bez dijakritike: RAZRED:, ESKALACIJA:, SAZETAK_MAIL:. Formatter razdvajaj po tim oznakama, nikad po poziciji.</div></div></article><article class="item" data-cat="podaci" data-search="podaci iz prošlog izvođenja se provuku dalje u novom zapisu se pojavi vrijednost iz prethodnog. prethodni korak je vratio prazno polje, a sljedeći korak je preskočio i zadržao staru vrijednost. polje je mapirano na korak koji se u toj putanji nije izvršio."><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Podaci iz prošlog izvođenja se provuku dalje</h3></div><div class="item-badges"><span class="badge ru">često</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>U novom zapisu se pojavi vrijednost iz prethodnog.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Prethodni korak je vratio prazno polje, a sljedeći korak je preskočio i zadržao staru vrijednost.</li><li>Polje je mapirano na korak koji se u toj putanji nije izvršio.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Traži od AI koraka da nikad ne vraća prazno polje nego riječ NEMA. U Zapu provjeri da nijedno polje nije mapirano na korak iz druge putanje.</div></div></article><article class="item" data-cat="podaci" data-search="hrvatski znakovi se pokvare umjesto č, ć, š, ž pojave se čudni znakovi ili upitnici. aplikacija na kraju lanca očekuje drukčije kodiranje. tekst je prošao kroz korak koji ga je pretvorio u drugi format. csv izvoz otvoren u excelu bez odabira kodiranja."><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Hrvatski znakovi se pokvare</h3></div><div class="item-badges"><span class="badge am">povremeno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Umjesto č, ć, š, ž pojave se čudni znakovi ili upitnici.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Aplikacija na kraju lanca očekuje drukčije kodiranje.</li><li>Tekst je prošao kroz korak koji ga je pretvorio u drugi format.</li><li>CSV izvoz otvoren u Excelu bez odabira kodiranja.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Provjeri gdje se točno kvari — otvori povijest izvođenja i pogledaj izlaz svakog koraka redom. Za nazive polja i oznake u promptovima koristi verzije bez dijakritike.</div></div></article><article class="item" data-cat="podaci" data-search="datum završi u krivom formatu 5. lipnja postane 6. svibnja, ili obrnuto. ulaz je bio dvosmislen (05.06.) i sustav ga je protumačio po američkom zapisu. vremenska zona zapa ne odgovara tvojoj. formatter za datum nije postavljen na izlazni format koji ciljna aplikacija očekuje."><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Datum završi u krivom formatu</h3></div><div class="item-badges"><span class="badge ru">često</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>5. lipnja postane 6. svibnja, ili obrnuto.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Ulaz je bio dvosmislen (05.06.) i sustav ga je protumačio po američkom zapisu.</li><li>Vremenska zona Zapa ne odgovara tvojoj.</li><li>Formatter za datum nije postavljen na izlazni format koji ciljna aplikacija očekuje.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Postavi vremensku zonu Zapa. Koristi Formatter — Date/Time s izričito zadanim ulaznim i izlaznim formatom. U promptu traži DD.MM.GGGG i da dvosmislen datum vrati kao NEMA.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Logika</h4><article class="item" data-cat="logika" data-search="putanja uvijek ide istim putem sve završi u prvoj putanji, iako bi dio trebao ići u drugu. uvjet putanje uspoređuje slobodan tekst umjesto zatvorene vrijednosti. uvjet traži točno podudaranje, a vrijednost ima razmak ili novi red na kraju. polje po kojem se grana ponekad dođe prazno."><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Putanja uvijek ide istim putem</h3></div><div class="item-badges"><span class="badge am">povremeno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Sve završi u prvoj putanji, iako bi dio trebao ići u drugu.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Uvjet putanje uspoređuje slobodan tekst umjesto zatvorene vrijednosti.</li><li>Uvjet traži točno podudaranje, a vrijednost ima razmak ili novi red na kraju.</li><li>Polje po kojem se grana ponekad dođe prazno.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Grana se samo po zatvorenim vrijednostima (DA|NE, A|B|C|D). Prije usporedbe provuci vrijednost kroz Formatter da makne razmake. Dodaj i treću putanju za slučaj kad je polje prazno.</div></div></article><article class="item" data-cat="logika" data-search="isti zapis se obradi dva puta duplikati u tablici ili dva ista maila. zap je bio isključen pa uključen, i ponovno je obradio zapise. okidač gleda izmjene redaka, a upis u isti redak broji kao izmjena. dva zapa gledaju isti izvor."><div class="item-top"><div class="item-id"><span class="num">11</span><h3>Isti zapis se obradi dva puta</h3></div><div class="item-badges"><span class="badge am">povremeno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Duplikati u tablici ili dva ista maila.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Zap je bio isključen pa uključen, i ponovno je obradio zapise.</li><li>Okidač gleda izmjene redaka, a upis u isti redak broji kao izmjena.</li><li>Dva Zapa gledaju isti izvor.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Dodaj korak koji provjerava postoji li već zapis prije nego što ga stvori. Ako Zap upisuje u tablicu koju gleda, upiši u drugi list.</div></div></article><article class="item" data-cat="logika" data-search="radi u testu, ne radi uživo svaki korak u testu zeleno, a u stvarnom radu ništa ili greška. test je odrađen na uredno popunjenom zapisu, a stvarni ulazi imaju prazna polja. test koristi zapis koji je već u sustavu, pa se preskaču koraci koji stvaraju nove. veza korištena u testu ima drukčija prava od one koja radi uživo."><div class="item-top"><div class="item-id"><span class="num">12</span><h3>Radi u testu, ne radi uživo</h3></div><div class="item-badges"><span class="badge ru">često</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Svaki korak u testu zeleno, a u stvarnom radu ništa ili greška.</p></div><div><h4 style="margin-bottom:8px">Mogući uzroci</h4><ul class="ticks"><li>Test je odrađen na uredno popunjenom zapisu, a stvarni ulazi imaju prazna polja.</li><li>Test koristi zapis koji je već u sustavu, pa se preskaču koraci koji stvaraju nove.</li><li>Veza korištena u testu ima drukčija prava od one koja radi uživo.</li></ul></div><div class="note em"><strong>Što napraviti:</strong> Testiraj na deset stvarnih zapisa iz arhive, s dva namjerno neuredna. Nakon uključivanja pogledaj prvih pet izvođenja u povijesti prije nego što zaboraviš na Zap.</div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Kako izbjeći većinu ovoga unaprijed</h2><p>šest navika koje rješavaju problem prije nego što nastane.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <ul class="ticks">
+      <li><b>Filter odmah iza okidača.</b> Rješava problem 2 i pola troška.</li>
+      <li><b>Fiksne oznake u AI promptu.</b> Rješava probleme 4 i 6.</li>
+      <li><b>Temperatura na nulu.</b> Rješava problem 4.</li>
+      <li><b>Izričito NEMA umjesto praznog polja.</b> Rješava probleme 5 i 7.</li>
+      <li><b>Zatvorene vrijednosti za grananje.</b> Rješava problem 10.</li>
+      <li><b>Test na deset stvarnih zapisa.</b> Rješava problem 12 i većinu ostalih.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Kad nešto radi mjesecima pa stane</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Zap se rijetko pokvari sam. Gotovo uvijek se promijenilo nešto izvan njega:</p>
+      <p>preimenovan stupac, promijenjen obrazac, istekla veza, promijenjena lozinka, ili je aplikacija ažurirala sučelje.</p>
+      <p>Zato prvo pogledaj što se promijenilo u alatima, pa tek onda u Zapu.</p>
+    </div>
+    <div class="note em"><strong>Navika koja se isplati:</strong> jednom mjesečno otvori popis Zapova i pogledaj kad je koji zadnji put uspješno radio. Zap koji tiho stoji tri tjedna je češći problem od onog koji javlja grešku.</div>
+  </div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || (it.getAttribute('data-search')||'').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':' rezultata');
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>

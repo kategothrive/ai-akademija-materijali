@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analiza konkurencije &mdash; Sve AI tajne, Modul 6</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"\2192";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 6</div>
+<h1>Analiza konkurencije &mdash; 10 promptova</h1>
+<p class="lede">Deset promptova za istraživanje s izvorima. Svaki nosi isti set pravila: izvor za svaku tvrdnju, razdvojeno nađeno od zaključenog, i &bdquo;nemam podatak&ldquo; umjesto procjene.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>10 promptova</span><span>Za Perplexity</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Zašto alat s pretragom, a ne obični razgovor</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <div class="prose" style="font-size:.96rem">
+      <p>Jezični model bez pretrage odgovara iz treninga. O tvojoj konkurenciji to znači: podaci od prije godinu i pol, ili nikakvi &mdash; a odgovor će i dalje zvučati uvjerljivo.</p>
+      <p>Za istraživanje koristi <b>Perplexity</b> ili bilo koji model s uključenom web pretragom i istraživačkim načinom rada. Rezultat onda ima izvore koje možeš otvoriti.</p>
+      <p>Sinteza je drugi posao: skupljeni materijal prenesi u Claude i tamo traži zaključak i odluku. Jedan alat skuplja, drugi odlučuje.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Pet pravila u svakom promptu</h4>
+    <ul class="ticks">
+      <li><b>Izvor s linkom i datumom</b> za svaku činjeničnu tvrdnju.</li>
+      <li><b>Razdvojeno nađeno od zaključenog.</b> Bez toga interpretacija izgleda kao podatak.</li>
+      <li><b>&bdquo;Nemam podatak&ldquo; umjesto procjene.</b> Naročito za prihod, broj zaposlenih i tržišni udio.</li>
+      <li><b>Oznaka kad je izvor stariji od godine.</b> Za našu regiju to je često slučaj.</li>
+      <li><b>Marketinški tekst nije činjenica.</b> Ono što tvrtka piše o sebi označava se kao njihova tvrdnja.</li>
+    </ul>
+    <div class="note ru"><strong>Otvori tri izvora, svaki put.</strong> Ne cijeli popis &mdash; ali tri. Ako izvor ne postoji, ne postoji ni podatak, koliko god odgovor bio uredno napisan.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Promptovi</h2><p>Svaki već sadrži set pravila na dnu. Ne briši ga &mdash; to je dio koji čuva od izmišljenih podataka.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Profil konkurenta</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Prije ozbiljne ponude gdje znaš da su i oni u igri.</div><pre class="p">Napravi profil ove tvrtke: <span class="f">[NAZIV, web</span>]
+
+Moj biznis za usporedbu: <span class="f">[KRATKI OPIS</span>]
+Tržište: <span class="f">[npr. Hrvatska i regija</span>]
+
+Trebam:
+1. Čime se točno bave i kome se obraćaju — njihovim rječnikom
+2. Koje usluge nude i kako su pakirane
+3. Cijene, samo ako su javno dostupne
+4. Veličina i starost tvrtke, iz javnih registara
+5. Kako se pozicioniraju — koje obećanje daju
+6. Gdje su objektivno jaki
+7. Gdje su slabi — rupe u ponudi, u komunikaciji, u iskustvu klijenta
+8. Po čemu se mi razlikujemo, i je li ta razlika klijentu uopće važna
+
+Pravila koja vrijede za cijeli ovaj razgovor:
+- Za svaku činjeničnu tvrdnju navedi izvor s linkom i datumom objave.
+- Jasno razdvoji ŠTO SI NAŠAO u izvorima od ONOGA ŠTO ZAKLJUČUJEŠ. Označi svaki dio.
+- Ako podatka nema, napiši „nemam podatak“. Nikad ne procjenjuj prihod, broj zaposlenih ni tržišni udio bez izvora.
+- Za hrvatsko, slovensko i bosansko tržište podaci su često stari ili nepotpuni — reci kad je izvor stariji od godine.
+- Ne prepričavaj marketinški tekst s njihove stranice kao činjenicu. Ako je tvrdnja iz njihovog materijala, tako je i označi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Pogledaj i njihovu LinkedIn stranicu, Google recenzije i sudski registar, ne samo web. Marketinški tekst na stranici je najmanje pouzdan izvor o tvrtki.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Cijene na tržištu</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Prije mijenjanja cjenika ili kad ti klijent kaže da ima bolju ponudu.</div><pre class="p">Istraži cijene za <span class="f">[USLUGA ILI PROIZVOD</span>] na tržištu <span class="f">[ZEMLJA/REGIJA</span>].
+
+Moja trenutna cijena: <span class="f">[IZNOS</span>]
+Moj format usluge: <span class="f">[OPIŠI — što je uključeno</span>]
+
+Trebam:
+1. Tvrtke koje javno objavljuju cijene za nešto usporedivo, s iznosima i linkovima
+2. Što je u tim cijenama uključeno, a što se plaća posebno
+3. Raspon od najniže do najviše, i što opravdava razliku
+4. Modeli naplate koji se koriste (po satu, po projektu, mjesečno, po korisniku)
+5. Gdje se moja cijena nalazi u tom rasponu
+6. Što bih morao/morala imati u ponudi da opravdam gornji dio raspona
+
+Pravila koja vrijede za cijeli ovaj razgovor:
+- Za svaku činjeničnu tvrdnju navedi izvor s linkom i datumom objave.
+- Jasno razdvoji ŠTO SI NAŠAO u izvorima od ONOGA ŠTO ZAKLJUČUJEŠ. Označi svaki dio.
+- Ako podatka nema, napiši „nemam podatak“. Nikad ne procjenjuj prihod, broj zaposlenih ni tržišni udio bez izvora.
+- Za hrvatsko, slovensko i bosansko tržište podaci su često stari ili nepotpuni — reci kad je izvor stariji od godine.
+- Ne prepričavaj marketinški tekst s njihove stranice kao činjenicu. Ako je tvrdnja iz njihovog materijala, tako je i označi.
+- Ako većina ne objavljuje cijene, reci to izričito i nemoj procjenjivati koliko naplaćuju.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Najkorisniji prompt u paketu i najlakše ga je pogrešno koristiti. Cijena bez opsega ne znači ništa — bez točke 2 uspoređuješ dvije različite stvari.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Mapiranje niše</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad ulaziš u novo tržište ili novu uslugu.</div><pre class="p">Mapiraj tko se sve bavi <span class="f">[USLUGA/NIŠA</span>] na tržištu <span class="f">[ZEMLJA/REGIJA</span>].
+
+Moj profil: <span class="f">[OPIŠI</span>]
+
+Trebam:
+1. Popis igrača, grupiran po tipu: velike agencije, male specijalizirane firme, samostalni konzultanti, strani igrači
+2. Za svaku grupu: kome se obraćaju i u kojem cjenovnom rasponu
+3. Tri niše ili segmenta koje nitko izričito ne pokriva
+4. Gdje je najviše igrača, a gdje najmanje
+5. Tko je ušao na tržište u zadnjih 12 mjeseci
+6. Gdje bih se ja realno mogao/mogla pozicionirati
+
+Pravila koja vrijede za cijeli ovaj razgovor:
+- Za svaku činjeničnu tvrdnju navedi izvor s linkom i datumom objave.
+- Jasno razdvoji ŠTO SI NAŠAO u izvorima od ONOGA ŠTO ZAKLJUČUJEŠ. Označi svaki dio.
+- Ako podatka nema, napiši „nemam podatak“. Nikad ne procjenjuj prihod, broj zaposlenih ni tržišni udio bez izvora.
+- Za hrvatsko, slovensko i bosansko tržište podaci su često stari ili nepotpuni — reci kad je izvor stariji od godine.
+- Ne prepričavaj marketinški tekst s njihove stranice kao činjenicu. Ako je tvrdnja iz njihovog materijala, tako je i označi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 3 je razlog da se ovo radi. Nepokriven segment je najlakše mjesto za ulazak — ali provjeri ručno postoji li tamo uopće platežna moć.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Što se promijenilo</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kvartalno, za dva do tri glavna konkurenta.</div><pre class="p">Što se promijenilo kod ovih tvrtki u zadnjih <span class="f">[6</span>] mjeseci: <span class="f">[NAZIVI</span>]
+
+Trebam:
+1. Nove usluge ili proizvodi
+2. Promjene u komunikaciji i pozicioniranju
+3. Zapošljavanje — koga traže, jer to govori kamo idu
+4. Nova partnerstva, akvizicije, financiranje
+5. Promjene u cijenama, ako su javne
+6. Što od ovoga mene stvarno tiče, a što je šum
+7. Jedan potez koji bih zbog ovoga trebao/trebala razmotriti
+
+Pravila koja vrijede za cijeli ovaj razgovor:
+- Za svaku činjeničnu tvrdnju navedi izvor s linkom i datumom objave.
+- Jasno razdvoji ŠTO SI NAŠAO u izvorima od ONOGA ŠTO ZAKLJUČUJEŠ. Označi svaki dio.
+- Ako podatka nema, napiši „nemam podatak“. Nikad ne procjenjuj prihod, broj zaposlenih ni tržišni udio bez izvora.
+- Za hrvatsko, slovensko i bosansko tržište podaci su često stari ili nepotpuni — reci kad je izvor stariji od godine.
+- Ne prepričavaj marketinški tekst s njihove stranice kao činjenicu. Ako je tvrdnja iz njihovog materijala, tako je i označi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 3 je najbolji signal koji postoji. Oglasi za posao govore o planovima tvrtke točnije od bilo koje objave — nitko ne zapošljava za smjer u koji ne ide.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Regulativa koja dolazi</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Prije godišnjeg planiranja, i za industrije pod nadzorom.</div><pre class="p">Koje regulatorne promjene dolaze za <span class="f">[INDUSTRIJA</span>] u <span class="f">[ZEMLJA / EU</span>] u sljedećih 12-24 mjeseca?
+
+Moj biznis: <span class="f">[OPIŠI</span>]
+
+Trebam:
+1. Propisi koji su doneseni i još nisu na snazi, s datumima primjene
+2. Propisi u pripremi, s naznakom u kojoj su fazi
+3. Za svaki: što konkretno mijenja za tvrtku moje veličine
+4. Što treba pripremiti unaprijed i do kada
+5. Gdje je ovo prilika, a ne samo obveza
+
+Pravila koja vrijede za cijeli ovaj razgovor:
+- Za svaku činjeničnu tvrdnju navedi izvor s linkom i datumom objave.
+- Jasno razdvoji ŠTO SI NAŠAO u izvorima od ONOGA ŠTO ZAKLJUČUJEŠ. Označi svaki dio.
+- Ako podatka nema, napiši „nemam podatak“. Nikad ne procjenjuj prihod, broj zaposlenih ni tržišni udio bez izvora.
+- Za hrvatsko, slovensko i bosansko tržište podaci su često stari ili nepotpuni — reci kad je izvor stariji od godine.
+- Ne prepričavaj marketinški tekst s njihove stranice kao činjenicu. Ako je tvrdnja iz njihovog materijala, tako je i označi.
+- Ovo nije pravni savjet. Za svaku obvezu koja nosi kaznu napiši da treba provjeriti s pravnikom ili knjigovođom.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Nikad ne postupaj po ovom odgovoru bez provjere u službenom izvoru. Model može promašiti datum primjene, a to je upravo ono što košta.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Trendovi u industriji</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Godišnje, za strategiju.</div><pre class="p">Analiziraj ključne trendove u <span class="f">[INDUSTRIJA</span>] za sljedećih 12-24 mjeseca.
+
+Geografski fokus: <span class="f">[Hrvatska / regija / EU</span>]
+Moja pozicija: <span class="f">[KRATKI OPIS</span>]
+
+Trebam:
+1. Pet trendova koji mijenjaju industriju, s konkretnim primjerima i izvorima
+2. Tehnološke promjene koje utječu na sektor
+3. Što radi vodeća konkurencija drukčije
+4. Tri prilike za moj biznis
+5. Tri prijetnje
+6. Tri konkretna poteza, poredana po tome što je najlakše izvesti
+
+Pravila koja vrijede za cijeli ovaj razgovor:
+- Za svaku činjeničnu tvrdnju navedi izvor s linkom i datumom objave.
+- Jasno razdvoji ŠTO SI NAŠAO u izvorima od ONOGA ŠTO ZAKLJUČUJEŠ. Označi svaki dio.
+- Ako podatka nema, napiši „nemam podatak“. Nikad ne procjenjuj prihod, broj zaposlenih ni tržišni udio bez izvora.
+- Za hrvatsko, slovensko i bosansko tržište podaci su često stari ili nepotpuni — reci kad je izvor stariji od godine.
+- Ne prepričavaj marketinški tekst s njihove stranice kao činjenicu. Ako je tvrdnja iz njihovog materijala, tako je i označi.
+- Razlikuj globalni trend od onoga što se stvarno događa na mom tržištu. To često nije isto.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Zadnje pravilo je bitno. Globalni trend koji na hrvatskom tržištu nema nijednog primjera nije trend nego članak.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Rupe iz recenzija</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad tražiš na čemu se izdvojiti.</div><pre class="p">Analiziraj što kupci pišu o konkurenciji: <span class="f">[NAZIVI TVRTKI</span>]
+
+Izvori koje pregledaj: Google recenzije, Trustpilot, forumi, komentari na društvenim mrežama, grupe.
+
+Trebam:
+1. Na što se kupci najčešće žale — po temama, s brojem pojava
+2. Što najčešće hvale
+3. Tri teme koje se ponavljaju kod više konkurenata — to su rupe u cijelom tržištu
+4. Doslovni citati za svaku temu, s izvorom
+5. Što od toga ja već rješavam, a ne komuniciram
+6. Što bih mogao/mogla staviti u ponudu kao izričito obećanje
+
+Pravila koja vrijede za cijeli ovaj razgovor:
+- Za svaku činjeničnu tvrdnju navedi izvor s linkom i datumom objave.
+- Jasno razdvoji ŠTO SI NAŠAO u izvorima od ONOGA ŠTO ZAKLJUČUJEŠ. Označi svaki dio.
+- Ako podatka nema, napiši „nemam podatak“. Nikad ne procjenjuj prihod, broj zaposlenih ni tržišni udio bez izvora.
+- Za hrvatsko, slovensko i bosansko tržište podaci su često stari ili nepotpuni — reci kad je izvor stariji od godine.
+- Ne prepričavaj marketinški tekst s njihove stranice kao činjenicu. Ako je tvrdnja iz njihovog materijala, tako je i označi.
+- Ne generaliziraj s malog uzorka. Ako se nešto pojavljuje dva puta, napiši da je to rub, a ne obrazac.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 5 je najčešće najvrjednija. Većina malih firmi već rješava ono na što se kupci žale kod konkurencije — samo to nikad ne kaže naglas.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Tehnološki stack</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad prodaješ implementaciju ili integracije.</div><pre class="p">Koje alate i tehnologije koristi <span class="f">[NAZIV TVRTKE</span>]?
+
+Trebam:
+1. Alati vidljivi na njihovoj stranici i u javnim izvorima
+2. Što se može zaključiti iz oglasa za posao — koje alate traže od kandidata
+3. Integracije koje spominju
+4. Što od toga govori o njihovim procesima
+5. Gdje bi se moja usluga uklopila u taj stack
+6. Gdje bi bila u konfliktu s onim što već imaju
+
+Pravila koja vrijede za cijeli ovaj razgovor:
+- Za svaku činjeničnu tvrdnju navedi izvor s linkom i datumom objave.
+- Jasno razdvoji ŠTO SI NAŠAO u izvorima od ONOGA ŠTO ZAKLJUČUJEŠ. Označi svaki dio.
+- Ako podatka nema, napiši „nemam podatak“. Nikad ne procjenjuj prihod, broj zaposlenih ni tržišni udio bez izvora.
+- Za hrvatsko, slovensko i bosansko tržište podaci su često stari ili nepotpuni — reci kad je izvor stariji od godine.
+- Ne prepričavaj marketinški tekst s njihove stranice kao činjenicu. Ako je tvrdnja iz njihovog materijala, tako je i označi.
+- Ne zaključuj o alatima iz pretpostavke o industriji. Bez izvora napiši „nema podatka“.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Oglasi za posao su najbolji izvor za ovo. Tvrtka koja traži nekoga s iskustvom u određenom sustavu taj sustav i koristi.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Provjera tvrdnje</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Prije nego bilo koji podatak uđe u ponudu, objavu ili prezentaciju.</div><pre class="p">Provjeri ovu tvrdnju: „<span class="f">[TVRDNJA S BROJEM</span>]“
+
+Trebam:
+1. Je li tvrdnja točna — potvrđeno, djelomično, netočno, ili se ne može provjeriti
+2. Primarni izvor, s linkom i datumom
+3. Koji je točan broj, ako se razlikuje
+4. Kontekst koji mijenja značenje — na koje tržište, koji period i koji uzorak se odnosi
+5. Kako bih tu tvrdnju trebao/trebala formulirati da bude točna
+6. Ako ne postoji izvor, reci to jasno i predloži što bih mogao/mogla tvrditi na temelju vlastitih podataka
+
+Pravila koja vrijede za cijeli ovaj razgovor:
+- Za svaku činjeničnu tvrdnju navedi izvor s linkom i datumom objave.
+- Jasno razdvoji ŠTO SI NAŠAO u izvorima od ONOGA ŠTO ZAKLJUČUJEŠ. Označi svaki dio.
+- Ako podatka nema, napiši „nemam podatak“. Nikad ne procjenjuj prihod, broj zaposlenih ni tržišni udio bez izvora.
+- Za hrvatsko, slovensko i bosansko tržište podaci su često stari ili nepotpuni — reci kad je izvor stariji od godine.
+- Ne prepričavaj marketinški tekst s njihove stranice kao činjenicu. Ako je tvrdnja iz njihovog materijala, tako je i označi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Koristi ga pred svaku ponudu i svaku prezentaciju. Jedan netočan podatak je jedina stvar koju će publika zapamtiti — i obično ga netko provjeri.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Profil kupca u industriji</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Prije ulaska u novu industriju.</div><pre class="p">Istraži kako se kupuje <span class="f">[USLUGA</span>] u industriji <span class="f">[INDUSTRIJA</span>], na tržištu <span class="f">[ZEMLJA</span>].
+
+Trebam:
+1. Tko obično odlučuje o ovakvoj nabavi — pozicije, ne imena
+2. Tko priprema odluku i tko može blokirati
+3. Koliko obično traje proces odlučivanja
+4. Što se najčešće traži u ponudi
+5. Uobičajeni proračunski okviri, samo ako postoji javni izvor
+6. Gdje se takve nabave objavljuju ili gdje se traže dobavljači
+7. Tri stvari koje su za ovu industriju specifične i koje bi vanjski dobavljač lako promašio
+
+Pravila koja vrijede za cijeli ovaj razgovor:
+- Za svaku činjeničnu tvrdnju navedi izvor s linkom i datumom objave.
+- Jasno razdvoji ŠTO SI NAŠAO u izvorima od ONOGA ŠTO ZAKLJUČUJEŠ. Označi svaki dio.
+- Ako podatka nema, napiši „nemam podatak“. Nikad ne procjenjuj prihod, broj zaposlenih ni tržišni udio bez izvora.
+- Za hrvatsko, slovensko i bosansko tržište podaci su često stari ili nepotpuni — reci kad je izvor stariji od godine.
+- Ne prepričavaj marketinški tekst s njihove stranice kao činjenicu. Ako je tvrdnja iz njihovog materijala, tako je i označi.
+- Ako o procesu odlučivanja u ovoj industriji nema pouzdanih izvora, reci to i predloži tri pitanja koja mogu postaviti u prvom razgovoru.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 7 je razlog da se ovo radi prije prvog maila. Pogrešan stručni termin u prvoj rečenici odaje da si vanjski i mail je mrtav.</div></div></article>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Što s rezultatom</h2></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Postupak koji radi</h4>
+    <ol class="steps">
+      <li>Perplexity skuplja &mdash; promptovi iz sekcije 02.</li>
+      <li>Otvori tri navedena izvora i provjeri ono što ćeš koristiti.</li>
+      <li>Sve prenesi u Claude Project za strategiju.</li>
+      <li>Tamo traži sintezu i preporuku &mdash; system prompt br. 12 iz Modula 2.</li>
+      <li>Prije odluke pusti kroz prompt br. 13 iz Modula 2 &mdash; onaj koji napada tvoj plan.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h4>Ritam</h4>
+    <ul class="ticks">
+      <li><b>Kvartalno:</b> prompt 4 &mdash; što se promijenilo kod dva do tri glavna konkurenta.</li>
+      <li><b>Godišnje:</b> promptovi 6 i 3 &mdash; trendovi i mapiranje niše.</li>
+      <li><b>Pri promjeni cjenika:</b> prompt 2.</li>
+      <li><b>Prije svake ponude gdje su i oni u igri:</b> prompt 1.</li>
+      <li><b>Pred svaku objavu i prezentaciju:</b> prompt 9.</li>
+    </ul>
+    <div class="note em"><strong>Ne radi ovo mjesečno.</strong> Analiza konkurencije koja se radi previše često pretvara se u praćenje šuma i u kopiranje njihovih poteza. Kvartalno je dovoljno.</div>
+  </div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+</div>
+</body>
+</html>

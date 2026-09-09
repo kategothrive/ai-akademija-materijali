@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bilješke sa sastanaka &mdash; Sve AI tajne, Modul 6</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 6</div>
+<h1>Bilješke sa sastanaka</h1>
+<p class="lede">Notion baza, predložak stranice i prompt koji iz transkripta izvlači odluke, zadatke s nositeljima i rokovima, otvorena pitanja i gotov mail sažetak. Postavljanje: pola sata.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>2 baze</span><span>11 svojstava</span><span>Prompt</span><span>Predložak za Notion</span><span>Rujan 2026.</span></div>
+</header>
+
+<div class="note em" style="margin-top:28px"><strong>Predložak uz ovaj vodič:</strong> <span class="mono">Meeting_Notes_template_za_Notion.md</span> u istoj mapi. Otvori ga, kopiraj sve i zalijepi u predložak stranice u Notionu &mdash; naslovi i tablica se prenesu kako treba.</div>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Što ovo rješava</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <div class="prose" style="font-size:.96rem">
+      <p>Sastanak završi, svi se raziđu, i za tri tjedna dvije strane pamte različito.</p>
+      <p>Problem nije pamćenje nego to što se odluke i zadaci nikad ne razdvoje od razgovora. U transkriptu su pomiješani &mdash; netko je predložio, netko se složio, netko je rekao &bdquo;vidjet ćemo&ldquo;.</p>
+      <p>Ovaj predložak to razdvaja svaki put na isti način. I daje ti mail sažetak koji šalješ u roku dva sata &mdash; što je, praktično, najjeftinija reputacijska investicija koju imaš.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Zašto Notion, a ne dokument</h4>
+    <ul class="ticks">
+      <li><b>Zadaci se vežu na sastanak.</b> Vidiš odakle je zadatak došao i uz koji citat.</li>
+      <li><b>Sastanci se vežu na klijenta.</b> Sve o klijentu na jednom mjestu, kronološki.</li>
+      <li><b>Otvorena pitanja se filtriraju.</b> Prije sljedećeg sastanka otvoriš filter i imaš dnevni red.</li>
+      <li><b>Zadaci imaju status ZA POTVRDU.</b> Ništa iz modela ne ulazi u obveze bez tvoje potvrde.</li>
+    </ul>
+    <div class="note"><strong>Ako ne koristiš Notion:</strong> ista struktura radi u monday.com, Airtableu, ClickUpu ili u dva lista u Google Sheetsu. Svojstva su ista, samo se drukčije zovu.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Baza Sastanci</h2><p>Jedanaest svojstava. Uz svaki stoji zašto postoji &mdash; ako ti razlog ne vrijedi, izbaci ga.</p></div></div>
+<div class="tbl-scroll"><table><thead><tr><th>Svojstvo</th><th>Tip</th><th>Što sadrži</th><th>Zašto</th></tr></thead><tbody><tr><td class="k">Naslov</td><td class="mono">Title</td><td>Tema sastanka i datum, npr. „Mobile 4U — kick-off, 12.09.“</td><td>Nikad samo „Sastanak“. Za tri mjeseca nećeš znati koji je koji.</td></tr><tr><td class="k">Datum</td><td class="mono">Date</td><td>Datum i vrijeme sastanka.</td><td>Uključi vrijeme — korisno kad ima dva sastanka isti dan.</td></tr><tr><td class="k">Tip</td><td class="mono">Select</td><td>Interni / Klijent / Prodajni / Partner / Kandidat</td><td>Po tipu poslije filtriraš. Bez ovoga baza postaje hrpa.</td></tr><tr><td class="k">Klijent ili projekt</td><td class="mono">Relation</td><td>Veza na bazu klijenata ili projekata.</td><td>Ovo je ono što bazu čini korisnom — sve o klijentu na jednom mjestu.</td></tr><tr><td class="k">Sudionici</td><td class="mono">Multi-select ili Person</td><td>Tko je bio.</td><td>Za interne sastanke koristi Person, za vanjske Multi-select.</td></tr><tr><td class="k">Odluke</td><td class="mono">Text</td><td>Što je zaključeno.</td><td>Samo odlučeno, ne razgovarano. To su dvije različite stvari.</td></tr><tr><td class="k">Otvoreno</td><td class="mono">Text</td><td>Što nije riješeno i tko treba odlučiti.</td><td>Najkorisnije polje. Ovo je popis za sljedeći sastanak.</td></tr><tr><td class="k">Moj sljedeći korak</td><td class="mono">Text</td><td>Jedna stvar koju ja radim prvo.</td><td>Jedna, ne pet. Ostalo ide u zadatke.</td></tr><tr><td class="k">Rizici</td><td class="mono">Text</td><td>Što je izgovoreno a zvuči kao problem koji dolazi.</td><td>Ovo se čita mjesec dana kasnije i tada vrijedi najviše.</td></tr><tr><td class="k">Status</td><td class="mono">Select</td><td>Sažetak poslan / Čeka sažetak / Bez sažetka</td><td>Da se vidi je li sažetak otišao sudionicima.</td></tr><tr><td class="k">Transkript</td><td class="mono">Files ili Text</td><td>Izvorni transkript ili bilješke.</td><td>Zadrži izvor. Sažetak se može ponovno napraviti, transkript ne.</td></tr></tbody></table></div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Baza Zadaci</h2><p>Šest svojstava. Poveži ju relacijom na Sastanke.</p></div></div>
+<div class="tbl-scroll"><table><thead><tr><th>Svojstvo</th><th>Tip</th><th>Što sadrži</th></tr></thead><tbody><tr><td class="k">Zadatak</td><td class="mono">Title</td><td>Što treba napraviti — glagol na početku.</td></tr><tr><td class="k">Nositelj</td><td class="mono">Person ili Text</td><td>Jedna osoba. Zadatak bez nositelja nije zadatak.</td></tr><tr><td class="k">Rok</td><td class="mono">Date</td><td>Konkretan datum. „Uskoro“ nije rok.</td></tr><tr><td class="k">Sastanak</td><td class="mono">Relation</td><td>Veza na sastanak s kojeg je zadatak došao.</td></tr><tr><td class="k">Status</td><td class="mono">Select</td><td>ZA POTVRDU / Potvrđeno / U radu / Gotovo</td></tr><tr><td class="k">Dokaz</td><td class="mono">Text</td><td>Citat iz transkripta iz kojeg je zadatak izvučen.</td></tr></tbody></table></div>
+<div class="note ru" style="margin-top:14px"><strong>Svojstvo <em>Dokaz</em> je ono koje razlikuje ovu bazu od svake druge.</strong> Citat iz razgovora uz svaki zadatak znači da za tri tjedna ne raspravljaš o tome je li nešto bilo dogovoreno. Model koji mora navesti citat i mnogo manje izmišlja.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Prompt</h2><p>Zalijepi u instrukcije Claude Projecta &bdquo;Sastanci&ldquo;. Format je uvijek isti, pa se rezultat prekopira u Notion bez preuređivanja.</p></div></div>
+<div class="card">
+<pre class="p">Ti si moj zapisničar. Iz transkripta ili bilježaka vraćaš uvijek isti format, bez uvoda.
+
+## SASTANAK
+Tema, datum, sudionici, tip sastanka.
+
+## ODLUKE
+Samo ono što je stvarno odlučeno. Ako se o nečemu razgovaralo bez odluke, to ide u OTVORENO.
+
+## ZADACI
+Tablica sa stupcima: ZADATAK | NOSITELJ | ROK | DOKAZ (citat iz razgovora)
+- Glagol na početku zadatka.
+- Zadatak bez nositelja ili bez roka označi kao „nositelj nije određen“ ili „rok nije određen“ i stavi ga i u OTVORENO.
+- Nikad ne izmišljaj nositelja ni rok koji nisu izgovoreni.
+
+## OTVORENO
+Što nije riješeno, i tko treba odlučiti.
+
+## RIZICI
+Što je izgovoreno a zvuči kao problem koji dolazi. Ako ničega nema, napiši „ništa uočeno“.
+
+## MOJ SLJEDEĆI KORAK
+Jedna stvar. Ne pet.
+
+## MAIL SAŽETAK
+Do 150 riječi, spreman za slanje sudionicima. Zahvala u jednoj rečenici, dvije do tri ključne točke, zadaci s nositeljima i rokovima, moj sljedeći korak s datumom.
+
+Pravila:
+- Razdvoji „netko je predložio“ od „dogovorili smo“. To je najvažnije pravilo.
+- Ne izmišljaj zaključke. Ako se sastanak završio bez odluke, tako i napiši.
+- Ne uljepšavaj citate u stupcu DOKAZ — prenesi ih doslovno.
+- Ako je transkript nepotpun ili nejasan, reci gdje i što ti fali.</pre>
+<div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div>
+<div class="note"><strong>Prvo pravilo na dnu je najvažnije u cijelom promptu.</strong> Razdvajanje &bdquo;netko je predložio&ldquo; od &bdquo;dogovorili smo&ldquo; je cijela vrijednost ovog postupka. Bez toga dobivaš popis lijepih namjera koje nitko nije preuzeo.</div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">05</div><div class="txt"><h2>Faza 1 &mdash; bez integracije</h2><p>šest koraka, oko pola sata postavljanja. Radi od prvog sastanka.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Napravi bazu u Notionu</h3></div><div class="item-badges"><span class="badge gy">20 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Dvije baze: Sastanci i Zadaci, povezane relacijom. Svojstva su u sekciji 02.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Napravi template stranicu</h3></div><div class="item-badges"><span class="badge gy">10 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>U bazi Sastanci klikni na predloške i zalijepi strukturu iz priloženog .md dokumenta.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Snimaj ili zapisuj</h3></div><div class="item-badges"><span class="badge gy">tijekom sastanka</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Transkript iz alata za sastanke, ili vlastite bilješke. Oboje radi.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Zalijepi u Claude Project</h3></div><div class="item-badges"><span class="badge gy">2 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Projekt „Sastanci“ s promptom iz sekcije 04. Zalijepi transkript.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Prekopiraj u Notion</h3></div><div class="item-badges"><span class="badge gy">3 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Rezultat je već u strukturi predloška — samo prekopiraj.</p></div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Pošalji sažetak</h3></div><div class="item-badges"><span class="badge gy">2 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Mail sažetak je zadnja sekcija odgovora. Pošalji ga u roku dva sata.</p></div></div></article>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">06</div><div class="txt"><h2>Faza 2 &mdash; kad radi dva mjeseca</h2><p>Tek tada. Do tada ne znaš koje iznimke automatizacija mora pokriti.</p></div></div>
+<div class="card">
+<ul class="ticks"><li><b>Transkript se dohvaća sam</b> &mdash; Alat za sastanke sprema transkript u mapu ili ga šalje mailom, a scenarij ga uzima odande.</li><li><b>Scenarij poziva model</b> &mdash; Make, Zapier ili Power Automate pošalje transkript i vrati strukturirani odgovor.</li><li><b>Zadaci se upisuju u bazu</b> &mdash; Svaki zadatak postaje red u bazi Zadaci, sa statusom ZA POTVRDU.</li><li><b>Sažetak ide u nacrt, ne u poštu</b> &mdash; Mail se pripremi kao nacrt. Ti klikneš pošalji.</li><li><b>Podsjetnici gledaju samo potvrđeno</b> &mdash; Zadaci u statusu ZA POTVRDU ne ulaze u podsjetnike dok ih ne potvrdiš.</li></ul>
+<div class="note ru"><strong>Sažetak nikad ne ide sudionicima automatski.</strong> Priprema se kao nacrt, ti ga pročitaš i pošalješ. Jedan pogrešno pripisan zadatak u mailu klijentu košta više od svih ušteđenih minuta.</div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+</div>
+</body>
+</html>

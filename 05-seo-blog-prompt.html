@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEO članak &mdash; Sve AI tajne, Modul 5</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 5</div>
+<h1>SEO članak &mdash; pet promptova</h1>
+<p class="lede">Od ključne riječi do objave. Pet promptova koji idu po redu, i checklista od dvanaest točaka prije objave. Namjerno bez obećanja o prvim mjestima &mdash; ovo je posao, ne trik.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>5 promptova</span><span>12 točaka</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Zašto ovih pet, a ne jedan</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <div class="prose" style="font-size:.96rem">
+      <p>&bdquo;Napiši mi SEO članak od 1500 riječi o [tema]&ldquo; daje tekst koji izgleda kao članak i ne radi ništa.</p>
+      <p>Razlog je jednostavan: model ne zna što ljudi traže, ne zna što ti znaš a konkurencija ne piše, i razvodnjava tekst da ispuni duljinu.</p>
+      <p>Zato ovih pet promptova idu po redu: istraživanje, struktura, pisanje po sekcijama, uređivanje, provjera. Svaki daje ulaz sljedećem.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Četiri stvari koje AI ne može umjesto tebe</h4>
+    <ul class="ticks">
+      <li><b>Stvarni volumeni pretraživanja.</b> Model ih izmišlja uvjerljivo. Koristi alat s pretragom ili prihvati procjenu teško/lako.</li>
+      <li><b>Tvoje iskustvo.</b> Najmanje jedna sekcija u članku mora biti nešto što samo ti znaš. To je jedini dio koji te razlikuje.</li>
+      <li><b>Provjera činjenica.</b> Svaki broj, datum, naziv i propis provjeri u izvoru.</li>
+      <li><b>Odluka o namjeri.</b> Sadržaj koji ne odgovara namjeri pretrage ne rangira, koliko god bio dobro napisan.</li>
+    </ul>
+    <div class="note ru"><strong>O hrvatskom tržištu:</strong> volumeni su mali, i to je prednost. Fraza koju mjesečno traži pedeset ljudi može donijeti klijenta &mdash; a na nju se realno može doći. Ne odbacuj temu zato što nema tisuće pretraživanja.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Pet promptova, po redu</h2><p>Svaki koristi izlaz prethodnog. Ne preskoči prvi &mdash; on odlučuje hoće li ostatak imati smisla.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Istraživanje ključne riječi i namjere</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Prvi korak. Bez ovoga pišeš tekst koji nikoga ne traži.</div><pre class="p">Radim SEO analizu za temu: <span class="f">[TEMA</span>].
+
+Moj biznis: <span class="f">[OPIS</span>]
+Ciljno tržište i jezik: <span class="f">[npr. Hrvatska, hrvatski</span>]
+Kome pišem: <span class="f">[PUBLIKA</span>]
+
+Daj mi:
+1. Deset ključnih riječi i fraza koje bi moja publika stvarno upisala u pretraživač — onako kako ljudi pišu, ne kako se stručno kaže
+2. Za svaku: koja je namjera pretrage (informacijska / usporedba / kupovna / navigacijska)
+3. Koje su realno dostupne malom sajtu, a koje drže veliki portali
+4. Tri fraze s dugim repom na koje se stvarno može doći na prvu stranicu
+5. Koja pitanja ljudi postavljaju oko ove teme
+
+Pravila:
+- Ne izmišljaj brojeve pretraživanja i volumene. Ako ih ne možeš provjeriti, reci to i procijeni samo teško/lako.
+- Hrvatsko tržište ima male volumene — nemoj odbacivati frazu zato što ima malo pretraživanja.
+- Razlikuj hrvatske i engleske upite. Dio moje publike traži na engleskom.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet:</strong> Koristi alat s pretraživanjem weba za ovaj prompt. Bez izvora dobivaš uvjerljive brojeve koji ne postoje — a na njima onda gradiš cijeli tekst.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Struktura članka</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Nakon što znaš ključnu riječ i namjeru.</div><pre class="p">Napravi detaljnu strukturu SEO članka.
+
+Primarna ključna riječ: <span class="f">[UPIŠI</span>]
+Sekundarne: <span class="f">[UPIŠI ili ostavi prazno</span>]
+Namjera pretrage: <span class="f">[informacijska / usporedba / kupovna</span>]
+Publika: <span class="f">[OPIŠI</span>]
+Moja jedinstvena perspektiva: <span class="f">[ŠTO JA ZNAM A KONKURENCIJA NE PIŠE</span>]
+
+Daj:
+1. H1 naslov s ključnom riječi, do 60 znakova
+2. Meta opis, 150-160 znakova, s ključnom riječi i pozivom na akciju
+3. Uvod: hook, što čitatelj dobiva, ključna riječ u prvoj rečenici — najviše 100 riječi
+4. Najmanje pet H2 naslova, uz svaki što ide unutra i približna duljina
+5. H3 podnaslovi gdje su potrebni
+6. Zaključak i poziv na akciju
+7. FAQ sekcija s pet pitanja
+8. Predložene interne linkove — na koje moje stranice bi trebao voditi
+
+Pravila:
+- Struktura mora odgovarati namjeri pretrage. Kupovna namjera ne trpi 2000 riječi uvoda.
+- Najmanje jedan H2 mora nositi moju perspektivu, ne opće znanje.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet:</strong> Točka 8 je ono što većina preskoči. Članak bez internih linkova ne pomaže ostatku sajta, koliko god bio dobar.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Pisanje po strukturi</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Sekciju po sekciju, ne cijeli članak odjednom.</div><pre class="p">Napiši sekciju članka po ovoj strukturi.
+
+Cijela struktura članka: <span class="f">[ZALIJEPI STRUKTURU</span>]
+Sekcija koju pišem sada: <span class="f">[KOJI H2</span>]
+Ključna riječ: <span class="f">[UPIŠI</span>]
+Duljina: <span class="f">[BROJ</span>] riječi
+Moj ton: <span class="f">[po Brand Voice dokumentu ili opiši</span>]
+
+Pravila:
+- Piši samo tu sekciju. Ne ponavljaj ono što je u drugim sekcijama.
+- Ključnu riječ koristi prirodno. Ako je moraš ubaciti silom, nemoj.
+- Svaka tvrdnja ili s konkretnim primjerom ili s brojem. Bez općenitih rečenica koje bi mogle stajati u bilo kojem članku.
+- Kratki odlomci, najviše tri rečenice.
+- Bez „U današnjem svijetu“, bez „Važno je napomenuti“, bez „Zaključno“.
+- Ako mi treba podatak koji nemam, ostavi <span class="f">[OZNAČENO POLJE</span>] i reci mi što fali.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet:</strong> Pisanje sekciju po sekciju daje bitno bolji tekst od „napiši mi članak od 1500 riječi“. Model tada ne razvodnjava da bi ispunio duljinu.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Uređivanje i skraćivanje</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kad je draft gotov.</div><pre class="p">Uredi ovaj članak:
+
+<span class="f">[ZALIJEPI ČLANAK</span>]
+
+Ključna riječ: <span class="f">[UPIŠI</span>]
+
+Daj mi:
+1. Koje rečenice ne nose novu informaciju — navedi ih doslovno da ih izbacim
+2. Gdje je tekst općenit, a mogao bi biti konkretan
+3. Je li ključna riječ prirodno raspoređena ili natrpana
+4. Tri varijante naslova, poredane
+5. Skraćenu verziju: 25% manje riječi, isti sadržaj, moj ton nepromijenjen
+
+Pravila:
+- Ne dodaj nove tvrdnje ni brojeve.
+- Ne mijenjaj moj ton u neutralni.
+- Ako je članak dobar, reci to kratko i prijeđi na točku 4.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet:</strong> Najkorisniji prompt u ovom setu. Prvi draft je gotovo uvijek 25% predugačak i to se vidi u vremenu na stranici.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Provjera prije objave</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Zadnji korak.</div><pre class="p">Provjeri ovaj članak prije objave:
+
+<span class="f">[ZALIJEPI ČLANAK</span>]
+
+Ključna riječ: <span class="f">[UPIŠI</span>]
+Namjera pretrage: <span class="f">[UPIŠI</span>]
+
+Provjeri i javi mi:
+1. Odgovara li članak namjeri pretrage — ako je namjera kupovna, a članak edukativni, reci mi
+2. Nalazi li čitatelj odgovor na glavno pitanje u prvih 150 riječi
+3. Je li H1 jedinstven i sadrži li ključnu riječ
+4. Meta opis: duljina, ključna riječ, poziv na akciju
+5. Struktura naslova: ima li skokova (H2 pa H4)
+6. Tvrdnje bez izvora ili broja — nabroji ih
+7. Rečenice duže od 25 riječi — nabroji ih
+8. Postoji li poziv na akciju i je li jedan
+
+Za svaku točku samo: u redu, ili što konkretno popraviti.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet:</strong> Točka 6 je zaštita od tebe samog/same. Tvrdnja bez izvora u objavljenom članku je ono što ti netko pošalje u komentaru mjesecima kasnije.</div></div></article>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Checklista prije objave</h2><p>Dvanaest točaka. Traje pet minuta i hvata većinu onoga što bi inače primijetio netko drugi.</p></div></div>
+<div class="card">
+  <div class="item-badges"><h4 style="flex:1 1 auto">Provjera</h4><span class="count" id="klab"></span></div>
+  <div class="progressbar"><i id="kbar"></i></div>
+  <div><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Namjera pretrage odgovara formatu teksta</b><span>Ako ljudi traže cijenu, ne daj im povijest teme.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Odgovor na glavno pitanje u prvih 150 riječi</b><span>Google i čitatelj traže isto — odgovor prije uvoda.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Jedan H1, ključna riječ u njemu, do 60 znakova</b></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Meta opis 150-160 znakova, s pozivom na akciju</b></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Struktura naslova bez skokova</b><span>H2 pa H3, nikad H2 pa H4.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Svaka tvrdnja ima broj, primjer ili izvor</b><span>Ovo je razlika između tvog članka i deset istih.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Najmanje jedna sekcija koju samo ti možeš napisati</b><span>Iskustvo, podatak iz prakse, slučaj klijenta.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Interni linkovi na dvije do tri svoje stranice</b></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Slike imaju opisni alt tekst</b></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Jedan poziv na akciju, ne tri</b></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Odlomci do tri rečenice, rečenice do 25 riječi</b></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Provjeren svaki broj, datum i naziv</b><span>AI generira, čovjek verificira. Bez iznimke.</span></span></label></div>
+  <div class="note em"><strong>Sedma točka je najvažnija.</strong> Deset članaka o istoj temi napisanih AI-em su isti članak. Jedna sekcija s tvojim slučajem, tvojim brojem ili tvojom greškom je razlog zbog kojeg će netko ostati čitati &mdash; i zbog kojeg će ga netko linkati.</div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+(function(){
+  var c=[].slice.call(document.querySelectorAll('.kchk')),b=document.getElementById('kbar'),l=document.getElementById('klab');
+  function p(){var n=c.filter(function(x){return x.checked}).length;
+    if(b)b.style.width=(n/c.length*100)+'%'; if(l)l.textContent=n+' od '+c.length;}
+  c.forEach(function(x){x.addEventListener('change',p)});p();
+})();
+</script>
+
+</div>
+</body>
+</html>

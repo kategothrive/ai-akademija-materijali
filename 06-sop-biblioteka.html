@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deset SOP-ova &mdash; Sve AI tajne, Modul 6</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 6</div>
+<h1>Deset SOP-ova</h1>
+<p class="lede">Deset gotovih procedura za procese koje ima gotovo svaka mala firma. Svaki ima okidač, odgovornu osobu, korake, mjesta gdje se griješi, pravilo eskalacije i način mjerenja. Prilagodi ih, ne prepisuj.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>10 SOP-ova</span><span>68 koraka</span><span>6 područja</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Zašto SOP, a ne popis zadataka</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <div class="prose" style="font-size:.96rem">
+      <p>SOP nije birokracija. To je odgovor na pitanje &bdquo;što ako te nema tri tjedna&ldquo;.</p>
+      <p>I što je važnije za ovaj tečaj: <b>nedokumentiran proces se ne može automatizirati</b>. Možeš automatizirati samo ono što možeš opisati &mdash; korak po korak, s okidačem i s granicama.</p>
+      <p>Zato svaki SOP koji napišeš nije samo dokument, nego i nacrt budućeg agenta.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Šest dijelova koje svaki SOP mora imati</h4>
+    <ul class="ticks">
+      <li><b>Okidač</b> &mdash; što pokreće proces. Bez toga SOP je popis želja.</li>
+      <li><b>Odgovorna uloga</b> &mdash; uloga, ne ime. Ljudi se mijenjaju, uloge ostaju.</li>
+      <li><b>Koraci</b> &mdash; jedan korak, jedna radnja. Ako korak ima &bdquo;i&ldquo; u sredini, to su dva koraka.</li>
+      <li><b>Gdje se griješi</b> &mdash; ovo je dio koji SOP čini korisnim, a ne samo formalnim.</li>
+      <li><b>Eskalacija</b> &mdash; kad se ne improvizira i kome se javlja.</li>
+      <li><b>Mjerenje</b> &mdash; po čemu znaš da proces radi.</li>
+    </ul>
+    <div class="note"><strong>Kako ih napisati za svoj slučaj:</strong> u Modulu 2 je system prompt br. 9 &mdash; opišeš proces kako ga pamtiš, model postavi pitanja i složi SOP u ovoj strukturi.</div>
+  </div>
+</div>
+<div class="note ru" style="margin-top:16px"><strong>Ne uvodi deset SOP-ova odjednom.</strong> Počni s jednim &mdash; onim procesom koji najviše boli kad te nema. Kad radi mjesec dana, uzmi drugi. Deset uvedenih u tjedan znači deset dokumenata koje nitko ne čita.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Biblioteka</h2><p>Filtriraj po području ili traži po ključnoj riječi. Polja u uglatim zagradama zamijeni svojim vrijednostima.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži &mdash; npr. ponuda, pritužba, naplata, pristupi, zaliha&hellip;" aria-label="Traži SOP">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Svi<span class="n">10</span></button><button class="chip" data-cat="prodaja" aria-pressed="false">Prodaja<span class="n">3</span></button><button class="chip" data-cat="klijenti" aria-pressed="false">Klijenti<span class="n">2</span></button><button class="chip" data-cat="financije" aria-pressed="false">Financije<span class="n">1</span></button><button class="chip" data-cat="marketing" aria-pressed="false">Marketing<span class="n">1</span></button><button class="chip" data-cat="ljudi" aria-pressed="false">Ljudi<span class="n">1</span></button><button class="chip" data-cat="operacije" aria-pressed="false">Operacije<span class="n">2</span></button></div>
+</div>
+<h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Prodaja i klijenti</h4><article class="item" data-cat="prodaja" data-search="obrada upita s weba da nijedan upit ne ostane bez odgovora i da se vrijeme ulaže u upite koji imaju smisla. novi red u tablici upita ili novi mail na info adresu. upit se upiše u tablicu s datumom i izvorom. kvalifikacija po pet kriterija — poklapanje, budžet, ovlast, rok, veličina. razred a, b, c ili d. razred a i b: poziv u roku 24 sata (a) ili tri radna dana (b). razred c: ulazi u nurture listu, bez poziva. razred d: kratak pristojan odgovor s uputom na resurs. bez ponude. nakon poziva: bilješka u tablicu — što traže, budžet, rok, tko odlučuje, sljedeći korak s datumom. ponuda se šalje samo nakon razgovora, nikad prije. ponuda poslana bez razgovora — pogađanje opsega i najčešći izvor izgubljenog vremena. razred c i d dobiju poziv jer je upit „zvučao dobro“. taj sat je uzet razredu a. bilješka nije upisana, pa se za dva tjedna ne zna što je dogovoreno."><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Obrada upita s weba</h3></div><div class="item-badges"><span class="badge gy">7 koraka</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Svrha</td><td>Da nijedan upit ne ostane bez odgovora i da se vrijeme ulaže u upite koji imaju smisla.</td></tr><tr><td class="k">Kad se pokreće</td><td>Novi red u tablici upita ili novi mail na info adresu.</td></tr><tr><td class="k">Tko je odgovoran</td><td>Osoba koja vodi prodaju</td></tr><tr><td class="k">Što treba prije</td><td>Pristup tablici upita, cjenik, popis kriterija kvalifikacije</td></tr></tbody></table></div><div><h4 style="margin-bottom:8px">Koraci</h4><ol class="steps"><li>Upit se upiše u tablicu s datumom i izvorom.</li><li>Kvalifikacija po pet kriterija — poklapanje, budžet, ovlast, rok, veličina. Razred A, B, C ili D.</li><li>Razred A i B: poziv u roku 24 sata (A) ili tri radna dana (B).</li><li>Razred C: ulazi u nurture listu, bez poziva.</li><li>Razred D: kratak pristojan odgovor s uputom na resurs. Bez ponude.</li><li>Nakon poziva: bilješka u tablicu — što traže, budžet, rok, tko odlučuje, sljedeći korak s datumom.</li><li>Ponuda se šalje samo nakon razgovora, nikad prije.</li></ol></div><div><h4 style="margin-bottom:8px">Gdje se najčešće griješi</h4><ul class="ticks"><li>Ponuda poslana bez razgovora — pogađanje opsega i najčešći izvor izgubljenog vremena.</li><li>Razred C i D dobiju poziv jer je upit „zvučao dobro“. Taj sat je uzet razredu A.</li><li>Bilješka nije upisana, pa se za dva tjedna ne zna što je dogovoreno.</li></ul></div><div class="note ru"><strong>Eskalacija:</strong> Iznos iznad <span class="f">[IZNOS</span>], zahtjev za iznimku od standardnih uvjeta, ili klijent iz industrije s kojom ne radimo → vlasnik.</div><div class="note em"><strong>Kako se mjeri:</strong> Udio upita koji dobiju odgovor u roku 24 sata. Udio ponuda koje postanu posao.</div></div></article><article class="item" data-cat="prodaja" data-search="priprema i slanje ponude da ponuda ide iz razgovora, u istom formatu, i da se zna što je obećano. završen discovery razgovor s razredom a ili b. iz bilježaka razgovora izvuci: što klijent stvarno kupuje, tko odlučuje, tri rizika. executive summary u tri rečenice — problem njihovim riječima, što predlažemo, kakav ishod. tri paketa: minimalni, preporučeni, prošireni. preporučeni je očiti odabir. izričito napiši što nije uključeno. rok, uvjeti plaćanja, i što se traži od klijenta da odluči. interni pregled: pročitaj naglas i provjeri je li nešto obećano što ne možemo isporučiti. pošalji, upiši datum u tablicu, i zakaži follow-up za treći i sedmi dan. ponuda bez sekcije „što nije uključeno“ — izvor svih kasnijih nesporazuma. prošireni paket obećava nešto što se nije radilo prije. tu se gubi novac. follow-up nije zakazan pa ponuda tiho umre."><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Priprema i slanje ponude</h3></div><div class="item-badges"><span class="badge gy">7 koraka</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Svrha</td><td>Da ponuda ide iz razgovora, u istom formatu, i da se zna što je obećano.</td></tr><tr><td class="k">Kad se pokreće</td><td>Završen discovery razgovor s razredom A ili B.</td></tr><tr><td class="k">Tko je odgovoran</td><td>Osoba koja je vodila razgovor</td></tr><tr><td class="k">Što treba prije</td><td>Bilješke razgovora, cjenik, predložak ponude, popis prošlih sličnih projekata</td></tr></tbody></table></div><div><h4 style="margin-bottom:8px">Koraci</h4><ol class="steps"><li>Iz bilježaka razgovora izvuci: što klijent stvarno kupuje, tko odlučuje, tri rizika.</li><li>Executive summary u tri rečenice — problem njihovim riječima, što predlažemo, kakav ishod.</li><li>Tri paketa: minimalni, preporučeni, prošireni. Preporučeni je očiti odabir.</li><li>Izričito napiši što NIJE uključeno.</li><li>Rok, uvjeti plaćanja, i što se traži od klijenta da odluči.</li><li>Interni pregled: pročitaj naglas i provjeri je li nešto obećano što ne možemo isporučiti.</li><li>Pošalji, upiši datum u tablicu, i zakaži follow-up za treći i sedmi dan.</li></ol></div><div><h4 style="margin-bottom:8px">Gdje se najčešće griješi</h4><ul class="ticks"><li>Ponuda bez sekcije „što nije uključeno“ — izvor svih kasnijih nesporazuma.</li><li>Prošireni paket obećava nešto što se nije radilo prije. Tu se gubi novac.</li><li>Follow-up nije zakazan pa ponuda tiho umre.</li></ul></div><div class="note ru"><strong>Eskalacija:</strong> Odstupanje od cjenika, netipičan opseg, ili traženje popusta → vlasnik.</div><div class="note em"><strong>Kako se mjeri:</strong> Udio ponuda koje postanu posao. Prosječno vrijeme od razgovora do poslane ponude.</div></div></article><article class="item" data-cat="prodaja" data-search="onboarding novog klijenta da prvi tjedan suradnje postavi ton i da klijent zna što se događa. potpisan ugovor ili prihvaćena ponuda. u roku 24 sata: mail dobrodošlice s planom prvih 7 dana i popisom onoga što nam treba od njih. otvori mapu ili projekt za klijenta i upiši ga u tablicu aktivnih. zakaži kick-off razgovor u roku 5 radnih dana. nakon kick-offa: sažetak s odlukama, zadacima i rokovima — u roku dva sata. provjera na 3. i 7. dan: je li klijent dostavio što treba, ima li pitanja. na kraju prvog tjedna: kratki status s onim što je napravljeno i što slijedi. mail dobrodošlice bez konkretnih datuma — „uskoro ćemo“ odmah ruši povjerenje. ne traži se izričito što klijent mora dostaviti, pa projekt stoji i izgleda kao naša krivica. kick-off bez pisanog sažetka. za tri tjedna dvije strane pamte različito."><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Onboarding novog klijenta</h3></div><div class="item-badges"><span class="badge gy">6 koraka</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Svrha</td><td>Da prvi tjedan suradnje postavi ton i da klijent zna što se događa.</td></tr><tr><td class="k">Kad se pokreće</td><td>Potpisan ugovor ili prihvaćena ponuda.</td></tr><tr><td class="k">Tko je odgovoran</td><td>Osoba koja vodi projekt</td></tr><tr><td class="k">Što treba prije</td><td>Ugovor, predlošci mailova, popis onoga što tražimo od klijenta</td></tr></tbody></table></div><div><h4 style="margin-bottom:8px">Koraci</h4><ol class="steps"><li>U roku 24 sata: mail dobrodošlice s planom prvih 7 dana i popisom onoga što nam treba od njih.</li><li>Otvori mapu ili projekt za klijenta i upiši ga u tablicu aktivnih.</li><li>Zakaži kick-off razgovor u roku 5 radnih dana.</li><li>Nakon kick-offa: sažetak s odlukama, zadacima i rokovima — u roku dva sata.</li><li>Provjera na 3. i 7. dan: je li klijent dostavio što treba, ima li pitanja.</li><li>Na kraju prvog tjedna: kratki status s onim što je napravljeno i što slijedi.</li></ol></div><div><h4 style="margin-bottom:8px">Gdje se najčešće griješi</h4><ul class="ticks"><li>Mail dobrodošlice bez konkretnih datuma — „uskoro ćemo“ odmah ruši povjerenje.</li><li>Ne traži se izričito što klijent mora dostaviti, pa projekt stoji i izgleda kao naša krivica.</li><li>Kick-off bez pisanog sažetka. Za tri tjedna dvije strane pamte različito.</li></ul></div><div class="note ru"><strong>Eskalacija:</strong> Klijent ne dostavlja materijale ni nakon dvije provjere → vlasnik, prije nego što rok postane problem.</div><div class="note em"><strong>Kako se mjeri:</strong> Vrijeme od potpisa do kick-offa. Udio projekata koji krenu u roku.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Klijenti i podrška</h4><article class="item" data-cat="klijenti" data-search="mjesečno izvještavanje klijentu da klijent vidi vrijednost i da izvještaj ne pojede dva dana. prvi radni dan u mjesecu. izvezi podatke o odrađenom iz prethodnog mjeseca. kroz ai: nalazi, trend, anomalije — po predlošku. izračune provjeri u tablici. dodaj svoj nalaz i preporuku. ovo je dio za koji klijent plaća — ne prepuštaj ga modelu. usporedi s prošlim mjesecom i izdvoji jednu stvar koja se promijenila. pošalji do 5. u mjesecu, s jednim konkretnim predlogom za tekući mjesec. zapiši u tablicu što si preporučio/preporučila — sljedeći mjesec provjeravaš je li urađeno. izvještaj koji samo prikazuje brojeve, bez nalaza. klijent tada plaća tablicu. izračun preuzet iz ai odgovora bez provjere. preporuka koja se nikad ne provjerava, pa se ponavlja tri mjeseca."><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Mjesečno izvještavanje klijentu</h3></div><div class="item-badges"><span class="badge gy">6 koraka</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Svrha</td><td>Da klijent vidi vrijednost i da izvještaj ne pojede dva dana.</td></tr><tr><td class="k">Kad se pokreće</td><td>Prvi radni dan u mjesecu.</td></tr><tr><td class="k">Tko je odgovoran</td><td>Osoba koja vodi klijenta</td></tr><tr><td class="k">Što treba prije</td><td>Podaci o odrađenom, predložak izvještaja, prošli izvještaj</td></tr></tbody></table></div><div><h4 style="margin-bottom:8px">Koraci</h4><ol class="steps"><li>Izvezi podatke o odrađenom iz prethodnog mjeseca.</li><li>Kroz AI: nalazi, trend, anomalije — po predlošku. Izračune provjeri u tablici.</li><li>Dodaj svoj nalaz i preporuku. Ovo je dio za koji klijent plaća — ne prepuštaj ga modelu.</li><li>Usporedi s prošlim mjesecom i izdvoji jednu stvar koja se promijenila.</li><li>Pošalji do 5. u mjesecu, s jednim konkretnim predlogom za tekući mjesec.</li><li>Zapiši u tablicu što si preporučio/preporučila — sljedeći mjesec provjeravaš je li urađeno.</li></ol></div><div><h4 style="margin-bottom:8px">Gdje se najčešće griješi</h4><ul class="ticks"><li>Izvještaj koji samo prikazuje brojeve, bez nalaza. Klijent tada plaća tablicu.</li><li>Izračun preuzet iz AI odgovora bez provjere.</li><li>Preporuka koja se nikad ne provjerava, pa se ponavlja tri mjeseca.</li></ul></div><div class="note ru"><strong>Eskalacija:</strong> Rezultati padaju dva mjeseca zaredom → razgovor s klijentom prije nego što ga oni otvore.</div><div class="note em"><strong>Kako se mjeri:</strong> Izvještaj poslan do 5. u mjesecu. Vrijeme po izvještaju.</div></div></article><article class="item" data-cat="klijenti" data-search="obrada pritužbe da pritužba bude riješena i da se ne ponovi. pritužba mailom, telefonom, na društvenim mrežama ili preko recenzije. potvrdi primitak u roku 4 sata, i to bez rješenja — samo da je primljeno i do kada odgovaramo. prikupi činjenice: što je dogovoreno, što je isporučeno, gdje je razlika. odredi je li pritužba opravdana, djelomično ili nije. odgovor: priznaj situaciju („žao nam je što je do ovoga došlo“), reci što radimo i do kada. ako je opravdana — ponudi rješenje iz naših pravila, ne improviziraj. nakon rješenja: zapiši uzrok u popis i odredi što mijenjamo da se ne ponovi. za javne pritužbe (recenzija): kratak javni odgovor do 100 riječi, nastavak razgovora privatno. odgovor „žao nam je što se tako osjećate“ — prebacuje problem na klijenta i pogoršava situaciju. objašnjavanje internih razloga. klijenta ne zanima zašto, nego što sada. riješena pritužba bez zapisanog uzroka. za mjesec dana ista pritužba od drugog klijenta."><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Obrada pritužbe</h3></div><div class="item-badges"><span class="badge gy">7 koraka</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Svrha</td><td>Da pritužba bude riješena i da se ne ponovi.</td></tr><tr><td class="k">Kad se pokreće</td><td>Pritužba mailom, telefonom, na društvenim mrežama ili preko recenzije.</td></tr><tr><td class="k">Tko je odgovoran</td><td>Osoba koja prva primi pritužbu</td></tr><tr><td class="k">Što treba prije</td><td>Ugovor s klijentom, povijest komunikacije, pravila o povratu i garanciji</td></tr></tbody></table></div><div><h4 style="margin-bottom:8px">Koraci</h4><ol class="steps"><li>Potvrdi primitak u roku 4 sata, i to bez rješenja — samo da je primljeno i do kada odgovaramo.</li><li>Prikupi činjenice: što je dogovoreno, što je isporučeno, gdje je razlika.</li><li>Odredi je li pritužba opravdana, djelomično ili nije.</li><li>Odgovor: priznaj situaciju („žao nam je što je do ovoga došlo“), reci što radimo i do kada.</li><li>Ako je opravdana — ponudi rješenje iz naših pravila, ne improviziraj.</li><li>Nakon rješenja: zapiši uzrok u popis i odredi što mijenjamo da se ne ponovi.</li><li>Za javne pritužbe (recenzija): kratak javni odgovor do 100 riječi, nastavak razgovora privatno.</li></ol></div><div><h4 style="margin-bottom:8px">Gdje se najčešće griješi</h4><ul class="ticks"><li>Odgovor „žao nam je što se tako osjećate“ — prebacuje problem na klijenta i pogoršava situaciju.</li><li>Objašnjavanje internih razloga. Klijenta ne zanima zašto, nego što sada.</li><li>Riješena pritužba bez zapisanog uzroka. Za mjesec dana ista pritužba od drugog klijenta.</li></ul></div><div class="note ru"><strong>Eskalacija:</strong> Novčani zahtjev, spominjanje odvjetnika, prijetnja javnom objavom → vlasnik, odmah.</div><div class="note em"><strong>Kako se mjeri:</strong> Vrijeme do prvog odgovora. Broj pritužbi s istim uzrokom u kvartalu.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Financije</h4><article class="item" data-cat="financije" data-search="naplata i podsjetnici da se ne mora pamtiti tko nije platio i da podsjetnik ne pokvari odnos. tjedno, ponedjeljkom. izvezi popis dospjelih i neplaćenih računa. podijeli po kašnjenju: do 7 dana, 8-30 dana, više od 30. do 7 dana: nježan podsjetnik, najviše 4 rečenice, s podacima za plaćanje. 8-30 dana: telefonski poziv, pa mail sa sažetkom razgovora. više od 30: čvršći mail s rokom i naznakom sljedećeg koraka, bez prijetnje. svaki kontakt upiši u tablicu s datumom. iznose i datume uzmi iz tablice — nikad iz ai odgovora. prvi podsjetnik napisan preostro. većina kašnjenja je zaboravljivost, ne loša volja. podsjetnici se šalju iz osobnog sandučića vlasnika. kada dođe do neugodnog razgovora, nema odmaka. izračun kašnjenja ili iznosa prepušten jezičnom modelu."><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Naplata i podsjetnici</h3></div><div class="item-badges"><span class="badge gy">7 koraka</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Svrha</td><td>Da se ne mora pamtiti tko nije platio i da podsjetnik ne pokvari odnos.</td></tr><tr><td class="k">Kad se pokreće</td><td>Tjedno, ponedjeljkom.</td></tr><tr><td class="k">Tko je odgovoran</td><td>Osoba koja vodi administraciju</td></tr><tr><td class="k">Što treba prije</td><td>Pristup knjigovodstvu ili tablici računa, predlošci podsjetnika</td></tr></tbody></table></div><div><h4 style="margin-bottom:8px">Koraci</h4><ol class="steps"><li>Izvezi popis dospjelih i neplaćenih računa.</li><li>Podijeli po kašnjenju: do 7 dana, 8-30 dana, više od 30.</li><li>Do 7 dana: nježan podsjetnik, najviše 4 rečenice, s podacima za plaćanje.</li><li>8-30 dana: telefonski poziv, pa mail sa sažetkom razgovora.</li><li>Više od 30: čvršći mail s rokom i naznakom sljedećeg koraka, bez prijetnje.</li><li>Svaki kontakt upiši u tablicu s datumom.</li><li>Iznose i datume uzmi iz tablice — nikad iz AI odgovora.</li></ol></div><div><h4 style="margin-bottom:8px">Gdje se najčešće griješi</h4><ul class="ticks"><li>Prvi podsjetnik napisan preostro. Većina kašnjenja je zaboravljivost, ne loša volja.</li><li>Podsjetnici se šalju iz osobnog sandučića vlasnika. Kada dođe do neugodnog razgovora, nema odmaka.</li><li>Izračun kašnjenja ili iznosa prepušten jezičnom modelu.</li></ul></div><div class="note ru"><strong>Eskalacija:</strong> Kašnjenje iznad 60 dana ili iznos iznad <span class="f">[IZNOS</span>] → vlasnik, odluka o daljnjim koracima.</div><div class="note em"><strong>Kako se mjeri:</strong> Prosječan broj dana od izdavanja do naplate. Iznos u kašnjenju na kraju mjeseca.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Marketing</h4><article class="item" data-cat="marketing" data-search="od ideje do objave da sadržaj izlazi u ritmu i da se ne piše svaki dan iznova. petkom za sljedeći tjedan, plus mjesečno planiranje. mjesečno: teme za cijeli mjesec, po omjeru pillara. dva mjesta ostavi prazna. petkom: iz mjesečnog plana uzmi teme za sljedeći tjedan i napiši hookove. tekstove piši u seriji — svi za tjedan u jednom sjedanju. vizuali: generiraj bez teksta, tekst dodaj u alatu za dizajn. provjera glasa: pročitaj naglas. što ne bi izgovorio/izgovorila, prepiši. zakaži objave. vikendom ništa. prvog u mjesecu: analiza — koji pillar i format su prošli, što prestati raditi. pisanje na dan objave. održi se dva tjedna, pa stane. analiza mjeseca se preskoči, pa se tri mjeseca objavljuje ono što ne radi. vizual s tekstom generiran u ai-u — hrvatski znakovi i font su gotovo uvijek pogrešni."><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Od ideje do objave</h3></div><div class="item-badges"><span class="badge gy">7 koraka</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Svrha</td><td>Da sadržaj izlazi u ritmu i da se ne piše svaki dan iznova.</td></tr><tr><td class="k">Kad se pokreće</td><td>Petkom za sljedeći tjedan, plus mjesečno planiranje.</td></tr><tr><td class="k">Tko je odgovoran</td><td>Osoba koja vodi sadržaj</td></tr><tr><td class="k">Što treba prije</td><td>Content pillari, kalendar, Brand Voice dokument, pristup platformama</td></tr></tbody></table></div><div><h4 style="margin-bottom:8px">Koraci</h4><ol class="steps"><li>Mjesečno: teme za cijeli mjesec, po omjeru pillara. Dva mjesta ostavi prazna.</li><li>Petkom: iz mjesečnog plana uzmi teme za sljedeći tjedan i napiši hookove.</li><li>Tekstove piši u seriji — svi za tjedan u jednom sjedanju.</li><li>Vizuali: generiraj bez teksta, tekst dodaj u alatu za dizajn.</li><li>Provjera glasa: pročitaj naglas. Što ne bi izgovorio/izgovorila, prepiši.</li><li>Zakaži objave. Vikendom ništa.</li><li>Prvog u mjesecu: analiza — koji pillar i format su prošli, što prestati raditi.</li></ol></div><div><h4 style="margin-bottom:8px">Gdje se najčešće griješi</h4><ul class="ticks"><li>Pisanje na dan objave. Održi se dva tjedna, pa stane.</li><li>Analiza mjeseca se preskoči, pa se tri mjeseca objavljuje ono što ne radi.</li><li>Vizual s tekstom generiran u AI-u — hrvatski znakovi i font su gotovo uvijek pogrešni.</li></ul></div><div class="note ru"><strong>Eskalacija:</strong> Objava o osjetljivoj temi, reakcija na javnu kritiku ili nešto što uključuje klijenta po imenu → vlasnik prije objave.</div><div class="note em"><strong>Kako se mjeri:</strong> Broj objava po planu. Upiti koji dolaze iz sadržaja, po pillaru.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Ljudi</h4><article class="item" data-cat="ljudi" data-search="onboarding novog člana tima da novi čovjek u prvom tjednu postane koristan a da nikome ne pojede pet dana. potpisan ugovor, prije prvog radnog dana. prije prvog dana: oprema, mailovi, pristupi alatima, i mentor određen po imenu. prvi dan: pregled tvrtke, tko radi što, i pet sop-ova koje mora pročitati. prvi tjedan: pristup ai asistentu tima s internim dokumentima — umjesto da pita kolegu istih dvadeset pitanja. do 5. dana: prvi samostalni zadatak, mali i s jasnim kriterijem uspjeha. kraj prvog tjedna: razgovor — što je jasno, što nije, što fali u sop-ovima. kraj prvog mjeseca: pregled, i popis sop-ova koje je on/ona dopunio/dopunila. pravila o ai alatima: što se smije stavljati u modele, što ne, i koji je plan. pristupi se sređuju prvog dana, pa novi čovjek dva dana čeka. nema mentora po imenu, pa svi misle da je nečiji drugi zadatak. nema pravila o ai alatima, pa klijentski podaci odu na besplatni plan u prvom tjednu."><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Onboarding novog člana tima</h3></div><div class="item-badges"><span class="badge gy">7 koraka</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Svrha</td><td>Da novi čovjek u prvom tjednu postane koristan a da nikome ne pojede pet dana.</td></tr><tr><td class="k">Kad se pokreće</td><td>Potpisan ugovor, prije prvog radnog dana.</td></tr><tr><td class="k">Tko je odgovoran</td><td>Neposredni nadređeni</td></tr><tr><td class="k">Što treba prije</td><td>Pristupi, popis SOP-ova, oprema, mentor iz tima</td></tr></tbody></table></div><div><h4 style="margin-bottom:8px">Koraci</h4><ol class="steps"><li>Prije prvog dana: oprema, mailovi, pristupi alatima, i mentor određen po imenu.</li><li>Prvi dan: pregled tvrtke, tko radi što, i pet SOP-ova koje mora pročitati.</li><li>Prvi tjedan: pristup AI asistentu tima s internim dokumentima — umjesto da pita kolegu istih dvadeset pitanja.</li><li>Do 5. dana: prvi samostalni zadatak, mali i s jasnim kriterijem uspjeha.</li><li>Kraj prvog tjedna: razgovor — što je jasno, što nije, što fali u SOP-ovima.</li><li>Kraj prvog mjeseca: pregled, i popis SOP-ova koje je on/ona dopunio/dopunila.</li><li>Pravila o AI alatima: što se smije stavljati u modele, što ne, i koji je plan.</li></ol></div><div><h4 style="margin-bottom:8px">Gdje se najčešće griješi</h4><ul class="ticks"><li>Pristupi se sređuju prvog dana, pa novi čovjek dva dana čeka.</li><li>Nema mentora po imenu, pa svi misle da je nečiji drugi zadatak.</li><li>Nema pravila o AI alatima, pa klijentski podaci odu na besplatni plan u prvom tjednu.</li></ul></div><div class="note ru"><strong>Eskalacija:</strong> Nema potrebnih pristupa nakon drugog dana → vlasnik. Ozbiljni propust u radu s podacima → vlasnik, odmah.</div><div class="note em"><strong>Kako se mjeri:</strong> Vrijeme do prvog samostalno završenog zadatka. Broj SOP-ova dopunjenih u prvom mjesecu.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Operacije</h4><article class="item" data-cat="operacije" data-search="nabava i narudžba da se ne naručuje po sjećanju i da se zna zašto je nešto naručeno. tjedno, ili kad zaliha padne ispod granice. izvezi stanje zaliha i potrošnju za prethodni period. izračun potrebnih količina radi tablica, ne jezični model. ai koristi za obrazloženje i za uočavanje odstupanja — artikl koji odudara od uzorka potrošnje. predloženu narudžbu pregledaj i potvrdi. sve što odudara provjeri ručno. naruči, upiši datum i očekivani rok dostave. na dan dostave: provjera količine i stanja, pa upis u sustav. mjesečno: koji su artikli bili u manjku, a koji su stajali. količine izračunate u jezičnom modelu. aritmetika nije njegov posao. narudžba poslana bez ljudske potvrde. nema mjesečnog pregleda, pa se iste greške u količinama ponavljaju."><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Nabava i narudžba</h3></div><div class="item-badges"><span class="badge gy">7 koraka</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Svrha</td><td>Da se ne naručuje po sjećanju i da se zna zašto je nešto naručeno.</td></tr><tr><td class="k">Kad se pokreće</td><td>Tjedno, ili kad zaliha padne ispod granice.</td></tr><tr><td class="k">Tko je odgovoran</td><td>Osoba koja vodi nabavu</td></tr><tr><td class="k">Što treba prije</td><td>Izvoz zaliha i potrošnje, popis dobavljača i uvjeta, granice zaliha po artiklu</td></tr></tbody></table></div><div><h4 style="margin-bottom:8px">Koraci</h4><ol class="steps"><li>Izvezi stanje zaliha i potrošnju za prethodni period.</li><li>Izračun potrebnih količina radi tablica, ne jezični model.</li><li>AI koristi za obrazloženje i za uočavanje odstupanja — artikl koji odudara od uzorka potrošnje.</li><li>Predloženu narudžbu pregledaj i potvrdi. Sve što odudara provjeri ručno.</li><li>Naruči, upiši datum i očekivani rok dostave.</li><li>Na dan dostave: provjera količine i stanja, pa upis u sustav.</li><li>Mjesečno: koji su artikli bili u manjku, a koji su stajali.</li></ol></div><div><h4 style="margin-bottom:8px">Gdje se najčešće griješi</h4><ul class="ticks"><li>Količine izračunate u jezičnom modelu. Aritmetika nije njegov posao.</li><li>Narudžba poslana bez ljudske potvrde.</li><li>Nema mjesečnog pregleda, pa se iste greške u količinama ponavljaju.</li></ul></div><div class="note ru"><strong>Eskalacija:</strong> Odstupanje iznad <span class="f">[POSTOTAK</span>] od uobičajene količine, ili iznos iznad <span class="f">[IZNOS</span>] → vlasnik.</div><div class="note em"><strong>Kako se mjeri:</strong> Broj dana s manjkom po artiklu. Vrijednost zaliha koje stoje dulje od [ROK].</div></div></article><article class="item" data-cat="operacije" data-search="pristupi i podaci u ai alatima da se zna kome je što dostupno i što se smije stavljati u ai alate. pri zaposlenju, pri odlasku, i pri uvođenju novog alata. pregled kvartalno. vodi popis: alat, plan, tko ima pristup, tko plaća, kada se obnavlja. za svaki ai alat provjeri i zapiši: trenira li se model na našim podacima i je li to isključeno. napiši pravilo što se ne smije stavljati u ai alate: osobni podaci klijenata, ugovori s imenima, nabavne cijene, pristupni podaci. za osjetljive dokumente: anonimiziraj prije nego što uđu u model. pri odlasku člana tima: pristupi se ukidaju isti dan, ne „kad se sjetimo“. kvartalno: pregled popisa. ukini što nitko ne koristi i provjeri postavke privatnosti. novi alat ne ulazi u rad prije nego što prođe ova provjera. besplatni plan za klijentske podatke. najčešća i najskuplja greška. pristupi ostaju aktivni mjesecima nakon odlaska. nema zapisanog pravila, pa svaki član tima odlučuje sam što je u redu staviti u model."><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Pristupi i podaci u AI alatima</h3></div><div class="item-badges"><span class="badge gy">7 koraka</span></div></div><div class="item-body"><div class="tbl-scroll"><table><tbody><tr><td class="k">Svrha</td><td>Da se zna kome je što dostupno i što se smije stavljati u AI alate.</td></tr><tr><td class="k">Kad se pokreće</td><td>Pri zaposlenju, pri odlasku, i pri uvođenju novog alata. Pregled kvartalno.</td></tr><tr><td class="k">Tko je odgovoran</td><td>Vlasnik ili osoba odgovorna za sustave</td></tr><tr><td class="k">Što treba prije</td><td>Popis alata i pretplata, popis pristupa po osobi</td></tr></tbody></table></div><div><h4 style="margin-bottom:8px">Koraci</h4><ol class="steps"><li>Vodi popis: alat, plan, tko ima pristup, tko plaća, kada se obnavlja.</li><li>Za svaki AI alat provjeri i zapiši: trenira li se model na našim podacima i je li to isključeno.</li><li>Napiši pravilo što se NE smije stavljati u AI alate: osobni podaci klijenata, ugovori s imenima, nabavne cijene, pristupni podaci.</li><li>Za osjetljive dokumente: anonimiziraj prije nego što uđu u model.</li><li>Pri odlasku člana tima: pristupi se ukidaju isti dan, ne „kad se sjetimo“.</li><li>Kvartalno: pregled popisa. Ukini što nitko ne koristi i provjeri postavke privatnosti.</li><li>Novi alat ne ulazi u rad prije nego što prođe ova provjera.</li></ol></div><div><h4 style="margin-bottom:8px">Gdje se najčešće griješi</h4><ul class="ticks"><li>Besplatni plan za klijentske podatke. Najčešća i najskuplja greška.</li><li>Pristupi ostaju aktivni mjesecima nakon odlaska.</li><li>Nema zapisanog pravila, pa svaki član tima odlučuje sam što je u redu staviti u model.</li></ul></div><div class="note ru"><strong>Eskalacija:</strong> Sumnja da su klijentski podaci izašli van, ili zahtjev klijenta za brisanjem podataka → vlasnik, odmah.</div><div class="note em"><strong>Kako se mjeri:</strong> Broj alata bez zapisanog vlasnika. Broj aktivnih pristupa osoba koje više nisu u timu.</div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Kako ih držati živima</h2><p>SOP koji se ne mijenja šest mjeseci vjerojatno nitko ne koristi.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Tri navike</h4>
+    <ul class="ticks">
+      <li><b>Datum i vlasnik na svakom SOP-u.</b> Bez toga za pola godine nitko ne zna vrijedi li još.</li>
+      <li><b>Novi član tima dopunjuje SOP.</b> On/ona vidi rupe koje ti više ne vidiš &mdash; to je najbolji trenutak za ispravke.</li>
+      <li><b>Svaka greška ide u sekciju &bdquo;gdje se griješi&ldquo;.</b> Ne u mail, ne u razgovor &mdash; u SOP.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Od SOP-a do agenta</h4>
+    <ol class="steps">
+      <li>SOP radi ručno dva mjeseca i više se ne mijenja.</li>
+      <li>Pogledaj koji korak se najviše ponavlja i traži najmanje odlučivanja.</li>
+      <li>Taj korak prvi automatiziraj &mdash; ne cijeli proces.</li>
+      <li>Sekcija &bdquo;eskalacija&ldquo; postaje granica agenta, a &bdquo;gdje se griješi&ldquo; postaje popis testnih slučajeva.</li>
+    </ol>
+    <div class="note em">Zadnji korak je razlog zašto SOP-ovi štede toliko vremena kasnije. Test set za agenta već imaš napisan &mdash; to su greške koje su se stvarno dogodile.</div>
+  </div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || it.getAttribute('data-search').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':(n>=2&&n<=4?' rezultata':' rezultata'));
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>

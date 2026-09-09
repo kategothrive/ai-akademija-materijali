@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Financijska analiza &mdash; Sve AI tajne, Modul 6</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"\2192";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 6</div>
+<h1>Financijska analiza &mdash; šest promptova</h1>
+<p class="lede">AI interpretira, tablica računa. Svaki prompt nosi isti set pravila o računanju &mdash; formula prije rezultata, bez procjena, i obavezna provjera prije nego što broj uđe u odluku.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>6 promptova</span><span>8 provjera</span><span>Rujan 2026.</span></div>
+</header>
+
+<div class="note ru" style="margin-top:28px"><strong>Jedno pravilo iznad svih ostalih:</strong> jezični model nije kalkulator. Može pogriješiti u dugom nizu brojeva, i to bez ijednog znaka da je pogriješio &mdash; odgovor izgleda jednako uvjerljivo. Zato ovdje model čita, uočava i objašnjava, a množi i zbraja tablica.</div>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Podjela posla</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <h4>Što AI radi dobro</h4>
+    <ul class="ticks">
+      <li><b>Uočava obrasce</b> u nizu brojeva koje bi ti trebalo dugo tražiti.</li>
+      <li><b>Postavlja pitanja</b> koja ti ne padaju na pamet jer si predugo u podacima.</li>
+      <li><b>Prevodi izvještaj</b> na jezik koji razumiješ bez knjigovodstvenog obrazovanja.</li>
+      <li><b>Priprema pitanja</b> za knjigovođu, pa razgovor traje kraće i vrijedi više.</li>
+      <li><b>Piše formule</b> koje onda pustiš u Excelu.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Što ne prepuštaš modelu</h4>
+    <ul class="ticks">
+      <li><b>Zbrajanje i množenje</b> dugih nizova. Ovo je posao tablice.</li>
+      <li><b>Prag isplativosti i marže</b> &mdash; brojevi po kojima odlučuješ.</li>
+      <li><b>Popunjavanje praznih polja.</b> Prazno polje je informacija, ne rupa koju treba zatvoriti.</li>
+      <li><b>Porezne odluke.</b> To je pitanje za knjigovođu ili poreznog savjetnika, uvijek.</li>
+    </ul>
+    <div class="note"><strong>Praktičan obrazac:</strong> traži formulu, pusti ju u tablici, pa vrati rezultat modelu na interpretaciju. Dobivaš i točan broj i objašnjenje.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Promptovi</h2><p>Svaki već sadrži pravila o računanju. Ne briši ih.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Mjesečni nalaz</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Nakon zatvaranja mjeseca, s izvještajem ili izvozom iz knjigovodstva.</div><pre class="p">Analiziraj ove financijske podatke.
+
+<span class="f">[ZALIJEPI TABLICU ILI IZVJEŠTAJ</span>]
+
+Period: <span class="f">[OD — DO</span>]
+Moj biznis: <span class="f">[OPIS</span>]
+Prethodni period za usporedbu: <span class="f">[ZALIJEPI ili napiši da nemam</span>]
+
+Trebam:
+1. TRI NALAZA — najvažniji prvi, svaki s brojem koji ga dokazuje
+2. TREND — što raste, što pada, koliko, u kojem periodu
+3. ANOMALIJE — svaki red ili mjesec koji odudara. Koliko odudara i dvije moguće interpretacije
+4. TRI PITANJA za knjigovođu ili osobu koja je ovo pripremila
+5. ŠTO BIH TREBAO/TREBALA MJERITI, a ne mjerim
+
+Obavezna pravila o računanju za cijeli ovaj razgovor:
+- Prije svakog izračuna napiši koji su ti ulazni podaci i kojom formulom računaš. Formula prije rezultata.
+- Ako u podacima ima praznih polja, dupliciranih redova ili nekonzistentnih formata datuma — reci to PRIJE analize i pitaj kako da postupim.
+- Nikad ne procjenjuj broj kojeg nema u podacima. Prazno polje ostaje prazno polje.
+- Ne zaokružuj bez oznake. Ako zaokružuješ, napiši „zaokruženo“.
+- Na kraju napiši: „Ključne izračune provjeri u tablici prije nego što ih koristiš u odluci.“</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ovaj prompt ne služi za izračun nego za interpretaciju. Ako model počne zbrajati stupce, zaustavi ga i traži formulu koju ćeš pustiti u tablici.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Signali u novčanom toku</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Mjesečno, i uvijek prije veće obveze.</div><pre class="p">Pogledaj ove podatke o novčanom toku i reci mi na što trebam paziti.
+
+<span class="f">[ZALIJEPI PODATKE — priljevi, odljevi, stanje po mjesecima</span>]
+
+Fiksni mjesečni troškovi: <span class="f">[IZNOS</span>]
+Najveći pojedinačni priljev u periodu: <span class="f">[IZNOS i od kojeg klijenta, bez naziva</span>]
+Uvjeti plaćanja koje dajem klijentima: <span class="f">[npr. 30 dana</span>]
+Uvjeti koje imam prema dobavljačima: <span class="f">[npr. 15 dana</span>]
+
+Trebam:
+1. Mjeseci u kojima je stanje bilo najtanje, i zašto
+2. Ovisnost o pojedinom klijentu — koliki udio priljeva dolazi od najvećeg
+3. Razlika između mojih uvjeta naplate i uvjeta plaćanja — financiram li ja klijente
+4. Tri signala na koja bih trebao/trebala reagirati prije nego što postanu problem
+5. Što bih mogao/mogla promijeniti u uvjetima, a da ne izgubim klijente
+
+Obavezna pravila o računanju za cijeli ovaj razgovor:
+- Prije svakog izračuna napiši koji su ti ulazni podaci i kojom formulom računaš. Formula prije rezultata.
+- Ako u podacima ima praznih polja, dupliciranih redova ili nekonzistentnih formata datuma — reci to PRIJE analize i pitaj kako da postupim.
+- Nikad ne procjenjuj broj kojeg nema u podacima. Prazno polje ostaje prazno polje.
+- Ne zaokružuj bez oznake. Ako zaokružuješ, napiši „zaokruženo“.
+- Na kraju napiši: „Ključne izračune provjeri u tablici prije nego što ih koristiš u odluci.“</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 3 je razlog zbog kojeg profitabilne firme ostaju bez novca. Ako naplaćuješ za 45 dana, a plaćaš za 15, ti kreditiraš klijente.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Marže po usluzi</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Kvartalno, i prije mijenjanja cjenika.</div><pre class="p">Izračunaj i objasni marže po usluzi.
+
+<span class="f">[ZALIJEPI PODATKE — usluga, prihod, izravni troškovi, utrošeni sati</span>]
+
+Moja ciljana marža: <span class="f">[POSTOTAK, ako je imam</span>]
+Moja satnica ili interni trošak sata: <span class="f">[IZNOS</span>]
+
+Trebam:
+1. Marža po usluzi — pokaži formulu prije rezultata
+2. Prihod po satu za svaku uslugu
+3. Koja usluga izgleda profitabilno, a nije kad se uračuna vrijeme
+4. Koja usluga nosi najviše prihoda, a koja najviše zarade — to obično nije ista
+5. Što bih trebao/trebala prestati prodavati, a što više
+6. Gdje mi u podacima nedostaje informacija da bi izračun bio pouzdan
+
+Obavezna pravila o računanju za cijeli ovaj razgovor:
+- Prije svakog izračuna napiši koji su ti ulazni podaci i kojom formulom računaš. Formula prije rezultata.
+- Ako u podacima ima praznih polja, dupliciranih redova ili nekonzistentnih formata datuma — reci to PRIJE analize i pitaj kako da postupim.
+- Nikad ne procjenjuj broj kojeg nema u podacima. Prazno polje ostaje prazno polje.
+- Ne zaokružuj bez oznake. Ako zaokružuješ, napiši „zaokruženo“.
+- Na kraju napiši: „Ključne izračune provjeri u tablici prije nego što ih koristiš u odluci.“</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 4 je najčešće iznenađenje. Usluga s najvećim prihodom često je ona koja pojede najviše sati — a to se vidi tek kad se sati uračunaju.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Plan i ostvarenje</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Mjesečno ili kvartalno, ako radiš s planom.</div><pre class="p">Usporedi plan i ostvarenje.
+
+<span class="f">[ZALIJEPI TABLICU — stavka, planirano, ostvareno, period</span>]
+
+Trebam:
+1. Odstupanja veća od <span class="f">[POSTOTAK</span>], sortirana po iznosu odstupanja, ne po postotku
+2. Za svako: je li odstupanje jednokratno ili je obrazac koji se ponavlja
+3. Koja odstupanja su rezultat vanjskih okolnosti, a koja mojih odluka — i po čemu to zaključuješ
+4. Što ovo znači za ostatak godine ako se nastavi
+5. Tri stvari koje bih trebao/trebala napraviti ovaj mjesec
+
+Obavezna pravila o računanju za cijeli ovaj razgovor:
+- Prije svakog izračuna napiši koji su ti ulazni podaci i kojom formulom računaš. Formula prije rezultata.
+- Ako u podacima ima praznih polja, dupliciranih redova ili nekonzistentnih formata datuma — reci to PRIJE analize i pitaj kako da postupim.
+- Nikad ne procjenjuj broj kojeg nema u podacima. Prazno polje ostaje prazno polje.
+- Ne zaokružuj bez oznake. Ako zaokružuješ, napiši „zaokruženo“.
+- Na kraju napiši: „Ključne izračune provjeri u tablici prije nego što ih koristiš u odluci.“
+- Sortiraj po iznosu, ne po postotku. Odstupanje od 300% na maloj stavci je manje važno od 8% na velikoj.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Zadnje pravilo štedi sate. Postotna odstupanja na sitnim stavkama izgledaju dramatično i odvlače pažnju s onoga što stvarno mijenja rezultat.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Provjera cijene</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Prije nego postaviš ili promijeniš cijenu.</div><pre class="p">Pomozi mi provjeriti je li moja cijena održiva. NE računaj sam — daj mi formule koje ću pustiti u tablici, pa interpretiraj rezultate koje ti vratim.
+
+Usluga: <span class="f">[NAZIV</span>]
+Cijena: <span class="f">[IZNOS</span>]
+Koliko sati stvarno trošim po isporuci: <span class="f">[BROJ</span>]
+Izravni troškovi po isporuci: <span class="f">[IZNOS</span>]
+Moji mjesečni fiksni troškovi: <span class="f">[IZNOS</span>]
+Koliko isporuka mjesečno realno stignem: <span class="f">[BROJ</span>]
+
+Daj mi:
+1. Formule za: bruto maržu po isporuci, prihod po satu, prag isplativosti u broju isporuka
+2. Nakon što ti vratim izračunate brojeve — interpretaciju: je li ovo održivo i gdje je rizik
+3. Što se događa ako mi opseg naraste za 30% — na čemu prvo puca
+4. Tri načina da poboljšam rezultat bez dizanja cijene
+5. Koji podatak mi nedostaje da bih ovo mogao/mogla ozbiljno procijeniti
+
+Obavezna pravila o računanju za cijeli ovaj razgovor:
+- Prije svakog izračuna napiši koji su ti ulazni podaci i kojom formulom računaš. Formula prije rezultata.
+- Ako u podacima ima praznih polja, dupliciranih redova ili nekonzistentnih formata datuma — reci to PRIJE analize i pitaj kako da postupim.
+- Nikad ne procjenjuj broj kojeg nema u podacima. Prazno polje ostaje prazno polje.
+- Ne zaokružuj bez oznake. Ako zaokružuješ, napiši „zaokruženo“.
+- Na kraju napiši: „Ključne izračune provjeri u tablici prije nego što ih koristiš u odluci.“</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Namjerno je postavljen tako da model ne računa. Prag isplativosti i marža su brojevi po kojima donosiš odluke — oni idu kroz tablicu, ne kroz jezični model.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Pitanja za knjigovođu</h3></div></div><div class="item-body"><div class="note em"><strong>Kada:</strong> Prije godišnjeg razgovora ili kad nešto ne razumiješ u izvještaju.</div><pre class="p">Iz ovog izvještaja pripremi mi pitanja za knjigovođu.
+
+<span class="f">[ZALIJEPI IZVJEŠTAJ</span>]
+
+Moj biznis: <span class="f">[OPIS</span>]
+Što me trenutno najviše zanima: <span class="f">[npr. zašto je dobit manja nego lani unatoč većem prihodu</span>]
+
+Trebam:
+1. Pet pitanja koja bih trebao/trebala postaviti, poredanih po važnosti
+2. Za svako: zašto je važno i što bih trebao/trebala čuti kao odgovor
+3. Stavke u izvještaju koje ne razumijem, objašnjene jednostavno
+4. Tri stvari koje bih možda trebao/trebala raditi drukčije, a koje knjigovođa neće sam predložiti
+5. Što od ovoga nije pitanje za knjigovođu nego za poreznog savjetnika ili pravnika
+
+Obavezna pravila o računanju za cijeli ovaj razgovor:
+- Prije svakog izračuna napiši koji su ti ulazni podaci i kojom formulom računaš. Formula prije rezultata.
+- Ako u podacima ima praznih polja, dupliciranih redova ili nekonzistentnih formata datuma — reci to PRIJE analize i pitaj kako da postupim.
+- Nikad ne procjenjuj broj kojeg nema u podacima. Prazno polje ostaje prazno polje.
+- Ne zaokružuj bez oznake. Ako zaokružuješ, napiši „zaokruženo“.
+- Na kraju napiši: „Ključne izračune provjeri u tablici prije nego što ih koristiš u odluci.“</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">&#8593; Na vrh</a></div><div class="note"><strong>Savjet:</strong> Točka 4 postoji jer knjigovođa evidentira, a ne savjetuje o poslovanju. Pitanja koja postaviš odlučuju koliko ćeš iz tog razgovora izvući.</div></div></article>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Provjera prije nego što broj uđe u odluku</h2><p>Osam točaka. Traje dvije minute i čuva od odluke donesene na krivom broju.</p></div></div>
+<div class="card">
+  <div class="item-badges"><h4 style="flex:1 1 auto">Provjera</h4><span class="count" id="klab"></span></div>
+  <div class="progressbar"><i id="kbar"></i></div>
+  <div><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Formula je pokazana prije rezultata</b><span>Ako je model dao samo broj, traži formulu i provjeri ju.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Ključni izračun ponovljen u tablici</b><span>Marža, prag isplativosti i odstupanja — uvijek u Excelu.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Prazna polja i duplikati provjereni prije analize</b><span>Neuredni ulaz daje uredan i pogrešan izlaz.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Format datuma i decimalni zarez ujednačeni</b><span>Najčešći izvor tihih grešaka kod naših izvoza.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Zaokruživanja označena</b></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Nijedan broj nije procijenjen umjesto pročitan</b></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Interpretacija razdvojena od podatka</b><span>Što je iz tablice, a što je zaključak modela.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Ništa osjetljivo nije otišlo na besplatni plan</b><span>Financijski podaci idu samo na plaćeni plan s isključenim treniranjem.</span></span></label></div>
+  <div class="note ru"><strong>Zadnja točka nije formalnost.</strong> Financijski podaci tvrtke na besplatnom planu mogu poslužiti za treniranje modela. Plaćeni plan i isključeno treniranje u postavkama &mdash; detalji su u AI Security Cheat Sheetu iz Modula 0.</div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+(function(){var c=[].slice.call(document.querySelectorAll('.kchk')),b=document.getElementById('kbar'),l=document.getElementById('klab');
+function p(){var n=c.filter(function(x){return x.checked}).length;if(b)b.style.width=(n/c.length*100)+'%';if(l)l.textContent=n+' od '+c.length;}
+c.forEach(function(x){x.addEventListener('change',p)});p();})();
+</script>
+</div>
+</body>
+</html>
