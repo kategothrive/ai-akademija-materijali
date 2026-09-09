@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zapier ili Make &mdash; Sve AI tajne, Modul 8</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<style>
+.flow{width:100%;height:auto;display:block}
+.flow .q{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.5}
+.flow .z{fill:var(--rust-soft);stroke:var(--rust);stroke-width:1.5}
+.flow .m{fill:var(--emerald-soft);stroke:var(--emerald);stroke-width:1.5}
+.flow .o{fill:var(--surface-sunk);stroke:var(--line-strong);stroke-width:1.5}
+.flow .t{fill:var(--ink);font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:12.5px}
+.flow .tb{fill:var(--ink);font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:15px}
+.flow .s{fill:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.05em}
+.flow .lbl{fill:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600}
+.flow .ln{stroke:var(--line-strong);stroke-width:1.5;fill:none}
+.flow .ar{fill:var(--line-strong)}
+.diagram-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface);padding:18px}
+.diagram-wrap svg{min-width:820px}
+</style>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 8</div>
+<h1>Zapier ili Make</h1>
+<p class="lede">Pet pitanja po redu i odgovor. Ispod dijagrama usporedba po deset kriterija i tri načina da se koriste oba &mdash; jer u praksi se to najčešče i radi.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>5 pitanja</span><span>10 kriterija</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Dijagram odluke</h2><p>Idi od prvog pitanja nadolje. Prvi &bdquo;DA&ldquo; daje odgovor &mdash; dalje ne moraš.</p></div></div>
+<div class="diagram-wrap"><svg class="flow" viewBox="0 0 1000 760" role="img" aria-label="Dijagram odluke: Zapier ili Make"><rect class="q" x="210" y="30" width="380" height="74" rx="3"/><text class="s" x="224" y="52" text-anchor="start">1.</text><text class="t" x="246" y="53" text-anchor="start">Treba li scenarij grananje, petlje ili obradu nizova?</text><text class="s" x="246" y="73" text-anchor="start">više ruta, iterator, agregator</text><text class="s" x="246" y="92" text-anchor="start"></text><rect class="q" x="210" y="150" width="380" height="74" rx="3"/><text class="s" x="224" y="172" text-anchor="start">2.</text><text class="t" x="246" y="173" text-anchor="start">Ima li tvoj alat modul u Zapieru?</text><text class="s" x="246" y="193" text-anchor="start">provjeri prije svega ostalog</text><text class="s" x="246" y="212" text-anchor="start"></text><rect class="q" x="210" y="270" width="380" height="74" rx="3"/><text class="s" x="224" y="292" text-anchor="start">3.</text><text class="t" x="246" y="293" text-anchor="start">Koliko izvođenja mjesečno?</text><text class="s" x="246" y="313" text-anchor="start">broji sve, ne samo uspješne</text><text class="s" x="246" y="332" text-anchor="start"></text><rect class="q" x="210" y="390" width="380" height="74" rx="3"/><text class="s" x="224" y="412" text-anchor="start">4.</text><text class="t" x="246" y="413" text-anchor="start">Trebaš li vidjeti podatke između koraka?</text><text class="s" x="246" y="433" text-anchor="start">za traženje kvara i dorađivanje</text><text class="s" x="246" y="452" text-anchor="start"></text><rect class="q" x="210" y="510" width="380" height="74" rx="3"/><text class="s" x="224" y="532" text-anchor="start">5.</text><text class="t" x="246" y="533" text-anchor="start">Gradi li netko iz tima bez tehničkog znanja?</text><text class="s" x="246" y="553" text-anchor="start">tko će to održavati za pola godine</text><text class="s" x="246" y="572" text-anchor="start"></text><rect class="m" x="680" y="36" width="280" height="60" rx="3"/><text class="tb" x="696" y="62" text-anchor="start">MAKE</text><text class="s" x="696" y="81" text-anchor="start">Grananje i nizovi su Makeova jaka strana</text><path class="ln" d="M590,66 L673,66"/><path class="ar" d="M680,66 L673,62 L673,70 Z"/><text class="lbl" x="635.0" y="58" text-anchor="middle">DA</text><rect class="z" x="680" y="156" width="280" height="60" rx="3"/><text class="tb" x="696" y="182" text-anchor="start">ZAPIER</text><text class="s" x="696" y="201" text-anchor="start">Ako postoji modul i tok je ravan A → B</text><path class="ln" d="M590,186 L673,186"/><path class="ar" d="M680,186 L673,182 L673,190 Z"/><text class="lbl" x="635.0" y="178" text-anchor="middle">DA</text><rect class="m" x="680" y="276" width="280" height="60" rx="3"/><text class="tb" x="696" y="302" text-anchor="start">MAKE</text><text class="s" x="696" y="321" text-anchor="start">Iznad ~1000 izvođenja cijena po operaciji presuđuje</text><path class="ln" d="M590,306 L673,306"/><path class="ar" d="M680,306 L673,302 L673,310 Z"/><text class="lbl" x="635.0" y="298" text-anchor="middle">&gt; 1000</text><rect class="m" x="680" y="396" width="280" height="60" rx="3"/><text class="tb" x="696" y="422" text-anchor="start">MAKE</text><text class="s" x="696" y="441" text-anchor="start">Vidiš svaki paket i svaki izlaz</text><path class="ln" d="M590,426 L673,426"/><path class="ar" d="M680,426 L673,422 L673,430 Z"/><text class="lbl" x="635.0" y="418" text-anchor="middle">DA</text><rect class="z" x="680" y="516" width="280" height="60" rx="3"/><text class="tb" x="696" y="542" text-anchor="start">ZAPIER</text><text class="s" x="696" y="561" text-anchor="start">Sučelje je jednostavnije za netehničke ljude</text><path class="ln" d="M590,546 L673,546"/><path class="ar" d="M680,546 L673,542 L673,550 Z"/><text class="lbl" x="635.0" y="538" text-anchor="middle">DA</text><path class="ln" d="M400.0,104 L400.0,143"/><path class="ar" d="M400.0,150 L396.0,143 L404.0,143 Z"/><text class="lbl" x="408.0" y="130.0" text-anchor="start">NE</text><path class="ln" d="M400.0,224 L400.0,263"/><path class="ar" d="M400.0,270 L396.0,263 L404.0,263 Z"/><text class="lbl" x="408.0" y="250.0" text-anchor="start">NE</text><path class="ln" d="M400.0,344 L400.0,383"/><path class="ar" d="M400.0,390 L396.0,383 L404.0,383 Z"/><text class="lbl" x="408.0" y="370.0" text-anchor="start">&lt; 1000</text><path class="ln" d="M400.0,464 L400.0,503"/><path class="ar" d="M400.0,510 L396.0,503 L404.0,503 Z"/><text class="lbl" x="408.0" y="490.0" text-anchor="start">NE</text><rect class="o" x="210" y="624" width="380" height="58" rx="3"/><text class="tb" x="226" y="649" text-anchor="start">OBA RADE</text><text class="s" x="226" y="668" text-anchor="start">Uzmi onaj koji već plaćaš ili koji tvoj tim poznaje</text><path class="ln" d="M400.0,584 L400.0,617"/><path class="ar" d="M400.0,624 L396.0,617 L404.0,617 Z"/><text class="lbl" x="408.0" y="607.0" text-anchor="start">NE</text></svg></div>
+<div class="note em" style="margin-top:16px"><strong>Pravilo koje nadjačava cijeli dijagram:</strong> ako već plaćaš jedan od njih i tim ga poznaje &mdash; to je tvoj alat. Bolji alat koji nitko ne otvara gubi od dobrog alata koji svi imaju u trakama.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Usporedba</h2><p>Deset kriterija. Zadnji stupac kaže tko je bolji u tome, ne tko je bolji općenito.</p></div></div>
+<div class="tbl-scroll"><table><thead><tr><th>Kriterij</th><th>Zapier</th><th>Make</th><th>Bolji</th></tr></thead><tbody><tr><td class="k">Cijena</td><td>Po zadatku — svaki korak u svakom izvođenju je zadatak</td><td>Po operaciji — jeftinije na velikom volumenu</td><td class="k"><span class="badge em">Make</span></td></tr><tr><td class="k">Sučelje</td><td>Jednostavnije, vodi te korak po korak</td><td>Vizualno platno, više slobode i više mogućnosti za pogrešku</td><td class="k"><span class="badge ru">Zapier</span></td></tr><tr><td class="k">Grananje</td><td>Paths, ograničeno na višim planovima</td><td>Router i If-else, bez dodatnih uvjeta</td><td class="k"><span class="badge em">Make</span></td></tr><tr><td class="k">Obrada nizova</td><td>Ograničena. Line Itemizer rješava dio slučajeva</td><td>Iterator i Array aggregator, ugrađeno</td><td class="k"><span class="badge em">Make</span></td></tr><tr><td class="k">Traženje kvara</td><td>Povijest izvođenja po koraku</td><td>Vidiš svaki paket i svaki izlaz, možeš pokrenuti dio scenarija</td><td class="k"><span class="badge em">Make</span></td></tr><tr><td class="k">Broj integracija</td><td>Najveći broj gotovih aplikacija</td><td>Manji broj, ali HTTP modul pokriva ostalo</td><td class="k"><span class="badge ru">Zapier</span></td></tr><tr><td class="k">Dijeljenje scenarija</td><td>Link na predložak</td><td>Datoteka blueprinta koja se uvozi</td><td class="k"><span class="badge em">Make</span></td></tr><tr><td class="k">Učenje</td><td>Naučiš u jedan dan</td><td>Naučiš u tjedan, ali dobiješ bitno više</td><td class="k"><span class="badge ru">Zapier</span></td></tr><tr><td class="k">Rukovanje greškama</td><td>Osnovno</td><td>Resume, Skip, Retry, Rollback po modulu</td><td class="k"><span class="badge em">Make</span></td></tr><tr><td class="k">Za koga</td><td>Netehnički ljudi, jednostavni tokovi</td><td>Tko gradi više scenarija i želi kontrolu</td><td class="k"><span class="badge gy">—</span></td></tr></tbody></table></div>
+<div class="note ru" style="margin-top:14px"><strong>O cijeni, jer se najviše pogriješi:</strong> Zapier naplaćuje po zadatku, a zadatak je <em>svaki korak u svakom izvođenju</em>. Scenarij od šest koraka koji se pokrene sto puta mjesečno je šesto zadataka, ne sto. Make naplaćuje po operaciji, ali ista logika vrijedi &mdash; zato filtar odmah iza okidača štedi više od svake druge optimizacije.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Kad koristiš oba</h2><p>U praksi je to najčešči ishod, i to je u redu.</p></div></div>
+<div class="grid g3"><div class="card"><h4>Zapier za ono što ima modul, Make za logiku</h4><div class="prose" style="font-size:.94rem"><p>Ako tvoj alat postoji samo u Zapieru, a scenarij treba grananje — Zapier pozove Make webhook i Make odradi ostatak.</p></div></div><div class="card"><h4>Make kao glavni, Zapier za rubne alate</h4><div class="prose" style="font-size:.94rem"><p>Praktičnije od obrnutog. Jedan Zap koji šalje podatke na Makeov webhook rješava svaki alat koji Make ne pokriva.</p></div></div><div class="card"><h4>Ne drži isti proces u oba</h4><div class="prose" style="font-size:.94rem"><p>Podijeljen proces znači dva mjesta za traženje kvara i dva mjesta za zaboraviti. Jedan proces, jedan alat.</p></div></div></div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Preporuka za polaznike ovog tečaja</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <h4>Ako počinješ od nule</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Prvo <b>ni jedno</b>. Faza 1 svakog procesa iz ovog tečaja radi bez ijedne integracije &mdash; tablica, Claude Project i ručno prebacivanje.</p>
+      <p>Kad Faza 1 radi dva mjeseca i više se ne mijenja, tada odaberi alat. Do tada bi bilo koji alat bio scenarij koji stalno prepravljaš.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Ako si u Microsoft 365</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Provjeri prvo <b>Power Automate</b>. Već ga plaćaš uz M365, a sa standardnim konektorima pokriva većinu Faze 1 &mdash; tablice, SharePoint popise, mail sa zajedničkog sandučića, raspored.</p>
+      <p>Nova pretplata je najveća barijera za implementaciju. Alat koji već imaš pobjeđuje.</p>
+    </div>
+    <div class="note"><strong>Napomena:</strong> HTTP akcija prema vanjskim adresama u Power Automateu je premium. Zato Faza 1 u ovom tečaju nema nijedan vanjski poziv &mdash; sve staje u standardne konektore.</div>
+  </div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+</div>
+</body>
+</html>

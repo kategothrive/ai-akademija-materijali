@@ -1,0 +1,30 @@
+{
+  "name": "Sastanci — transkript u zadatke i sažetak",
+  "flow": [
+    { "id": 1, "module": "google-drive:watchFilesInAFolder", "version": 4,
+      "parameters": { "__IMTCONN__": null, "folderId": "", "select": "all", "limit": 3 },
+      "mapper": {}, "metadata": { "designer": { "x": 0, "y": 0, "name": "Novi transkript u mapi" } } },
+    { "id": 2, "module": "google-drive:getAFile", "version": 4,
+      "parameters": { "__IMTCONN__": null },
+      "mapper": { "fileId": "{{1.id}}", "formatFileConversion": "text/plain" },
+      "metadata": { "designer": { "x": 300, "y": 0, "name": "Preuzmi sadržaj" } } },
+    { "id": 3, "module": "anthropic-claude:createAMessage", "version": 1,
+      "parameters": { "__IMTCONN__": null },
+      "mapper": {
+        "model": "claude-sonnet-5", "max_tokens": 2000, "temperature": 0,
+        "system": "Iz transkripta izvuci strukturu. Odgovori TOCNO u ovom obliku, s ovim oznakama: ODLUKE: / ZADACI: (zadatak | nositelj | rok | citat) / OTVORENO: / RIZICI: / SAZETAK_MAIL: . Razdvoji 'netko je predlozio' od 'dogovorili smo' - prijedlozi idu u OTVORENO. Nositelja i rok koji nisu izgovoreni upisi kao 'nije odreden' i dodaj u OTVORENO. Nikad ne izmisljaj zakljucak. Ako je transkript nepotpun, reci gdje i sto ti fali.",
+        "messages": [ { "role": "user", "content": "Naziv datoteke: {{1.name}}\nTranskript:\n{{2.data}}" } ] },
+      "metadata": { "designer": { "x": 600, "y": 0, "name": "Struktura (Claude)" } } },
+    { "id": 4, "module": "google-sheets:addRow", "version": 2,
+      "parameters": { "__IMTCONN__": null, "mode": "select", "spreadsheetId": "", "sheetId": "", "includesHeaders": true, "insertDataOption": "INSERT_ROWS" },
+      "mapper": { "values": { "0": "{{1.name}}", "1": "{{formatDate(now; \"DD.MM.YYYY\")}}", "2": "{{3.result}}", "3": "ZA POTVRDU" } },
+      "metadata": { "designer": { "x": 900, "y": 0, "name": "Upiši u registar" } } },
+    { "id": 5, "module": "email:ActionCreateDraft", "version": 7,
+      "parameters": { "__IMTCONN__": null },
+      "mapper": { "folder": "", "to": [ "sudionici@tvojadomena.hr" ], "subject": "Sažetak sastanka — {{1.name}}", "contentType": "text", "html": "{{3.result}}" },
+      "metadata": { "designer": { "x": 1200, "y": 0, "name": "Nacrt sažetka" } } }
+  ],
+  "metadata": { "instant": false, "version": 1,
+    "scenario": { "roundtrips": 1, "maxErrors": 3, "autoCommit": true, "autoCommitTriggerLast": true, "sequential": false, "slots": null, "confidential": false, "dataloss": false, "dlq": false, "freshVariables": false },
+    "designer": { "orphans": [] }, "zone": "eu1.make.com", "notes": [] }
+}

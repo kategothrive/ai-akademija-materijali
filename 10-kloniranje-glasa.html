@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kloniranje glasa &mdash; Sve AI tajne, Modul 10</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 10</div>
+<h1>Kloniranje glasa</h1>
+<p class="lede">Kvaliteta klona odlučuje se u snimanju, ne u postavkama. Šest pravila za snimanje, šest za skriptu, pet provjera prije upotrebe i jasna granica gdje se generirani glas ne koristi.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>6 + 6 pravila</span><span>5 provjera</span><span>Rujan 2026.</span></div>
+</header>
+
+<div class="note ru" style="margin-top:28px"><strong>Prvo pravilo, prije svega tehničkog:</strong> kloniraj samo <b>svoj</b> glas, ili glas osobe od koje imaš <b>pisani pristanak</b> u kojem stoji za što se glas smije koristiti i do kada. Alati to i sami zahtijevaju, ali važnije je od uvjeta korištenja: tuđi glas bez pristanka je i pravni i etički problem koji nijedna ušteda vremena ne pokriva.</div>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Snimanje &mdash; ovdje se odlučuje sve</h2><p>Dobar materijal snimljen mobitelom u tihoj sobi pobjeđuje loš materijal snimljen skupim mikrofonom u praznoj prostoriji.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Tiha prostorija, ne studio</h3></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Soba s tekstilom — zavjese, tepih, kauč. Izbjegni prazne prostorije s golim zidovima i staklom.</p></div><div class="note"><strong>Zašto:</strong> Odjek je jedina stvar koju se poslije ne može popraviti. Šum se filtrira, odjek ne.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Mikrofon blizu, ne u laptopu</h3></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Bilo koji vanjski mikrofon na 15-20 cm od usta, malo ispod razine usta.</p></div><div class="note"><strong>Zašto:</strong> Laptopov mikrofon uvijek uhvati i sobu i ventilator. Razlika je odmah čujna.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Isključi sve što zuji</h3></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Klima, ventilator laptopa, hladnjak u susjednoj sobi, obavijesti na telefonu.</p></div><div class="note"><strong>Zašto:</strong> Konstantan šum model uči kao dio tvog glasa i vraća ga u svakom generiranom zvuku.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Snimaj u jednom sjedanju</h3></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Isti mikrofon, isti položaj, isto vrijeme dana, isto stanje glasa.</p></div><div class="note"><strong>Zašto:</strong> Materijal snimljen u dva navrata daje glas koji zvuči kao dvije osobe.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Pij vodu, ne kavu i ne mlijeko</h3></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Voda sobne temperature, pauza svakih deset minuta.</p></div><div class="note"><strong>Zašto:</strong> Suha usta i mliječni proizvodi proizvode zvukove koje mikrofon hvata, a slušatelj primijeti.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Snimaj s rezervom</h3></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Snimi osjetno više materijala nego što je minimum. Loše dijelove izbaciš.</p></div><div class="note"><strong>Zašto:</strong> Bolje je imati previše dobrog materijala nego dovoljno osrednjeg.</div></div></article>
+<div class="note em" style="margin-top:16px"><strong>O količini materijala:</strong> alati imaju dvije razine &mdash; brzo kloniranje iz kraćeg uzorka i napredno iz dužeg, uz dodatnu potvrdu identiteta. Konkretni zahtjevi za trajanje i format se mijenjaju, pa ih provjeri u alatu prije snimanja. Ono što se ne mijenja: <b>više dobrog materijala uvijek daje bolji klon</b>, a loš materijal se ne može nadoknaditi količinom.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Što čitaš</h2><p>Model uči tvoj ritam i tvoj rječnik. Materijal odlučuje što će naučiti.</p></div></div>
+<div class="card">
+<ul class="ticks"><li><b>Čitaj kako govoriš, ne kako se čita</b> &mdash; Model uči tvoj ritam, ne tvoju dikciju. Ako u životu govoriš brzo i s pauzama, tako i snimaj.</li><li><b>Uključi različite registre</b> &mdash; Dio teksta neutralno, dio s naglašavanjem, dio kao da nekome objašnjavaš. Model tada zna raspon.</li><li><b>Uključi svoju terminologiju</b> &mdash; Nazive svojih usluga, stručne izraze iz industrije, imena alata. Ono što izgovaraš često.</li><li><b>Uključi brojeve i datume</b> &mdash; Cijene, postotke, datume. Hrvatski brojevi imaju padeže i model ih mora čuti od tebe.</li><li><b>Bez čitanja tuđeg teksta</b> &mdash; Uzmi svoje tekstove — svoje postove, svoje mailove, svoj opis usluga. Ne novinske članke.</li><li><b>Bez emotivnih ekstrema</b> &mdash; Ne treba vika ni šapat. Model treba tvoj radni glas, ne raspon glumca.</li></ul>
+<div class="note ru"><strong>Najvažnija točka je peta.</strong> Ako čitaš tuđi tekst, model nauči tvoj glas na tuđem ritmu &mdash; i onda tvoj sadržaj zvuči kao da ga čita spiker. Čitaj svoje postove i svoje mailove; ritam koji model treba je onaj kojim ti pišeš i govoriš.</div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Pet provjera prije prve upotrebe</h2><p>Označi kako prolaziš.</p></div></div>
+<div class="card">
+  <div class="item-badges"><h4 style="flex:1 1 auto">Provjera kvalitete</h4><span class="count" id="klab"></span></div>
+  <div class="progressbar"><i id="kbar"></i></div>
+  <div><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Pusti generirani zvuk nekome ko te poznaje</b><span>Ako odmah prepozna da nije živ glas, reci gdje mu je zapelo — obično su to pauze ili krajevi rečenica.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Provjeri hrvatske znakove i strane riječi</b><span>Č, ć, š, ž, đ, plus nazivi alata i engleske riječi u hrvatskoj rečenici. Ovdje modeli najviše griješe.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Provjeri brojeve i datume</b><span>Izgovara li 2026. kao „dvije tisuće dvadeset šesta“ ili slovka cifre. Ako griješi, dodaj primjere u materijal.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Poslušaj na mobilnom zvučniku</b><span>Ne na slušalicama. Većina ljudi tvoj sadržaj sluša na telefonu, često bez slušalica.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Poslušaj cijelu minutu</b><span>Kratki uzorci zvuče dobro gotovo uvijek. Umor u glasu i ponavljanje intonacije čuju se tek nakon 40 sekundi.</span></span></label></div>
+  <div class="note em"><strong>Peta provjera hvata najviše.</strong> Kratki uzorci zvuče dobro gotovo uvijek &mdash; problem se čuje nakon četrdesetak sekundi, kad se intonacija počne ponavljati. Ako video traje dvije minute, poslušaj cijele dvije.</div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Gdje se koristi, a gdje ne</h2><p>Granica nije tehnička nego pitanje povjerenja.</p></div></div>
+<div class="tbl-scroll"><table><thead><tr><th></th><th>Situacija</th></tr></thead><tbody><tr><td class="k"><span class="badge em">Da</span></td><td>Tvoji edukativni i marketinški videi, gdje se zna da je glas generiran</td></tr><tr><td class="k"><span class="badge em">Da</span></td><td>Voiceover za module i tutorijale koje bi ionako snimao/snimala sam/sama</td></tr><tr><td class="k"><span class="badge em">Da</span></td><td>Prijevod tvog sadržaja na drugi jezik, tvojim glasom</td></tr><tr><td class="k"><span class="badge em">Da</span></td><td>Ispravljanje jedne rečenice u već snimljenom videu, umjesto ponovnog snimanja</td></tr><tr><td class="k"><span class="badge ru">Ne</span></td><td>Bilo čiji glas osim tvog, bez pisanog pristanka te osobe</td></tr><tr><td class="k"><span class="badge ru">Ne</span></td><td>Snimke gdje slušatelj misli da razgovara sa živom osobom</td></tr><tr><td class="k"><span class="badge ru">Ne</span></td><td>Klijentske poruke i obavijesti koje traže povjerenje — naplata, pritužbe, loše vijesti</td></tr><tr><td class="k"><span class="badge ru">Ne</span></td><td>Bilo što gdje bi otkriće da je glas generiran naštetilo tvom ugledu</td></tr></tbody></table></div>
+<div class="note ru" style="margin-top:14px"><strong>Test koji rješava sve rubne slučajeve:</strong> što bi se dogodilo da slušatelj sazna da glas nije snimljen? Ako bi rekao &bdquo;logično, to je edukativni video&ldquo; &mdash; u redu je. Ako bi se osjećao prevarenim &mdash; nemoj, koliko god klon bio dobar.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">05</div><div class="txt"><h2>Kad nešto ne zvuči dobro</h2><p>Šest najčešćih problema i što ih uzrokuje.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><h3>Glas zvuči kao ja, ali plosnato</h3></div><div class="item-badges"><span class="badge am">uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Materijal je snimljen jednolično, u jednom registru.</p></div><div class="note em"><strong>Rješenje:</strong> Dosnimi dio gdje objašnjavaš nešto s naglašavanjem i nešto što ti je stvarno zanimljivo. Model tada dobije raspon.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Krajevi rečenica padaju čudno</h3></div><div class="item-badges"><span class="badge am">uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Model nije čuo dovoljno završenih rečenica s tvojom intonacijom.</p></div><div class="note em"><strong>Rješenje:</strong> U dodatnom materijalu čitaj cijele odlomke, ne izolirane rečenice. Nemoj rezati na svakoj točki.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Hrvatski znakovi zvuče strano</h3></div><div class="item-badges"><span class="badge ru">uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Materijal je bio pretežno na engleskom ili je model zadan na drugi jezik.</p></div><div class="note em"><strong>Rješenje:</strong> Provjeri postavku jezika i osiguraj da je materijal na hrvatskom. Dodaj riječi s č, ć, š, ž, đ u različitim položajima.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Čuje se šum ili odjek u izlazu</h3></div><div class="item-badges"><span class="badge am">uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Šum iz snimke je ušao u model kao dio glasa.</p></div><div class="note em"><strong>Rješenje:</strong> Ovo se ne popravlja postavkama. Snimi novi materijal u boljim uvjetima — to je jedini put.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Nazivi alata i engleske riječi</h3></div><div class="item-badges"><span class="badge am">uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Model ih izgovara po hrvatskim pravilima ili obrnuto.</p></div><div class="note em"><strong>Rješenje:</strong> Dodaj u materijal rečenice u kojima te riječi izgovaraš onako kako želiš. Ako i dalje griješi, u tekstu ih napiši fonetski.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><h3>Zvuči dobro, a ipak ne mogu ga koristiti</h3></div><div class="item-badges"><span class="badge gy">uzrok</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Najčešće nije tehnički problem nego osjećaj da nije autentično.</p></div><div class="note em"><strong>Rješenje:</strong> To je valjan razlog da ga ne koristiš. Glasovni klon je alat za uštedu vremena na sadržaju koji bi ionako snimio/snimila — nije zamjena za tebe tamo gdje je tvoja prisutnost poanta.</div></div></article>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">06</div><div class="txt"><h2>Gdje ovo stvarno štedi vrijeme</h2></div></div>
+<div class="grid g3">
+  <div class="card hero"><h4>Ispravak jedne rečenice</h4><div class="prose" style="font-size:.93rem"><p>Pogrešan podatak u dvominutnom videu. Bez klona: ponovno snimanje. S klonom: zamijeniš jednu rečenicu i nitko ne primijeti.</p><p>Ovo je u praksi najkorisnija primjena, a najmanje očekivana.</p></div></div>
+  <div class="card"><h4>Voiceover za module</h4><div class="prose" style="font-size:.93rem"><p>Deset kratkih lekcija koje bi ionako snimao/snimala. Tekst napišeš, glas generiraš, vrijeme snimanja i ponavljanja nestaje.</p></div></div>
+  <div class="card"><h4>Isti sadržaj, drugi jezik</h4><div class="prose" style="font-size:.93rem"><p>Tvoj glas na engleskom za američko tržište, bez potrebe da snimaš na jeziku na kojem ti ritam nije prirodan.</p></div></div>
+</div>
+<div class="note" style="margin-top:16px"><strong>Sljedeći korak:</strong> ako uz glas želiš i sliku, materijal 02 pokriva avatare. Cijeli radni tok od skripte do objavljenog videa je u materijalu 03.</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+(function(){var c=[].slice.call(document.querySelectorAll('.kchk')),b=document.getElementById('kbar'),l=document.getElementById('klab');
+function p(){var n=c.filter(function(x){return x.checked}).length;if(b)b.style.width=(n/c.length*100)+'%';if(l)l.textContent=n+' od '+c.length;}
+c.forEach(function(x){x.addEventListener('change',p)});p();})();
+</script>
+</div>
+</body>
+</html>

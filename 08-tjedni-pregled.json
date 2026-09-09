@@ -1,0 +1,29 @@
+{
+  "name": "Tjedni pregled iz tablice",
+  "flow": [
+    { "id": 1, "module": "google-sheets:filterRows", "version": 2,
+      "parameters": { "__IMTCONN__": null, "mode": "select", "spreadsheetId": "", "sheetId": "", "includesHeaders": true, "filter": [], "sortOrder": "asc", "maxResults": 200 },
+      "mapper": {}, "metadata": { "designer": { "x": 0, "y": 0, "name": "Redci prošlog tjedna" } } },
+    { "id": 2, "module": "builtin:BasicAggregator", "version": 1,
+      "parameters": { "feeder": 1 }, "mapper": {},
+      "metadata": { "designer": { "x": 300, "y": 0, "name": "Složi u jedan popis" } } },
+    { "id": 3, "module": "anthropic-claude:createAMessage", "version": 1,
+      "parameters": { "__IMTCONN__": null },
+      "mapper": {
+        "model": "claude-sonnet-5", "max_tokens": 1200, "temperature": 0,
+        "system": "Napisi tjedni sazetak iz redaka. Brojevi su vec izracunati - ne racunaj nista sam. Odgovori u ovom obliku: NALAZI: (tri nalaza, svaki s brojem iz podataka) / ODUDARA: / PITANJA: / NEDOSTAJE: . Ne zbrajaj, ne mnozi i ne racunaj postotke. Ako neki redak ima prazno polje, spomeni to u NEDOSTAJE umjesto da pretpostavis vrijednost.",
+        "messages": [ { "role": "user", "content": "Period: prošli tjedan\nPodaci:\n{{2.array}}" } ] },
+      "metadata": { "designer": { "x": 600, "y": 0, "name": "Sažetak (Claude)" } } },
+    { "id": 4, "module": "email:ActionSendEmail", "version": 7,
+      "parameters": { "__IMTCONN__": null },
+      "mapper": { "to": [ "ja@tvojadomena.hr" ], "subject": "Tjedni pregled — {{formatDate(now; \"DD.MM.YYYY\")}}", "contentType": "text", "html": "{{3.result}}" },
+      "metadata": { "designer": { "x": 900, "y": 0, "name": "Pošalji sebi" } } },
+    { "id": 5, "module": "google-sheets:addRow", "version": 2,
+      "parameters": { "__IMTCONN__": null, "mode": "select", "spreadsheetId": "", "sheetId": "", "includesHeaders": true, "insertDataOption": "INSERT_ROWS" },
+      "mapper": { "values": { "0": "{{formatDate(now; \"DD.MM.YYYY\")}}", "1": "{{3.result}}" } },
+      "metadata": { "designer": { "x": 1200, "y": 0, "name": "Arhiva sažetaka" } } }
+  ],
+  "metadata": { "instant": false, "version": 1,
+    "scenario": { "roundtrips": 1, "maxErrors": 3, "autoCommit": true, "autoCommitTriggerLast": true, "sequential": false, "slots": null, "confidential": false, "dataloss": false, "dlq": false, "freshVariables": false },
+    "designer": { "orphans": [] }, "zone": "eu1.make.com", "notes": [] }
+}

@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Od skripte do objave &mdash; Sve AI tajne, Modul 10</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<style>
+.flow{width:100%;height:auto;display:block}
+.flow .bg{fill:var(--surface);stroke:var(--line);stroke-width:1}
+.flow .bg-ai{fill:var(--surface-sunk);stroke:var(--line-strong);stroke-width:1.5}
+.flow .bg-gate{fill:var(--rust-soft);stroke:var(--rust);stroke-width:1.5}
+.flow .bg-out{fill:var(--emerald-soft);stroke:var(--emerald);stroke-width:1.5}
+.flow .tt{fill:var(--ink);font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:15px}
+.flow .s{fill:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.05em}
+.flow .b{fill:var(--ink-soft);font-family:"Source Serif 4",serif;font-size:12px}
+.flow .ln{stroke:var(--line-strong);stroke-width:1.5;fill:none}
+.flow .ln-a{stroke:var(--rust);stroke-width:2;fill:none}
+.flow .ar{fill:var(--line-strong)}
+.flow .ar-a{fill:var(--rust)}
+.diagram-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface);padding:18px}
+.diagram-wrap svg{min-width:860px}
+.calc-out{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:14px}
+.calc-out .kpi{border:1px solid var(--line);border-radius:3px;padding:12px 14px;background:var(--surface-sunk)}
+.calc-out .kpi b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:1.5rem;line-height:1.1}
+.calc-out .kpi span{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.calc-out .kpi.win{background:var(--emerald-soft);border-color:var(--emerald)}
+</style>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 10</div>
+<h1>Od skripte do objave</h1>
+<p class="lede">Osam koraka, dvije obvezne ljudske provjere, pet promptova koji pokrivaju skriptu, naslove, titlove i ponovnu upotrebu. Alat ubrzava sve osim dva koraka &mdash; i to su ona dva koja odlučuju o kvaliteti.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>8 koraka</span><span>5 promptova</span><span>Kalkulator</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:36px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Cijeli tok na jednoj slici</h2><p>Red 1 ide slijeva nadesno, red 2 zdesna nalijevo. Istaknuta polja su ljudske provjere.</p></div></div>
+<div class="diagram-wrap"><svg class="flow" viewBox="0 0 1000 520" role="img" aria-label="Dijagram radnog toka: osam koraka od ideje do mjerenja, s dvije ljudske provjere"><text class="s" x="16" y="28" text-anchor="start">RED 1 · OD IDEJE DO LICA</text><text class="s" x="984" y="28" text-anchor="end">RED 2 · OD MONTAŽE DO MJERENJA</text><rect class="bg" x="16" y="52" width="214" height="150" rx="3"/><text class="s" x="32" y="78" text-anchor="start">01</text><text class="tt" x="32" y="104" text-anchor="start">IDEJA</text><text class="b" x="32" y="132" text-anchor="start">jedna teza,</text><text class="b" x="32" y="150" text-anchor="start">jedan gledatelj</text><text class="s" x="32" y="180" text-anchor="start">5 min</text><rect class="bg-ai" x="262" y="52" width="214" height="150" rx="3"/><text class="s" x="278" y="78" text-anchor="start">02</text><text class="tt" x="278" y="104" text-anchor="start">SKRIPTA</text><text class="b" x="278" y="132" text-anchor="start">AI piše nacrt</text><text class="b" x="278" y="150" text-anchor="start">iz tvoje teze</text><text class="s" x="278" y="180" text-anchor="start">10 min</text><rect class="bg-gate" x="508" y="52" width="214" height="150" rx="3"/><text class="s" x="524" y="78" text-anchor="start">03</text><text class="tt" x="524" y="104" text-anchor="start">PROVJERA</text><text class="b" x="524" y="132" text-anchor="start">tvrdnje, brojevi,</text><text class="b" x="524" y="150" text-anchor="start">ton — ti, ne AI</text><text class="s" x="524" y="180" text-anchor="start">10 min</text><rect class="bg-ai" x="754" y="52" width="214" height="150" rx="3"/><text class="s" x="770" y="78" text-anchor="start">04</text><text class="tt" x="770" y="104" text-anchor="start">GLAS I LICE</text><text class="b" x="770" y="132" text-anchor="start">glasovni klon</text><text class="b" x="770" y="150" text-anchor="start">+ avatar</text><text class="s" x="770" y="180" text-anchor="start">10 min</text><rect class="bg" x="754" y="312" width="214" height="150" rx="3"/><text class="s" x="770" y="338" text-anchor="start">05</text><text class="tt" x="770" y="364" text-anchor="start">MONTAŽA</text><text class="b" x="770" y="392" text-anchor="start">rezovi, titlovi,</text><text class="b" x="770" y="410" text-anchor="start">naslovnica</text><text class="s" x="770" y="440" text-anchor="start">15 min</text><rect class="bg-gate" x="508" y="312" width="214" height="150" rx="3"/><text class="s" x="524" y="338" text-anchor="start">06</text><text class="tt" x="524" y="364" text-anchor="start">PROVJERA</text><text class="b" x="524" y="392" text-anchor="start">bez zvuka,</text><text class="b" x="524" y="410" text-anchor="start">pa bez slike</text><text class="s" x="524" y="440" text-anchor="start">10 min</text><rect class="bg-out" x="262" y="312" width="214" height="150" rx="3"/><text class="s" x="278" y="338" text-anchor="start">07</text><text class="tt" x="278" y="364" text-anchor="start">OBJAVA</text><text class="b" x="278" y="392" text-anchor="start">format po kanalu,</text><text class="b" x="278" y="410" text-anchor="start">opis, oznake</text><text class="s" x="278" y="440" text-anchor="start">5 min</text><rect class="bg-out" x="16" y="312" width="214" height="150" rx="3"/><text class="s" x="32" y="338" text-anchor="start">08</text><text class="tt" x="32" y="364" text-anchor="start">MJERENJE</text><text class="b" x="32" y="392" text-anchor="start">3 sekunde, dovršenost,</text><text class="b" x="32" y="410" text-anchor="start">klik</text><text class="s" x="32" y="440" text-anchor="start">5 min/tj.</text><path class="ln" d="M230,127.0 L255,127.0"/><path class="ar" d="M262,127.0 L255,123.0 L255,131.0 Z"/><path class="ln-a" d="M476,127.0 L501,127.0"/><path class="ar-a" d="M508,127.0 L501,123.0 L501,131.0 Z"/><path class="ln" d="M722,127.0 L747,127.0"/><path class="ar" d="M754,127.0 L747,123.0 L747,131.0 Z"/><path class="ln" d="M861.0,202 L861.0,305"/><path class="ar" d="M861.0,312 L857.0,305 L865.0,305 Z"/><path class="ln-a" d="M754,387.0 L729,387.0"/><path class="ar-a" d="M722,387.0 L729,383.0 L729,391.0 Z"/><path class="ln" d="M508,387.0 L483,387.0"/><path class="ar" d="M476,387.0 L483,383.0 L483,391.0 Z"/><path class="ln" d="M262,387.0 L237,387.0"/><path class="ar" d="M230,387.0 L237,383.0 L237,391.0 Z"/><text class="s" x="500" y="496" text-anchor="middle">Istaknute strelice vode u ljudsku provjeru. Bez njih ne ide dalje.</text></svg></div>
+<div class="note em" style="margin-top:16px"><strong>Sedamdeset minuta po videu</strong> je realno nakon četvrtog ili petog videa, kad ti alati i postavke sjednu. Prvi video računaj kao tri sata, i to je normalno &mdash; u njemu snimaš materijal za glas i avatar koji vrijedi za svaki sljedeći.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Osam koraka</h2><p>Uz svaki korak stoji ko ga radi. To je najvažniji stupac.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Ideja</h3></div><div class="item-badges"><span class="badge ru">Čovjek</span><span class="chip">5 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Jedna teza, jedan gledatelj, jedan cilj. Ako to ne možeš napisati u tri retka, video nije spreman za skriptu.</p></div><div class="note">Najčešća pogreška cijelog toka: video koji pokušava reći tri stvari, pa ne kaže nijednu.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Skripta</h3></div><div class="item-badges"><span class="badge am">AI</span><span class="chip">10 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Prompt 1 daje nacrt i tri verzije uvoda. Biraš jednu i prepisuješ je svojim riječima.</p></div><div class="note">Nacrt je nacrt. Skripta koju objaviš nedirnuta zvuči kao svaka druga generirana skripta &mdash; i gledatelj to zna.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Provjera skripte</h3></div><div class="item-badges"><span class="badge ru">Čovjek</span><span class="chip">10 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Prompt 2 nabraja nalaze, ali odluku donosiš ti. Provjeri svaku cijenu, svaki rok, svaki broj i svako obećanje.</p></div><div class="note">Ovo je prva od dvije obvezne točke gdje tok stoji dok ti ne pročitaš. Sve nakon ovoga samo brzo povećava štetu od pogreške u tekstu.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Glas i lice</h3></div><div class="item-badges"><span class="badge gy">Alat</span><span class="chip">10 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Generiraš prvih deset sekundi, provjeriš sinkronizaciju i izgovor, pa onda cijeli video.</p></div><div class="note">Generiranje cijelog videa bez uzorka je najskuplji način da otkriješ da alat pogrešno izgovara naziv tvoje usluge.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Montaža i titlovi</h3></div><div class="item-badges"><span class="badge gy">Alat + čovjek</span><span class="chip">15 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Rezovi, titlovi, naslovnica, format po kanalu. Titl nije dodatak &mdash; većina gledatelja gleda bez zvuka.</p></div><div class="note">Prompt 4 daje titl razlomljen po smislu, a ne po broju znakova. Razlika je vidljiva na svakom redu.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Provjera prije objave</h3></div><div class="item-badges"><span class="badge ru">Čovjek</span><span class="chip">10 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Dva odvojena prolaza: cijeli video bez zvuka (sinkronizacija i mimika), pa cijeli bez slike (ritam i izgovor).</p></div><div class="note">Dvije odvojene provjere hvataju više od jedne zajedničke. Gledaj cijeli video, ne prvih deset sekundi.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Objava</h3></div><div class="item-badges"><span class="badge ru">Čovjek</span><span class="chip">5 min</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Prompt 4 je pripremio opise i oznake. Ovdje samo biraš format po kanalu i objavljuješ.</p></div><div class="note">Ako je u fazi A odlučeno da se označava da je sadržaj generiran &mdash; ovdje se to provjerava, ne poslije.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Mjerenje</h3></div><div class="item-badges"><span class="badge ru">Čovjek</span><span class="chip">5 min/tjedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Tri broja po videu: gledanost prve tri sekunde, dovršenost i klikovi. Ništa više prvih mjesec dana.</p></div><div class="note">Prve tri sekunde mjere naslov i uvod. Dovršenost mjeri skriptu. Klikovi mjere zadnju rečenicu. Svaki broj pokazuje što popraviti.</div></div></article>
+<div class="note ru" style="margin-top:16px"><strong>Koraci 03 i 06 se ne preskaču.</strong> Alat može napisati skriptu, izgovoriti je tvojim glasom, animirati tvoje lice i složiti titlove &mdash; ali ne može znati je li cijena točna, je li rok realan i bi li ti to rekao klijentu. Kad se preskače provjera, alat ne pravi manje pogrešaka &mdash; pravi ih brže i u više formata odjednom.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Pet promptova</h2><p>Pokrivaju cijeli tok. Kopiraj, zamijeni uglate zagrade, pokreni po redu.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Skripta za jednominutni video</h3></div><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div></div><div class="item-body"><div class="prose" style="font-size:.94rem"><p>Zamijeni tekst u uglatim zagradama. Rezultat namjerno traži tri verzije uvoda &mdash; birat ćeš jednu.</p></div><pre class="p">Pišeš skriptu za video od jedne minute (oko 150 riječi na hrvatskom).
+
+TEZA: [jedna rečenica — što gledatelj mora shvatiti]
+GLEDATELJ: [tko je, što već zna, što ga muči]
+CILJ: [što želim da učini nakon videa]
+TON: [kako zvučim — npr. direktno, bez fraza, s primjerom iz prakse]
+
+PRAVILA:
+- Kratke rečenice. Jedna misao po rečenici.
+- Bez uvoda, bez pozdrava, bez &quot;danas ćemo govoriti o&quot;.
+- Prva rečenica je problem ili tvrdnja, ne najava.
+- Brojeve napiši riječima (dvadeset posto, ne 20 %).
+- Označi pauze novim redom.
+- Bez fraza tipa &quot;u današnjem svijetu&quot;, &quot;sve više ljudi&quot;, &quot;nije tajna da&quot;.
+
+ISPORUKA:
+1) Tri verzije prve tri rečenice, međusobno različite po pristupu.
+2) Ostatak skripte, prelomljen u odlomke po pauzama.
+3) Zadnja rečenica s konkretnim pozivom na radnju.
+4) Popis svih tvrdnji i brojeva koje sam ti dao, da ih provjerim.</pre></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Provjera skripte prije snimanja</h3></div><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div></div><div class="item-body"><div class="prose" style="font-size:.94rem"><p>Pokrećeš nakon što skripta postoji. Alat ovdje radi kao kritičar, ne kao pisac.</p></div><pre class="p">Pregledaj ovu skriptu za video i budi strog.
+
+SKRIPTA:
+[zalijepi skriptu]
+
+Za svaku točku daj konkretan primjer iz teksta:
+1) Koja rečenica je preduga za izgovor u jednom dahu?
+2) Gdje je fraza koja ne nosi informaciju?
+3) Koja tvrdnja zvuči kao činjenica, a nije potkrijepljena?
+4) Drži li prva rečenica pažnju bez konteksta ostatka videa?
+5) Bi li gledatelj nakon zadnje rečenice znao točno što učiniti?
+
+Ne prepisuj skriptu. Nabroji nalaze i predloži zamjenu samo za rečenice koje si označio.</pre></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Deset naslova i deset uvodnih kadrova</h3></div><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div></div><div class="item-body"><div class="prose" style="font-size:.94rem"><p>Naslov i prve tri sekunde odlučuju hoće li video biti pogledan. Generiraj ih odvojeno od skripte.</p></div><pre class="p">Za ovaj video napiši deset naslova i deset uvodnih kadrova.
+
+TEMA VIDEA: [tema]
+GLEDATELJ: [tko]
+GLAVNA TVRDNJA: [teza iz skripte]
+
+NASLOVI — deset komada, svaki po drugom principu:
+konkretan broj, greška, pitanje, suprotno očekivanju, prije/poslije,
+vremenski okvir, cijena/ušteda, &quot;prestani&quot;, usporedba, priznanje vlastite greške.
+
+UVODNI KADROVI — deset komada, svaki najviše dvanaest riječi,
+napisano onako kako će biti izgovoreno u prve tri sekunde.
+
+Označi koja tri naslova bih testirao prvo i zašto — jednom rečenicom po naslovu.</pre></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Titl, opis i oznake iz gotove skripte</h3></div><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div></div><div class="item-body"><div class="prose" style="font-size:.94rem"><p>Jedan prompt pokriva sve što ide oko videa. Radiš ga jednom, na kraju.</p></div><pre class="p">Iz ove skripte napravi materijale za objavu.
+
+SKRIPTA: [zalijepi]
+KANALI: [npr. LinkedIn, Instagram Reels, YouTube]
+
+ISPORUKA:
+1) Titl razlomljen u redove od najviše 42 znaka, po smislenim cjelinama —
+   ne po broju znakova nasred riječi.
+2) Opis za svaki kanal, u tonu tog kanala, s pozivom na radnju.
+   LinkedIn: prve dvije rečenice moraju raditi same, prije &quot;vidi više&quot;.
+3) Pet do osam oznaka po kanalu, bez generičkih tipa #business #ai.
+4) Tekst za naslovnicu videa — najviše pet riječi.
+5) Jedna rečenica koju bih zakvačio kao prvi komentar.</pre></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Jedan video u šest objava</h3></div><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div></div><div class="item-body"><div class="prose" style="font-size:.94rem"><p>Video je najskuplji sadržaj koji proizvodiš. Iz njega izlazi šest stvari, ne jedna.</p></div><pre class="p">Iz ovog videa napravi šest različitih objava.
+
+TRANSKRIPT ILI SKRIPTA: [zalijepi]
+
+1) LinkedIn post — jedna teza, bez ponavljanja cijelog videa, s vlastitim uvodom.
+2) Carousel — sedam slajdova, po jedna misao na slajd, naslov i dvije rečenice.
+3) Kratki tekst za newsletter — proširena teza, s primjerom kojeg u videu nema.
+4) Tri odvojena kratka videa — koje dijelove transkripta bih izrezao, s vremenskim oznakama.
+5) Odgovor na najčešće pitanje koje bi ovaj video izazvao.
+6) Nacrt bloga s ključnom riječi [ključna riječ] — samo struktura i naslovi odjeljaka.
+
+Za svaku objavu reci koji dio transkripta koristi. Ništa ne izmišljaj izvan njega.</pre></div></article>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Kalkulator</h2><p>Prije uvođenja alata provjeri isplati li se kod tvog broja videa.</p></div></div>
+
+<div class="card hero">
+  <h4>Isplati li se ovaj tok kod tebe</h4>
+  <div class="prose" style="font-size:.94rem"><p>Usporedba klasičnog snimanja i ovog toka. Upiši svoje brojeve — ništa se ne pamti nakon zatvaranja stranice.</p></div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="field"><label for="cv">Videa mjesečno</label><input id="cv" type="number" min="0" step="1" value="8"></div>
+    <div class="field"><label for="cs">Klasično: minuta po videu</label><input id="cs" type="number" min="0" step="5" value="150"><span class="hint">priprema, snimanje, ponavljanja, montaža</span></div>
+    <div class="field"><label for="ca">Ovaj tok: minuta po videu</label><input id="ca" type="number" min="0" step="5" value="70"><span class="hint">zbroj osam koraka iz dijagrama</span></div>
+    <div class="field"><label for="cj">Jezične verzije po videu</label><input id="cj" type="number" min="1" step="1" value="1"><span class="hint">1 ako radiš samo na hrvatskom</span></div>
+    <div class="field"><label for="ch">Vrijednost tvog sata (EUR)</label><input id="ch" type="number" min="0" step="5" value="60"></div>
+    <div class="field"><label for="ct">Mjesečna cijena alata (EUR)</label><input id="ct" type="number" min="0" step="5" value="60"></div>
+  </div>
+  <div class="calc-out" id="cout"></div>
+  <div class="note" id="cnote"></div>
+</div>
+<script>
+(function(){
+ var ids=['cv','cs','ca','cj','ch','ct'],out=document.getElementById('cout'),nt=document.getElementById('cnote');
+ function num(id){var v=parseFloat(document.getElementById(id).value);return isFinite(v)&&v>=0?v:0;}
+ function h(m){return Math.round(m/60*10)/10;}
+ function eur(x){return Math.round(x).toLocaleString('hr-HR');}
+ function plural(n,a,b,c){var n1=n%10,n2=n%100;if(n1===1&&n2!==11)return a;if(n1>=2&&n1<=4&&(n2<12||n2>14))return b;return c;}
+ function calc(){
+  var v=num('cv'),s=num('cs'),a=num('ca'),j=Math.max(1,num('cj')),hr=num('ch'),t=num('ct');
+  // klasično: svaka jezična verzija je novo snimanje. Ovaj tok: skripta i provjera po verziji, snimanje ne.
+  var klas=v*s*j, nov=v*(a+(j-1)*(a*0.45));
+  var ust=klas-nov, vrij=h(ust)*hr, neto=vrij-t;
+  out.innerHTML=''
+   +'<div class="kpi"><b>'+h(klas)+' h</b><span>klasično</span></div>'
+   +'<div class="kpi"><b>'+h(nov)+' h</b><span>ovaj tok</span></div>'
+   +'<div class="kpi'+(ust>0?' win':'')+'"><b>'+h(ust)+' h</b><span>ušteda mjesečno</span></div>'
+   +'<div class="kpi'+(neto>0?' win':'')+'"><b>'+eur(neto)+' €</b><span>neto, nakon alata</span></div>';
+  if(v===0||s===0){nt.textContent='Upiši broj videa i vrijeme po videu.';nt.className='note';return;}
+  if(ust<=0){nt.innerHTML='<strong>Ne isplati se.</strong> Uz ove brojeve klasično snimanje je jednako brzo ili brže. Snimaj i dalje sam — alat uvedi kad se broj videa poveća.';nt.className='note ru';return;}
+  var prag=Math.ceil(t/((s*j-(a+(j-1)*a*0.45))/60*hr||1));
+  nt.innerHTML='<strong>'+h(ust)+' '+plural(Math.round(h(ust)),'sat','sata','sati')+' mjesečno</strong> uz '+v+' '+plural(v,'video','videa','videa')+(j>1?' × '+j+' jezične verzije':'')+'. Prag isplativosti alata je oko '+prag+' '+plural(prag,'video','videa','videa')+' mjesečno.'+(j>1?' Najveći dio uštede dolazi iz jezičnih verzija — tu ručno snimanje nema odgovor.':' Ušteda bi bila osjetno veća da radiš i verzije na drugim jezicima.');
+  nt.className='note em';
+ }
+ ids.forEach(function(id){var e=document.getElementById(id);e.addEventListener('input',calc);e.addEventListener('change',calc);});
+ calc();
+})();
+</script>
+
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">05</div><div class="txt"><h2>Kako početi &mdash; prvi mjesec</h2></div></div>
+<div class="grid g3">
+  <div class="card"><h4>Tjedan 1</h4><div class="prose" style="font-size:.93rem"><p>Snimi materijal za glas i avatar. Jedno sjedanje, dobri uvjeti. Napravi <b>jedan</b> video od jedne minute i prođi sve osam koraka rukom.</p></div></div>
+  <div class="card"><h4>Tjedan 2 i 3</h4><div class="prose" style="font-size:.93rem"><p>Četiri videa, isti tok, bez ubrzavanja i bez preskakanja provjera. Bilježi koliko ti stvarno traje svaki korak.</p></div></div>
+  <div class="card"><h4>Tjedan 4</h4><div class="prose" style="font-size:.93rem"><p>Pogledaj tri broja po videu. Sad znaš svoje pravo vrijeme po koraku &mdash; upiši ga u kalkulator i odluči o pretplatama.</p></div></div>
+</div>
+<div class="note ru" style="margin-top:16px"><strong>Čega nema u prvom mjesecu:</strong> automatiziranog objavljivanja, generiranja u seriji i povezivanja s alatima za raspored. To je druga faza i ima smisla tek kad tok radi rukom dva mjeseca. Automatizirati tok koji još ne razumiješ znači automatizirati vlastite pogreške.</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make moduli &mdash; Sve AI tajne, Modul 8</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"\2192";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 8</div>
+<h1>Make &mdash; moduli koje stvarno koristiš</h1>
+<p class="lede">Make ima tisuće aplikacija i desetke tisuća modula. U praksi devedeset posto scenarija koristi ovih trideset i pet. Uz svaki interni naziv koji vidiš u blueprintu.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>34 modula</span><span>7 skupina</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Kako čitati ovu karticu</h2></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Dva naziva za istu stvar</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>U sučelju Make pokazuje <b>ljudski naziv</b> &mdash; <em>Add a Row</em>, <em>Router</em>, <em>Create a Prompt</em>.</p>
+      <p>U blueprintu, dakle u JSON datoteci, stoji <b>interni naziv</b> &mdash; <span class="mono">google-sheets:addRow</span>, <span class="mono">builtin:BasicRouter</span>, <span class="mono">anthropic-claude:createAMessage</span>.</p>
+      <p>Zato je uz svaki modul ovdje naveden i interni naziv: kad pogledaš u blueprint ili kad ti Make javi grešku, znaš o čemu je reč.</p>
+    </div>
+  </div>
+  <div class="card hero">
+    <h4>Pet modula nosi većinu posla</h4>
+    <ul class="ticks">
+      <li><b>Watch New Rows</b> &mdash; najčešći okidač. Obrazac upiše redak, scenarij krene.</li>
+      <li><b>Create a Prompt</b> &mdash; AI korak. Ovdje živi sistemska uputa.</li>
+      <li><b>Router</b> &mdash; razdvaja postupak po rezultatu.</li>
+      <li><b>Add a Row</b> &mdash; log i arhiva. Ne prepisuje ništa, pa je najsigurniji upis.</li>
+      <li><b>Create a Draft</b> &mdash; sve prema klijentima ide kao nacrt.</li>
+    </ul>
+    <div class="note">Ako naučiš samo ovih pet, možeš sam/sama sagraditi većinu scenarija iz Modula 7 i 8.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Moduli</h2><p>Filtriraj po skupini ili traži po tome što ti treba.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži &mdash; npr. redak, nacrt, ruta, duplikat, datoteka&hellip;" aria-label="Traži modul">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Svi<span class="n">34</span></button><button class="chip" data-cat="tok" aria-pressed="false">Tok i logika<span class="n">6</span></button><button class="chip" data-cat="greske" aria-pressed="false">Greške<span class="n">5</span></button><button class="chip" data-cat="ulaz" aria-pressed="false">Ulaz i okidači<span class="n">6</span></button><button class="chip" data-cat="tablice" aria-pressed="false">Tablice<span class="n">5</span></button><button class="chip" data-cat="ai" aria-pressed="false">AI<span class="n">3</span></button><button class="chip" data-cat="izlaz" aria-pressed="false">Izlaz<span class="n">4</span></button><button class="chip" data-cat="pomocni" aria-pressed="false">Pomoćni<span class="n">5</span></button></div>
+</div>
+<h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Tok i logika</h4><article class="item" data-cat="tok" data-search="router dijeli tok na više ruta. svaka ruta ima svoj filtar. kad ista ulazna informacija treba različit postupak — npr. eskalacija da ili ne. builtin:basicrouter"><div class="item-top"><div class="item-id"><h3>Router</h3></div><div class="item-badges"><span class="badge gy mono">builtin:BasicRouter</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Dijeli tok na više ruta. Svaka ruta ima svoj filtar.</p></div><div class="note em"><strong>Kada:</strong> Kad ista ulazna informacija treba različit postupak — npr. eskalacija DA ili NE.</div></div></article><article class="item" data-cat="tok" data-search="if-else kao router, ali s uvjetima i mogućnošću spajanja natrag u jedan tok. kad se rute poslije moraju vratiti u zajednički završni korak. builtin:basicifelse"><div class="item-top"><div class="item-id"><h3>If-else</h3></div><div class="item-badges"><span class="badge gy mono">builtin:BasicIfElse</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Kao Router, ali s uvjetima i mogućnošću spajanja natrag u jedan tok.</p></div><div class="note em"><strong>Kada:</strong> Kad se rute poslije moraju vratiti u zajednički završni korak.</div></div></article><article class="item" data-cat="tok" data-search="merge spaja if-else rute natrag u jedan tok. uz if-else, kad na kraju svi putovi vode u isti korak. builtin:basicmerge"><div class="item-top"><div class="item-id"><h3>Merge</h3></div><div class="item-badges"><span class="badge gy mono">builtin:BasicMerge</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Spaja if-else rute natrag u jedan tok.</p></div><div class="note em"><strong>Kada:</strong> Uz If-else, kad na kraju svi putovi vode u isti korak.</div></div></article><article class="item" data-cat="tok" data-search="iterator razdvaja niz u pojedinačne pakete koji se obrađuju jedan po jedan. kad iz jednog ulaza dobiješ listu — npr. deset redaka ili pet privitaka. builtin:basicfeeder"><div class="item-top"><div class="item-id"><h3>Iterator</h3></div><div class="item-badges"><span class="badge gy mono">builtin:BasicFeeder</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Razdvaja niz u pojedinačne pakete koji se obrađuju jedan po jedan.</p></div><div class="note em"><strong>Kada:</strong> Kad iz jednog ulaza dobiješ listu — npr. deset redaka ili pet privitaka.</div></div></article><article class="item" data-cat="tok" data-search="array aggregator suprotno od iteratora — spaja više paketa u jedan niz. kad ai korak treba vidjeti sve retke odjednom, a ne jedan po jedan. builtin:basicaggregator"><div class="item-top"><div class="item-id"><h3>Array aggregator</h3></div><div class="item-badges"><span class="badge gy mono">builtin:BasicAggregator</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Suprotno od Iteratora — spaja više paketa u jedan niz.</p></div><div class="note em"><strong>Kada:</strong> Kad AI korak treba vidjeti sve retke odjednom, a ne jedan po jedan.</div></div></article><article class="item" data-cat="tok" data-search="repeater pokreće sljedeće module zadani broj puta. rijetko. najčešće za generiranje niza brojeva ili ponavljanje poziva. builtin:basicrepeater"><div class="item-top"><div class="item-id"><h3>Repeater</h3></div><div class="item-badges"><span class="badge gy mono">builtin:BasicRepeater</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Pokreće sljedeće module zadani broj puta.</p></div><div class="note em"><strong>Kada:</strong> Rijetko. Najčešće za generiranje niza brojeva ili ponavljanje poziva.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Greške</h4><article class="item" data-cat="greske" data-search="resume preskače grešku i nastavlja s tim paketom. kad korak nije nužan — npr. upis u log koji smije pasti. builtin:resume"><div class="item-top"><div class="item-id"><h3>Resume</h3></div><div class="item-badges"><span class="badge gy mono">builtin:Resume</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Preskače grešku i nastavlja s tim paketom.</p></div><div class="note em"><strong>Kada:</strong> Kad korak nije nužan — npr. upis u log koji smije pasti.</div></div></article><article class="item" data-cat="greske" data-search="skip preskače i odbacuje paket koji je izazvao grešku. kad jedan neispravan zapis ne smije zaustaviti cijeli scenarij. builtin:ignore"><div class="item-top"><div class="item-id"><h3>Skip</h3></div><div class="item-badges"><span class="badge gy mono">builtin:Ignore</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Preskače i odbacuje paket koji je izazvao grešku.</p></div><div class="note em"><strong>Kada:</strong> Kad jedan neispravan zapis ne smije zaustaviti cijeli scenarij.</div></div></article><article class="item" data-cat="greske" data-search="retry sprema neuspjeli paket za automatsko ponavljanje ili ručni pregled. za privremene greške — mreža, ograničenje broja poziva. builtin:break"><div class="item-top"><div class="item-id"><h3>Retry</h3></div><div class="item-badges"><span class="badge gy mono">builtin:Break</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Sprema neuspjeli paket za automatsko ponavljanje ili ručni pregled.</p></div><div class="note em"><strong>Kada:</strong> Za privremene greške — mreža, ograničenje broja poziva.</div></div></article><article class="item" data-cat="greske" data-search="commit zaustavlja scenarij bez obrade ostatka. napredno. kad nakon greške ništa više ne smije proći. builtin:commit"><div class="item-top"><div class="item-id"><h3>Commit</h3></div><div class="item-badges"><span class="badge gy mono">builtin:Commit</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Zaustavlja scenarij bez obrade ostatka.</p></div><div class="note em"><strong>Kada:</strong> Napredno. Kad nakon greške ništa više ne smije proći.</div></div></article><article class="item" data-cat="greske" data-search="rollback zaustavlja scenarij s greškom i vraća acid module. napredno, za scenarije gdje je djelomičan upis gori od nikakvog. builtin:rollback"><div class="item-top"><div class="item-id"><h3>Rollback</h3></div><div class="item-badges"><span class="badge gy mono">builtin:Rollback</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Zaustavlja scenarij s greškom i vraća ACID module.</p></div><div class="note em"><strong>Kada:</strong> Napredno, za scenarije gdje je djelomičan upis gori od nikakvog.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Ulaz i okidači</h4><article class="item" data-cat="ulaz" data-search="custom webhook pokreće se kad na adresu dođu podaci. trenutačno, bez čekanja. kad obrazac, web stranica ili drugi alat mogu poslati podatke sami. gateway:customwebhook"><div class="item-top"><div class="item-id"><h3>Custom webhook</h3></div><div class="item-badges"><span class="badge gy mono">gateway:CustomWebHook</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Pokreće se kad na adresu dođu podaci. Trenutačno, bez čekanja.</p></div><div class="note em"><strong>Kada:</strong> Kad obrazac, web stranica ili drugi alat mogu poslati podatke sami.</div></div></article><article class="item" data-cat="ulaz" data-search="custom mailhook kao webhook, ali okidač je mail poslan na makeovu adresu. kad alat može poslati mail, a ne zna za webhook. gateway:custommailhook"><div class="item-top"><div class="item-id"><h3>Custom mailhook</h3></div><div class="item-badges"><span class="badge gy mono">gateway:CustomMailHook</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Kao webhook, ali okidač je mail poslan na Makeovu adresu.</p></div><div class="note em"><strong>Kada:</strong> Kad alat može poslati mail, a ne zna za webhook.</div></div></article><article class="item" data-cat="ulaz" data-search="webhook response vraća odgovor onome tko je pozvao webhook. kad web stranica čeka odgovor — npr. potvrdu prijave. gateway:webhookrespond"><div class="item-top"><div class="item-id"><h3>Webhook response</h3></div><div class="item-badges"><span class="badge gy mono">gateway:WebhookRespond</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Vraća odgovor onome tko je pozvao webhook.</p></div><div class="note em"><strong>Kada:</strong> Kad web stranica čeka odgovor — npr. potvrdu prijave.</div></div></article><article class="item" data-cat="ulaz" data-search="watch new rows pokreće se kad se pojavi novi redak. najčešći okidač u praksi. obrazac upisuje u tablicu, scenarij kreće. google-sheets:watchrows"><div class="item-top"><div class="item-id"><h3>Watch New Rows</h3></div><div class="item-badges"><span class="badge gy mono">google-sheets:watchRows</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Pokreće se kad se pojavi novi redak.</p></div><div class="note em"><strong>Kada:</strong> Najčešći okidač u praksi. Obrazac upisuje u tablicu, scenarij kreće.</div></div></article><article class="item" data-cat="ulaz" data-search="watch files in a folder pokreće se kad u mapu dođe nova ili izmijenjena datoteka. transkripti, skenirani dokumenti, izvozi iz drugih sustava. google-drive:watchfilesinafolder"><div class="item-top"><div class="item-id"><h3>Watch Files in a Folder</h3></div><div class="item-badges"><span class="badge gy mono">google-drive:watchFilesInAFolder</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Pokreće se kad u mapu dođe nova ili izmijenjena datoteka.</p></div><div class="note em"><strong>Kada:</strong> Transkripti, skenirani dokumenti, izvozi iz drugih sustava.</div></div></article><article class="item" data-cat="ulaz" data-search="watch emails pokreće se na novi mail po zadanim kriterijima. podrška, upiti, dokumenti koji dolaze mailom. email:triggernewemail"><div class="item-top"><div class="item-id"><h3>Watch Emails</h3></div><div class="item-badges"><span class="badge gy mono">email:TriggerNewEmail</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Pokreće se na novi mail po zadanim kriterijima.</p></div><div class="note em"><strong>Kada:</strong> Podrška, upiti, dokumenti koji dolaze mailom.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Tablice</h4><article class="item" data-cat="tablice" data-search="add a row dodaje redak na kraj tablice. log, arhiva, registar. najsigurniji upis jer ništa ne prepisuje. google-sheets:addrow"><div class="item-top"><div class="item-id"><h3>Add a Row</h3></div><div class="item-badges"><span class="badge gy mono">google-sheets:addRow</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Dodaje redak na kraj tablice.</p></div><div class="note em"><strong>Kada:</strong> Log, arhiva, registar. Najsigurniji upis jer ništa ne prepisuje.</div></div></article><article class="item" data-cat="tablice" data-search="update a row mijenja postojeći redak po broju. kad upisuješ status ili rezultat u redak koji je pokrenuo scenarij. google-sheets:updaterow"><div class="item-top"><div class="item-id"><h3>Update a Row</h3></div><div class="item-badges"><span class="badge gy mono">google-sheets:updateRow</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Mijenja postojeći redak po broju.</p></div><div class="note em"><strong>Kada:</strong> Kad upisuješ status ili rezultat u redak koji je pokrenuo scenarij.</div></div></article><article class="item" data-cat="tablice" data-search="search rows vraća retke koji odgovaraju kriteriju, s brojem retka. tjedni pregledi, provjera postoji li zapis prije upisa. google-sheets:filterrows"><div class="item-top"><div class="item-id"><h3>Search Rows</h3></div><div class="item-badges"><span class="badge gy mono">google-sheets:filterRows</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Vraća retke koji odgovaraju kriteriju, s brojem retka.</p></div><div class="note em"><strong>Kada:</strong> Tjedni pregledi, provjera postoji li zapis prije upisa.</div></div></article><article class="item" data-cat="tablice" data-search="get range values vraća sadržaj zadanog raspona. kad ti treba cijeli blok podataka odjednom, npr. cjenik. google-sheets:getsheetcontent"><div class="item-top"><div class="item-id"><h3>Get Range Values</h3></div><div class="item-badges"><span class="badge gy mono">google-sheets:getSheetContent</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Vraća sadržaj zadanog raspona.</p></div><div class="note em"><strong>Kada:</strong> Kad ti treba cijeli blok podataka odjednom, npr. cjenik.</div></div></article><article class="item" data-cat="tablice" data-search="bulk add rows dodaje više redaka odjednom. kad iz jednog ulaza nastane više zapisa — npr. pet zadataka iz sastanka. google-sheets:addmultiplerows"><div class="item-top"><div class="item-id"><h3>Bulk Add Rows</h3></div><div class="item-badges"><span class="badge gy mono">google-sheets:addMultipleRows</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Dodaje više redaka odjednom.</p></div><div class="note em"><strong>Kada:</strong> Kad iz jednog ulaza nastane više zapisa — npr. pet zadataka iz sastanka.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">AI</h4><article class="item" data-cat="ai" data-search="create a prompt šalje upit modelu i vraća odgovor. ovdje ide sistemska uputa. glavni ai korak. temperatura na 0 za automatizacije. anthropic-claude:createamessage"><div class="item-top"><div class="item-id"><h3>Create a Prompt</h3></div><div class="item-badges"><span class="badge gy mono">anthropic-claude:createAMessage</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Šalje upit modelu i vraća odgovor. Ovdje ide sistemska uputa.</p></div><div class="note em"><strong>Kada:</strong> Glavni AI korak. Temperatura na 0 za automatizacije.</div></div></article><article class="item" data-cat="ai" data-search="upload a file predaje datoteku modelu za obradu. za analizu dokumenata koje ne želiš pretvarati u tekst. anthropic-claude:uploadfile"><div class="item-top"><div class="item-id"><h3>Upload a File</h3></div><div class="item-badges"><span class="badge gy mono">anthropic-claude:uploadFile</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Predaje datoteku modelu za obradu.</p></div><div class="note em"><strong>Kada:</strong> Za analizu dokumenata koje ne želiš pretvarati u tekst.</div></div></article><article class="item" data-cat="ai" data-search="list skills vraća popis postavljenih skillova. kad radiš s vlastitim claude skillovima. anthropic-claude:listskills"><div class="item-top"><div class="item-id"><h3>List Skills</h3></div><div class="item-badges"><span class="badge gy mono">anthropic-claude:listSkills</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Vraća popis postavljenih skillova.</p></div><div class="note em"><strong>Kada:</strong> Kad radiš s vlastitim Claude skillovima.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Izlaz</h4><article class="item" data-cat="izlaz" data-search="create a draft sprema poruku kao nacrt u zadanu mapu. ne šalje. sve što ide klijentu, dok automatizacija ne radi tri mjeseca besprijekorno. email:actioncreatedraft"><div class="item-top"><div class="item-id"><h3>Create a Draft</h3></div><div class="item-badges"><span class="badge gy mono">email:ActionCreateDraft</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Sprema poruku kao nacrt u zadanu mapu. Ne šalje.</p></div><div class="note em"><strong>Kada:</strong> Sve što ide klijentu, dok automatizacija ne radi tri mjeseca besprijekorno.</div></div></article><article class="item" data-cat="izlaz" data-search="send an email šalje poruku. interne obavijesti i izvještaji sebi. prema klijentima tek nakon dugog testiranja. email:actionsendemail"><div class="item-top"><div class="item-id"><h3>Send an Email</h3></div><div class="item-badges"><span class="badge gy mono">email:ActionSendEmail</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Šalje poruku.</p></div><div class="note em"><strong>Kada:</strong> Interne obavijesti i izvještaji sebi. Prema klijentima tek nakon dugog testiranja.</div></div></article><article class="item" data-cat="izlaz" data-search="create a file from text stvara datoteku iz teksta. kad rezultat treba ostati kao dokument, npr. nacrt članka. google-drive:createafilefromtext"><div class="item-top"><div class="item-id"><h3>Create a File from Text</h3></div><div class="item-badges"><span class="badge gy mono">google-drive:createAFileFromText</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Stvara datoteku iz teksta.</p></div><div class="note em"><strong>Kada:</strong> Kad rezultat treba ostati kao dokument, npr. nacrt članka.</div></div></article><article class="item" data-cat="izlaz" data-search="download a file preuzima sadržaj datoteke. uz okidač na mapu — okidač daje ime, ovaj modul sadržaj. google-drive:getafile"><div class="item-top"><div class="item-id"><h3>Download a File</h3></div><div class="item-badges"><span class="badge gy mono">google-drive:getAFile</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Preuzima sadržaj datoteke.</p></div><div class="note em"><strong>Kada:</strong> Uz okidač na mapu — okidač daje ime, ovaj modul sadržaj.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Pomoćni</h4><article class="item" data-cat="pomocni" data-search="tools postavljanje varijabli, uvjeti, pretvorbe teksta i datuma. kad treba očistiti vrijednost prije usporedbe ili spojiti nekoliko polja. util"><div class="item-top"><div class="item-id"><h3>Tools</h3></div><div class="item-badges"><span class="badge gy mono">util</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Postavljanje varijabli, uvjeti, pretvorbe teksta i datuma.</p></div><div class="note em"><strong>Kada:</strong> Kad treba očistiti vrijednost prije usporedbe ili spojiti nekoliko polja.</div></div></article><article class="item" data-cat="pomocni" data-search="json parsiranje i sastavljanje json-a. kad ai korak vraća json ili kad se šalje podatak vanjskom sustavu. json"><div class="item-top"><div class="item-id"><h3>JSON</h3></div><div class="item-badges"><span class="badge gy mono">json</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Parsiranje i sastavljanje JSON-a.</p></div><div class="note em"><strong>Kada:</strong> Kad AI korak vraća JSON ili kad se šalje podatak vanjskom sustavu.</div></div></article><article class="item" data-cat="pomocni" data-search="text parser izvlačenje dijelova teksta po uzorku. kad iz odgovora treba izvući samo oznaku ili broj. regexp"><div class="item-top"><div class="item-id"><h3>Text parser</h3></div><div class="item-badges"><span class="badge gy mono">regexp</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Izvlačenje dijelova teksta po uzorku.</p></div><div class="note em"><strong>Kada:</strong> Kad iz odgovora treba izvući samo oznaku ili broj.</div></div></article><article class="item" data-cat="pomocni" data-search="http poziv na bilo koju adresu. kad aplikacija nema svoj modul u makeu. http"><div class="item-top"><div class="item-id"><h3>HTTP</h3></div><div class="item-badges"><span class="badge gy mono">http</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Poziv na bilo koju adresu.</p></div><div class="note em"><strong>Kada:</strong> Kad aplikacija nema svoj modul u Makeu.</div></div></article><article class="item" data-cat="pomocni" data-search="data store makeova mala baza za pamćenje između izvođenja. kad scenarij mora znati što je već obradio — sprječava duplikate. datastore"><div class="item-top"><div class="item-id"><h3>Data store</h3></div><div class="item-badges"><span class="badge gy mono">datastore</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p>Makeova mala baza za pamćenje između izvođenja.</p></div><div class="note em"><strong>Kada:</strong> Kad scenarij mora znati što je već obradio — sprječava duplikate.</div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Četiri obrasca koja rješavaju većinu slučajeva</h2></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Ocijeni pa razdvoji</h4>
+    <div class="prose" style="font-size:.94rem"><p><span class="mono">watchRows &rarr; createAMessage &rarr; BasicRouter &rarr; dvije rute</span></p><p>Osnova svakog scenarija koji nekako klasificira ulaz &mdash; kvalifikacija upita, eskalacija, trijaža.</p></div>
+  </div>
+  <div class="card">
+    <h4>Skupi pa sažmi</h4>
+    <div class="prose" style="font-size:.94rem"><p><span class="mono">filterRows &rarr; BasicAggregator &rarr; createAMessage &rarr; ActionSendEmail</span></p><p>Za sve periodične preglede. Aggregator je ključan &mdash; bez njega AI korak vidi jedan redak po izvođenju.</p></div>
+  </div>
+  <div class="card">
+    <h4>Razlomi pa obradi svaki</h4>
+    <div class="prose" style="font-size:.94rem"><p><span class="mono">createAMessage &rarr; BasicFeeder &rarr; addRow</span></p><p>Kad iz jednog sastanka nastane pet zadataka. Iterator ih razdvoji, pa svaki postane redak.</p></div>
+  </div>
+  <div class="card">
+    <h4>Provjeri pa upiši</h4>
+    <div class="prose" style="font-size:.94rem"><p><span class="mono">filterRows &rarr; filtar &bdquo;ne postoji&ldquo; &rarr; addRow</span></p><p>Jedina pouzdana obrana od duplikata. Alternativa je Data store, ako izvor nije tablica.</p></div>
+  </div>
+</div>
+<div class="note ru" style="margin-top:16px"><strong>Jedno pravilo o operacijama:</strong> svaki modul u svakom izvođenju troši jednu operaciju. Scenarij od šest modula koji se pokreće sto puta mjesečno je šesto operacija. Zato filtar ide <em>odmah</em> iza okidača &mdash; sve iza njega troši.</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || (it.getAttribute('data-search')||'').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':' rezultata');
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>

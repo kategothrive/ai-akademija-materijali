@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avatar &mdash; kontrolna lista, Modul 10</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 10</div>
+<h1>Avatar &mdash; kontrolna lista</h1>
+<p class="lede">Pet faza od odluke do objave. Većina loših avatara nije loša zbog alata nego zbog svjetla, položaja kamere i skripte napisane za čitanje umjesto za slušanje.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>28 točaka</span><span>5 faza</span><span>Rujan 2026.</span></div>
+</header>
+
+<div class="note ru" style="margin-top:28px"><strong>Pravilo bez iznimke:</strong> avatar se pravi od <b>tvog</b> lica, ili od lica osobe koja je dala <b>pisani pristanak</b> u kojem stoji za koju svrhu i do kada. Alati traže potvrdu identiteta upravo zato. Tuđe lice bez pristanka nije rubni slučaj &mdash; to je stvar koju se ne radi.</div>
+
+<section style="margin-top:36px">
+  <div class="card hero">
+    <div class="item-badges"><h4 style="flex:1 1 auto">Napredak</h4><span class="count" id="hlab"></span></div>
+    <div class="progressbar"><i id="hbar"></i></div>
+    <div class="prose" style="font-size:.93rem;margin-top:10px"><p>Označeno se ne pamti nakon zatvaranja stranice &mdash; ovo je radna lista za jedan video, ne dnevnik.</p></div>
+  </div>
+</section>
+
+<section style="margin-top:16px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Pet faza</h2><p>Redoslijed je namjeran. Faza A sprečava najveći gubitak vremena &mdash; avatar koji ti nije trebao.</p></div></div>
+<div class="card"><div class="item-badges"><span class="badge em">FAZA A</span><h4 style="flex:1 1 auto">Odluka &mdash; treba li ti avatar uopće</h4><span class="count">4 točaka</span></div><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>01. Definiraj točno koji video praviš</b><span>Jedna vrsta videa, jedan format, jedna svrha. &bdquo;Videi za društvene mreže&ldquo; nije definicija.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>02. Provjeri isplati li se</b><span>Ako snimaš jedan video mjesečno, snimanje je brže. Avatar se isplati od približno četiri videa mjesečno ili kad radiš iste videe na više jezika.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>03. Provjeri je li tvoje lice poanta</b><span>Ako klijent kupuje tebe, avatar radi protiv tebe. Ako kupuje informaciju, avatar je u redu.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>04. Odluči hoćeš li to reći gledatelju</b><span>Preporuka: reci. Jedna rečenica u opisu ili na kraju videa. Otkrivena naknadno, ista stvar zvuči kao skrivanje.</span></span></label></div><div class="card"><div class="item-badges"><span class="badge em">FAZA B</span><h4 style="flex:1 1 auto">Snimanje materijala za avatar</h4><span class="count">8 točaka</span></div><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>05. Neutralna pozadina, ravnomjerno svjetlo</b><span>Jednobojni zid, svjetlo s prednje strane. Bez sjena na licu, bez prozora iza tebe.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>06. Kamera u razini očiju</b><span>Ne ispod. Kut ispod lica model uči i vraća u svakom generiranom videu.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>07. Gledaj u objektiv, ne u ekran</b><span>Ako čitaš s ekrana, avatar će trajno gledati u stranu.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>08. Miruj u gornjem dijelu tijela</b><span>Prirodno, ali bez naginjanja i okretanja. Model uči tvoj mirni položaj kao osnovni.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>09. Jednobojna odjeća, bez uzoraka</b><span>Pruge, sitni uzorci i sjajni materijali stvaraju artefakte. Bez logotipa koji ćeš kasnije mijenjati.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>10. Bez naočala s odsjajem</b><span>Ako nosiš naočale, provjeri da se svjetlo ne odbija od stakla.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>11. Snimi i mirnu i govoreću sekvencu</b><span>Dio gdje samo stojiš i slušaš, dio gdje govoriš. Prvi daje avataru uvjerljive pauze.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>12. Snimi rezervu i pregledaj prije završetka</b><span>Ponovno postavljanje istog svjetla i istog položaja drugi dan gotovo nikad ne uspije.</span></span></label></div><div class="card"><div class="item-badges"><span class="badge em">FAZA C</span><h4 style="flex:1 1 auto">Skripta &mdash; ovdje se video gubi ili dobiva</h4><span class="count">6 točaka</span></div><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>13. Piši za uho, ne za oko</b><span>Kratke rečenice. Jedna misao po rečenici. Pročitaj naglas &mdash; gdje ti zapne dah, tu je rečenica predugačka.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>14. Prva rečenica nosi cijeli video</b><span>Bez uvoda, bez pozdrava, bez &bdquo;danas ćemo govoriti o&ldquo;. Kreni od problema ili tvrdnje.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>15. Označi pauze u tekstu</b><span>Novi red ili tri točke gdje želiš pauzu. Avatar bez označenih pauza govori u jednom dahu.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>16. Napiši brojeve riječima</b><span>&bdquo;dvadeset posto&ldquo; umjesto &bdquo;20 %&ldquo;, &bdquo;dvije tisuće dvadeset šesta&ldquo; umjesto &bdquo;2026.&ldquo;. Ovako točno znaš što će reći.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>17. Provjeri strane riječi i nazive alata</b><span>Ako alat pogrešno izgovori naziv, napiši ga fonetski. Provjeri prije generiranja cijelog videa.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>18. Drži se jedne minute za prvi video</b><span>Kratki video se pregleda i ispravi u petnaest minuta. Petominutni se ne pregleda pa se objavi s pogreškom.</span></span></label></div><div class="card"><div class="item-badges"><span class="badge em">FAZA D</span><h4 style="flex:1 1 auto">Prije generiranja</h4><span class="count">4 točaka</span></div><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>19. Generiraj prvo deset sekundi</b><span>Provjeri sinkronizaciju usta, izgovor i ton na kratkom uzorku. Tek onda cijeli video.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>20. Provjeri format i omjer</b><span>Vertikalno za mreže, horizontalno za YouTube i web. Naknadno rezanje odreže lice ili tekst.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>21. Provjeri jezik i akcent u postavkama</b><span>Ovdje nastaje najviše neočekivanih rezultata na hrvatskom.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>22. Odluči o titlovima odmah</b><span>Većina gledatelja na mrežama gleda bez zvuka. Titl nije dodatak nego dio videa.</span></span></label></div><div class="card"><div class="item-badges"><span class="badge em">FAZA E</span><h4 style="flex:1 1 auto">Provjera prije objave</h4><span class="count">6 točaka</span></div><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>23. Pogledaj cijeli video bez zvuka</b><span>Gledaš sinkronizaciju i mimiku. Bez zvuka se odmah vidi gdje usta ne prate tekst.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>24. Poslušaj cijeli video bez slike</b><span>Slušaš ritam, pauze i izgovor. Dvije odvojene provjere hvataju više od jedne zajedničke.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>25. Provjeri hrvatske znakove i imena</b><span>Č, ć, š, ž, đ, imena klijenata, nazivi tvojih usluga.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>26. Provjeri prvih tri sekunde na mobitelu</b><span>Vertikalno, na malom ekranu, bez zvuka. Tako će ga većina zapravo vidjeti.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>27. Provjeri tvrdnje u sadržaju</b><span>Cijene, rokovi, brojevi, obećanja. Avatar izgovori sve što napišeš, uključujući pogrešku.</span></span></label><label class="chk"><input type="checkbox" class="hchk"><span class="t"><b>28. Provjeri je li označeno da je generirano</b><span>Ako si tako odlučio/odlučila u fazi A &mdash; provjeri da je zaista tamo.</span></span></label></div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Gdje avatar radi</h2></div></div>
+<div class="tbl-scroll"><table><thead><tr><th></th><th>Primjena</th></tr></thead><tbody><tr><td class="k"><span class="badge em">da</span></td><td><b>Edukativni moduli i tutorijali</b><br><span class="muted">Deset lekcija koje bi ionako snimao/snimala pred kamerom.</span></td></tr><tr><td class="k"><span class="badge em">da</span></td><td><b>Isti sadržaj na više jezika</b><br><span class="muted">Najjača primjena. Jedna skripta, tvoje lice, četiri jezika.</span></td></tr><tr><td class="k"><span class="badge em">da</span></td><td><b>Ponavljajuće obavijesti</b><br><span class="muted">Tjedni pregled, najave, kratki podsjetnici gdje je informacija poanta.</span></td></tr><tr><td class="k"><span class="badge em">da</span></td><td><b>Onboarding materijali</b><br><span class="muted">Iste informacije svakom novom klijentu ili članu tima.</span></td></tr><tr><td class="k"><span class="badge em">da</span></td><td><b>Odgovori na česta pitanja</b><br><span class="muted">Deset kratkih videa na deset pitanja koja dobivaš svaki put.</span></td></tr></tbody></table></div>
+<div class="note em" style="margin-top:14px"><strong>Druga točka je najvrjednija.</strong> Ako radiš s tržištima na više jezika, avatar i klonirani glas jednu snimljenu skriptu pretvaraju u četiri jezične verzije s tvojim licem. To se ručnim snimanjem ne može izvesti ni uz najveći trud.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Gdje avatar ne radi</h2><p>Ovo je kraći, ali važniji popis.</p></div></div>
+<div class="tbl-scroll"><table><thead><tr><th></th><th>Situacija</th></tr></thead><tbody><tr><td class="k"><span class="badge ru">ne</span></td><td><b>Klijentski sastanci i pozivi</b><br><span class="muted">Avatar ne može odgovoriti na pitanje. Ako je razgovor dvosmjeran, ti si u kadru.</span></td></tr><tr><td class="k"><span class="badge ru">ne</span></td><td><b>Loše vijesti i osjetljive teme</b><br><span class="muted">Kašnjenje, greška, povišenje cijene, prekid suradnje. Ovdje generirano lice šteti.</span></td></tr><tr><td class="k"><span class="badge ru">ne</span></td><td><b>Prvi kontakt s važnim klijentom</b><br><span class="muted">Prvi dojam gradi povjerenje. Nemoj ga graditi na avataru.</span></td></tr><tr><td class="k"><span class="badge ru">ne</span></td><td><b>Svjedočanstva i preporuke</b><br><span class="muted">Nikad. Preporuka izgovorena generiranim licem je izmišljena preporuka, bez obzira čiji je tekst.</span></td></tr><tr><td class="k"><span class="badge ru">ne</span></td><td><b>Tuđe lice bez pisanog pristanka</b><br><span class="muted">Uključujuči zaposlenike i klijente. Pristanak mora navoditi svrhu i rok.</span></td></tr><tr><td class="k"><span class="badge ru">ne</span></td><td><b>Bilo što gdje bi otkrivanje štetilo</b><br><span class="muted">Isti test kao kod glasa: bi li gledatelj rekao &bdquo;logično&ldquo; ili &bdquo;prevaren sam&ldquo;.</span></td></tr></tbody></table></div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Pet pogrešaka koje se najviše vide</h2></div></div>
+<div class="grid g2">
+  <div class="card"><h4>Kamera ispod lica</h4><div class="prose" style="font-size:.93rem"><p>Snimljeno laptopom na stolu. Model uči taj kut i vraća ga u svakom videu. Nema postavke koja to popravlja.</p></div></div>
+  <div class="card"><h4>Pogled u stranu</h4><div class="prose" style="font-size:.93rem"><p>Nastaje čitanjem s ekrana tijekom snimanja. Nauči skriptu ili je stavi tik do objektiva.</p></div></div>
+  <div class="card"><h4>Skripta napisana za čitanje</h4><div class="prose" style="font-size:.93rem"><p>Duge rečenice s više zavisnih dijelova. Zvuči kao službeni dopis, a ne kao čovjek. Pročitaj naglas prije generiranja.</p></div></div>
+  <div class="card"><h4>Nema označenih pauza</h4><div class="prose" style="font-size:.93rem"><p>Avatar govori bez daha jer u tekstu nema mjesta gdje bi stao. Prelomi tekst u kratke odlomke.</p></div></div>
+  <div class="card"><h4>Pregledan samo početak</h4><div class="prose" style="font-size:.93rem"><p>Prvih deset sekundi je gotovo uvijek dobro. Problem je na 45. sekundi, gdje ga nitko nije provjerio.</p></div></div>
+  <div class="card"><h4>Prvi video od pet minuta</h4><div class="prose" style="font-size:.93rem"><p>Predugo za temeljit pregled, pa se objavi neprovjereno. Prvi video: jedna minuta.</p></div></div>
+</div>
+<div class="note" style="margin-top:16px"><strong>Sljedeći korak:</strong> kad avatar i glas rade, radni tok od skripte do objave je u materijalu 03.</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+(function(){var c=[].slice.call(document.querySelectorAll('.hchk')),b=document.getElementById('hbar'),l=document.getElementById('hlab');
+function p(){var n=c.filter(function(x){return x.checked}).length;if(b)b.style.width=(n/c.length*100)+'%';
+if(l)l.textContent=n+' od '+c.length+' — '+Math.round(n/c.length*100)+'%';}
+c.forEach(function(x){x.addEventListener('change',p)});p();})();
+</script>
+</div>
+</body>
+</html>

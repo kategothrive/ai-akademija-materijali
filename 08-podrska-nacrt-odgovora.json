@@ -1,0 +1,41 @@
+{
+  "name": "Podrška — nacrt odgovora i eskalacija",
+  "flow": [
+    { "id": 1, "module": "email:TriggerNewEmail", "version": 7,
+      "parameters": { "__IMTCONN__": null, "folder": "INBOX", "criteria": "ALL", "maxResults": 5 },
+      "mapper": {}, "metadata": { "designer": { "x": 0, "y": 0, "name": "Novi mail u sandučiću podrške" } } },
+    { "id": 2, "module": "anthropic-claude:createAMessage", "version": 1,
+      "parameters": { "__IMTCONN__": null },
+      "mapper": {
+        "model": "claude-sonnet-5", "max_tokens": 900, "temperature": 0,
+        "system": "Ti si prva linija podrske. Znanje ti je iskljucivo u tekstu koji dobijes u poruci. Odgovori TOCNO u ovom obliku: ESKALACIJA: DA|NE / RAZLOG_ESKALACIJE: / NACRT: . ESKALACIJA je DA ako se trazi novac ili popust, spominje odvjetnik ili sud, prijeti javnom objavom, trazi izmjena ugovora, ili odgovora nema u znanju. Ako je DA, u NACRT napisi samo potvrdu primitka s rokom javljanja. Najvise cetiri recenice, bez usklicnika. Nikad ne izmisljaj rok, iznos ni status narudzbe.",
+        "messages": [ { "role": "user", "content": "ZNANJE (FAQ i cjenik):\n[zalijepi FAQ i cjenik ovdje ili ih drzi u prethodnom koraku]\n\nUPIT:\nOd: {{1.from.address}}\nNaslov: {{1.subject}}\nTekst: {{1.text}}" } ] },
+      "metadata": { "designer": { "x": 300, "y": 0, "name": "Nacrt (Claude)" } } },
+    { "id": 3, "module": "builtin:BasicRouter", "version": 1, "mapper": null,
+      "metadata": { "designer": { "x": 600, "y": 0, "name": "Eskalacija?" } },
+      "routes": [
+        { "flow": [
+          { "id": 4, "module": "email:ActionCreateDraft", "version": 7,
+            "parameters": { "__IMTCONN__": null },
+            "filter": { "name": "Bez eskalacije", "conditions": [ [ { "a": "{{2.result}}", "b": "ESKALACIJA: NE", "o": "text:contains" } ] ] },
+            "mapper": { "folder": "", "to": [ "{{1.from.address}}" ], "subject": "Re: {{1.subject}}", "contentType": "text", "html": "{{2.result}}" },
+            "metadata": { "designer": { "x": 900, "y": -150, "name": "Nacrt odgovora" } } },
+          { "id": 5, "module": "google-sheets:addRow", "version": 2,
+            "parameters": { "__IMTCONN__": null, "mode": "select", "spreadsheetId": "", "sheetId": "", "includesHeaders": true, "insertDataOption": "INSERT_ROWS" },
+            "mapper": { "values": { "0": "{{formatDate(now; \"DD.MM.YYYY HH:mm\")}}", "1": "{{1.from.address}}", "2": "{{1.subject}}", "3": "NE", "4": "nacrt pripremljen" } },
+            "metadata": { "designer": { "x": 1200, "y": -150, "name": "Log" } } } ] },
+        { "flow": [
+          { "id": 6, "module": "email:ActionSendEmail", "version": 7,
+            "parameters": { "__IMTCONN__": null },
+            "filter": { "name": "Eskalacija", "conditions": [ [ { "a": "{{2.result}}", "b": "ESKALACIJA: DA", "o": "text:contains" } ] ] },
+            "mapper": { "to": [ "vlasnik@tvojadomena.hr" ], "subject": "ESKALACIJA — {{1.subject}}", "contentType": "text", "html": "Klijent: {{1.from.address}}\n\nOcjena agenta:\n{{2.result}}\n\nIzvorni upit:\n{{1.text}}" },
+            "metadata": { "designer": { "x": 900, "y": 150, "name": "Javi vlasniku" } } },
+          { "id": 7, "module": "google-sheets:addRow", "version": 2,
+            "parameters": { "__IMTCONN__": null, "mode": "select", "spreadsheetId": "", "sheetId": "", "includesHeaders": true, "insertDataOption": "INSERT_ROWS" },
+            "mapper": { "values": { "0": "{{formatDate(now; \"DD.MM.YYYY HH:mm\")}}", "1": "{{1.from.address}}", "2": "{{1.subject}}", "3": "DA", "4": "eskalirano" } },
+            "metadata": { "designer": { "x": 1200, "y": 150, "name": "Log" } } } ] } ] }
+  ],
+  "metadata": { "instant": false, "version": 1,
+    "scenario": { "roundtrips": 1, "maxErrors": 3, "autoCommit": true, "autoCommitTriggerLast": true, "sequential": false, "slots": null, "confidential": false, "dataloss": false, "dlq": false, "freshVariables": false },
+    "designer": { "orphans": [] }, "zone": "eu1.make.com", "notes": [] }
+}
