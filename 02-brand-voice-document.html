@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand Voice Document &mdash; Sve AI tajne, Modul 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 2</div>
+<h1>Brand Voice Document</h1>
+<p class="lede">Dokument koji AI čita prije nego što napiše prvu rečenicu &mdash; i zbog kojeg tekst zvuči kao ti, a ne kao prosjek interneta. Osam sekcija, generira gotov .txt.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>8 sekcija</span><span>Prompt za audit glasa</span><span>Generira dokument</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Zašto tekst zvuči kao AI</h2></div></div>
+<div class="grid g2">
+  <div class="card hero">
+    <div class="prose" style="font-size:.96rem">
+      <p>Model je treniran na prosjeku svega napisanog. Kad mu ne kažeš drukčije, piše prosjek &mdash; a prosjek zvuči točno kao ono što ljudi prepoznaju kao AI tekst.</p>
+      <p>Uskličnici. &bdquo;U današnjem svijetu.&ldquo; Tri jednako duge rečenice zaredom. Zaključak koji ponavlja uvod. Riječ <em>sinergija</em>.</p>
+      <p>Ni jedno od toga nije greška modela. To je odgovor na nepostojanje uputa.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Čime se ovaj dokument razlikuje od Brand Documenta</h4>
+    <div class="prose" style="font-size:.94rem">
+      <p><b>Brand Document</b> (Modul 1) je o <em>tvrtki</em> &mdash; usluge, cijene, publika, dokazi. Odgovara na pitanje <em>što</em>.</p>
+      <p><b>Brand Voice Document</b> je o <em>pisanju</em> &mdash; ritam, rječnik, otvaranja, kako kažeš ne. Odgovara na pitanje <em>kako</em>.</p>
+      <p>Trebaš oba, i oba idu u isti projekt. Ovaj je kraći i mijenja se rjeđe.</p>
+    </div>
+    <div class="note em"><strong>Realno vrijeme:</strong> 45 do 60 minuta, ako imaš primjere spremne. Sekcija G je pola tog vremena i vrijedi svake minute.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Ako ne znaš opisati svoj glas</h2><p>Većina ljudi ne zna. Zato ga ne opisuj &mdash; izvuci ga iz onoga što si već napisao/napisala.</p></div></div>
+<div class="card">
+  <h4>Prompt za audit glasa</h4>
+  <div class="prose" style="font-size:.95rem">
+    <p>Skupi osam do dvanaest svojih tekstova &mdash; emailove iz poslane pošte, LinkedIn postove, dijelove ponuda. Neka budu različiti formati i neka su svi <em>tvoji</em>, ne timski.</p>
+    <p>Zalijepi ih u Claude s ovim promptom. Rezultat je gotov materijal za sekcije A do F ispod.</p>
+  </div>
+  <pre class="p">Ti si analitičar stila pisanja. Ne pišeš — analiziraš.
+
+Ispod je 8 do 12 tekstova koje sam ja napisao/napisala: emailovi, postovi, dijelovi ponuda.
+<span class="f">[ZALIJEPI TEKSTOVE, ODVOJENE CRTOM ---</span>]
+
+Iz njih izvuci moj stvarni glas, na temelju dokaza iz teksta, ne pretpostavke:
+
+1. TRI PRIDJEVA koja opisuju moj ton, i uz svaki citat koji to dokazuje
+2. KONTRADIKCIJE — gdje sam direktan ali ne grub, topao ali ne familijaran i slično
+3. RITAM — prosječna duljina rečenice, mijenjam li ritam, koristim li jednorečenične odlomke
+4. RIJEČI KOJE PONAVLJAM — izrazi koji se pojavljuju u više tekstova
+5. KAKO OTVARAM — obrazac prve rečenice kroz sve tekstove
+6. KAKO ZATVARAM — obrazac zadnje rečenice i CTA-a
+7. FORMATIRANJE — emoji, bold, bulleti, uskličnici: koristim li i koliko
+8. ČEGA NEMA — koje uobičajene poslovne fraze ja nikad ne koristim. Ovo je jednako važno kao ono što koristim.
+9. NAJPREPOZNATLJIVIJA ODLIKA — jedna stvar po kojoj bi netko pogodio da je tekst moj
+
+Pravila:
+- Svaka tvrdnja mora imati citat iz mojih tekstova. Bez citata ne pišeš tvrdnju.
+- Ne uljepšavaj i ne laskaj. Ako je stil nekonzistentan, reci gdje i kako.
+- Ako u tekstovima vidiš naviku koja šteti (predugačke rečenice, previše kvalifikatora, isprike), izdvoj to posebno.</pre>
+  <div class="actions"><button class="copybtn" type="button">Kopiraj prompt za audit</button></div>
+  <div class="note"><strong>Točka 8 je zlato:</strong> ono čega u tvojim tekstovima <em>nema</em> definira glas jednako kao ono što ima. Prepiši to direktno u polje &bdquo;Zabranjene riječi i fraze&ldquo;.</div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Popuni osam sekcija</h2><p>Dokument se sastavlja u stvarnom vremenu. Ne mora sve odmah &mdash; kreni od A, D i G.</p></div></div>
+<div class="note ru">Ništa ne izlazi iz tvog preglednika i ne sprema se. Kopiraj rezultat prije nego što zatvoriš stranicu.</div>
+<div class="grid g2" style="margin-top:18px;align-items:start">
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="card"><h3>A. Tri pridjeva</h3><div class="prose" style="font-size:.92rem"><p>Tri su dovoljna. Uz svaki obavezno napiši i kontradikciju — ona nosi pola informacije.</p></div><div class="field"><label for="pridjevi">Tri pridjeva s kontradikcijom</label><div class="hint">Format: pridjev — što znači u praksi — ali ne.</div><textarea id="pridjevi" data-f="pridjevi" rows="5" placeholder="Direktan — kažemo cijenu i rok u prvoj rečenici — ali ne grub.
+Topao — pišemo kao čovjek čovjeku — ali ne familijaran, bez &#x27;dragi naši&#x27;.
+Stručan — znamo o čemu govorimo — ali bez žargona i skraćenica."></textarea></div></div><div class="card"><h3>B. Ritam i duljina</h3><div class="prose" style="font-size:.92rem"><p>Ovo je ono što AI najlakše promaši. Ritam je prepoznatljiviji od rječnika.</p></div><div class="field"><label for="ritam">Kako izgleda tvoja rečenica</label><div class="hint">Prosječna duljina, mijenjaš li ritam, koristiš li jednorečenične odlomke.</div><textarea id="ritam" data-f="ritam" rows="4" placeholder="Rečenice kratke, 8-15 riječi. Nikad tri jednako duge zaredom.
+Jednorečenični odlomci su dopušteni i koriste se za naglasak.
+Bez rečenica s tri zavisne klauzule."></textarea></div><div class="field"><label for="duljina">Duljina po formatu</label><div class="hint">Koliko riječi za koji format.</div><textarea id="duljina" data-f="duljina" rows="3" placeholder="LinkedIn post: 150-250 riječi
+Email: najviše 4 rečenice
+Ponuda: Executive Summary najviše 3 rečenice"></textarea></div></div><div class="card"><h3>C. Otvaranje i zatvaranje</h3><div class="prose" style="font-size:.92rem"><p>Prva i zadnja rečenica su ono što ljudi pamte — i ono gdje AI najčešće pada u klišej.</p></div><div class="field"><label for="otvaranje">Kako otvaramo</label><div class="hint">Što je dopušteno kao prva rečenica i što nikad nije.</div><textarea id="otvaranje" data-f="otvaranje" rows="3" placeholder="DA: konkretna situacija, broj, ili pitanje na koje je odgovor &#x27;da&#x27;
+NE: &#x27;U današnjem svijetu&#x27;, &#x27;Svi znamo da&#x27;, &#x27;Nadam se da ste dobro&#x27;, &#x27;Hvala na vašem emailu&#x27;"></textarea></div><div class="field"><label for="zatvaranje">Kako zatvaramo</label><textarea id="zatvaranje" data-f="zatvaranje" rows="3" placeholder="DA: jedan konkretan next step s datumom
+NE: &#x27;Slobodno se javite&#x27;, &#x27;Radujemo se suradnji&#x27;, &#x27;Stojimo vam na raspolaganju&#x27;"></textarea></div></div><div class="card"><h3>D. Rječnik</h3><div class="prose" style="font-size:.92rem"><p>Konkretne riječi. Ovo je dio koji AI može primijeniti mehanički i odmah.</p></div><div class="field"><label for="nasarijeci">Naše riječi i izrazi</label><div class="hint">Izrazi koji su dio tvog branda. Koristi ih AI automatski.</div><textarea id="nasarijeci" data-f="nasarijeci" rows="3" placeholder=""></textarea></div><div class="field"><label for="zabranjene">Zabranjene riječi i fraze</label><div class="hint">Najkorisnije polje u cijelom dokumentu. Budi nemilosrdan.</div><textarea id="zabranjene" data-f="zabranjene" rows="4" placeholder="sinergija, disruptivno, world-class, holistički, &#x27;strast za&#x27;, &#x27;na dnevnoj bazi&#x27;, &#x27;Odlično pitanje!&#x27;, &#x27;Apsolutno!&#x27;, uskličnici, &#x27;zar ne?&#x27;"></textarea></div><div class="field"><label for="terminologija">Kako nazivamo stvari</label><div class="hint">Ako imaš interne nazive za usluge ili faze, navedi ih ovdje s objašnjenjem.</div><textarea id="terminologija" data-f="terminologija" rows="3" placeholder=""></textarea></div></div><div class="card"><h3>E. Formatiranje</h3><div class="prose" style="font-size:.92rem"><p>Vizualni potpis teksta. Lako se opiše, lako se primijeni.</p></div><div class="field"><label for="format">Pravila formatiranja</label><div class="hint">Emoji, bold, bulleti, uskličnici, velika slova.</div><textarea id="format" data-f="format" rows="5" placeholder="Emoji: ne u emailovima i ponudama; do dva na LinkedInu
+Bold: samo za jednu ključnu misao po odlomku
+Bulleti: da, ali nikad više od pet u nizu
+Uskličnici: nikad
+VELIKA SLOVA za naglasak: nikad"></textarea></div></div><div class="card"><h3>F. Osjetljive situacije</h3><div class="prose" style="font-size:.92rem"><p>Ovdje se glas branda stvarno vidi. Većina firmi ovo nema napisano.</p></div><div class="field"><label for="ne">Kako kažemo NE</label><div class="hint">Odbijanje posla, odbijanje popusta, odbijanje zahtjeva izvan opsega.</div><textarea id="ne" data-f="ne" rows="4" placeholder="Kažemo ne u prvoj rečenici, obrazloženje u drugoj, alternativa u trećoj.
+Ne koristimo &#x27;nažalost&#x27; i ne opravdavamo se u tri odlomka."></textarea></div><div class="field"><label for="cijena">Kako govorimo o cijeni</label><div class="hint">Navodiš li cijenu, kako reagiraš na 'preskupo', pristajete li na popust.</div><textarea id="cijena" data-f="cijena" rows="4" placeholder="Cijenu kažemo bez uvijanja i bez isprike.
+Na &#x27;preskupo&#x27; pitamo s čim uspoređuju, ne spuštamo cijenu.
+Popust samo uz smanjenje opsega."></textarea></div><div class="field"><label for="losevijesti">Kako javljamo loše vijesti</label><div class="hint">Zakašnjenje, greška, problem na projektu.</div><textarea id="losevijesti" data-f="losevijesti" rows="4" placeholder="Prvo činjenica, onda posljedica, onda što radimo. Bez uvoda i bez traženja krivca.
+Priznajemo situaciju: &#x27;žao nam je što je do ovoga došlo&#x27; — ne &#x27;žao nam je što se tako osjećate&#x27;."></textarea></div></div><div class="card"><h3>G. Primjeri</h3><div class="prose" style="font-size:.92rem"><p>Najvažnija sekcija. Pet pravih tekstova nauče AI više od svih pravila iznad.</p></div><div class="field"><label for="dobri">Pet primjera DOBROG pisanja</label><div class="hint">Kopiraj cijele tekstove, ne opise. Različiti formati: email, post, odlomak ponude, odgovor na pritužbu, odbijanje.</div><textarea id="dobri" data-f="dobri" rows="10" placeholder=""></textarea></div><div class="field"><label for="losi">Tri primjera LOŠEG pisanja</label><div class="hint">Tekst koji ne zvuči kao ti — iz konkurencije ili neuspjeli AI output. Uz svaki jedna rečenica zašto je loš.</div><textarea id="losi" data-f="losi" rows="6" placeholder=""></textarea></div></div><div class="card"><h3>H. Razlike po kanalu</h3><div class="prose" style="font-size:.92rem"><p>Isti glas, drugi registar. Bez ovoga AI piše LinkedIn ton u ponudi.</p></div><div class="field"><label for="kanali">Što se mijenja po kanalu</label><textarea id="kanali" data-f="kanali" rows="5" placeholder="LinkedIn: osobnije, dopušteno prvo lice i anegdota
+Email klijentu: kraće i formalnije, bez anegdote
+Ponuda: najformalnije, ali bez korporativnog jezika
+WhatsApp: kratko, do 5 rečenica, bez potpisa"></textarea></div></div>
+    <button class="btn ghost" type="button" id="clr">Očisti sva polja</button>
+  </div>
+  <div class="card" style="position:sticky;top:16px">
+    <div class="item-badges"><h4 style="flex:1 1 auto">Tvoj Brand Voice Document</h4><span class="badge em">Live</span></div>
+    <div class="progressbar"><i id="pbar"></i></div>
+    <div class="count" id="plab"></div>
+    <pre class="p" id="out" style="max-height:500px;overflow:auto"></pre>
+    <div class="actions"><button class="copybtn" type="button" data-target="#out">Kopiraj dokument</button></div>
+    <div class="note"><strong>Ako imaš vremena za samo tri sekcije:</strong> A (tri pridjeva), D (zabranjene riječi) i G (primjeri). To troje nosi većinu razlike u outputu.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Test slijepim uzorkom</h2><p>Jedini pouzdan način da provjeriš radi li dokument.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Kako se izvodi</h4>
+    <ol class="steps">
+      <li>Uploadaj dokument u Claude Project i zadaj mu zadatak koji si već jednom sam/sama napisao/napisala.</li>
+      <li>Stavi svoj tekst i njegov jedan pod drugi, bez oznaka.</li>
+      <li>Pokaži kolegi ili klijentu koji te poznaje. Pitaj samo: koji je moj?</li>
+      <li>Ako pogodi odmah &mdash; vrati se na sekcije D i G. Ako se predomišlja &mdash; dokument radi.</li>
+    </ol>
+    <div class="note em">Ovo je test koji vrijedi ponoviti svaka tri mjeseca. Glas ti se mijenja, a dokument ne &mdash; osim ako ga ti ne mijenjaš.</div>
+  </div>
+  <div class="card">
+    <h4>Četiri stvari koje uvijek odaju AI</h4>
+    <ul class="ticks">
+      <li><b>Prazni superlativi</b> bez broja iza sebe. &bdquo;Značajno smo poboljšali&ldquo; &mdash; koliko?</li>
+      <li><b>Simetrična struktura.</b> Tri odlomka jednake duljine, tri bulleta, tri primjera. Živi ljudi pišu nepravilno.</li>
+      <li><b>Zaključak koji ponavlja uvod.</b> Ništa novo, samo drugim riječima.</li>
+      <li><b>Nema stava.</b> Tekst koji nikoga ne može naljutiti nikoga neće ni zainteresirati.</li>
+    </ul>
+    <div class="note ru">Ako to prepoznaš u outputu &mdash; nije problem u modelu, nego u tome što mu to nisi zabranio/zabranila. Dodaj rečenicu u sekciju D i više se ne ponavlja.</div>
+  </div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+var SPEC = [["A. Tri pridjeva", [["pridjevi", "Tri pridjeva s kontradikcijom"]]], ["B. Ritam i duljina", [["ritam", "Kako izgleda tvoja re\u010denica"], ["duljina", "Duljina po formatu"]]], ["C. Otvaranje i zatvaranje", [["otvaranje", "Kako otvaramo"], ["zatvaranje", "Kako zatvaramo"]]], ["D. Rje\u010dnik", [["nasarijeci", "Na\u0161e rije\u010di i izrazi"], ["zabranjene", "Zabranjene rije\u010di i fraze"], ["terminologija", "Kako nazivamo stvari"]]], ["E. Formatiranje", [["format", "Pravila formatiranja"]]], ["F. Osjetljive situacije", [["ne", "Kako ka\u017eemo NE"], ["cijena", "Kako govorimo o cijeni"], ["losevijesti", "Kako javljamo lo\u0161e vijesti"]]], ["G. Primjeri", [["dobri", "Pet primjera DOBROG pisanja"], ["losi", "Tri primjera LO\u0160EG pisanja"]]], ["H. Razlike po kanalu", [["kanali", "\u0160to se mijenja po kanalu"]]]];
+(function(){
+  var out=document.getElementById('out'),bar=document.getElementById('pbar'),lab=document.getElementById('plab');
+  var all=[].slice.call(document.querySelectorAll('[data-f]'));
+  function strip(s){return s.replace(/&#\d+;/g,'').replace(/&[a-z]+;/g,'')}
+  function render(){
+    var t='BRAND VOICE DOCUMENT\n';
+    t+='Kako pišemo — pravila za sve AI asistente i sve ljude u timu\n';
+    t+='Zadnja izmjena: '+new Date().toLocaleDateString('hr-HR')+'\n';
+    t+='\n'+'='.repeat(64)+'\n';
+    t+='\nUPUTA ZA AI: Ovaj dokument je nadređen svim ostalim uputama o stilu.\n';
+    t+='Ako ti neka moja poruka protuslovi ovom dokumentu, pitaj prije nego što napišeš.\n';
+    SPEC.forEach(function(sec){
+      t+='\n\n'+strip(sec[0]).toUpperCase()+'\n'+'-'.repeat(64)+'\n';
+      sec[1].forEach(function(f){
+        var el=document.getElementById(f[0]); var v=el?el.value.trim():'';
+        t+='\n'+strip(f[1])+':\n'+(v?v:'[nije ispunjeno]')+'\n';
+      });
+    });
+    t+='\n\n'+'='.repeat(64)+'\n';
+    t+='Snimi kao brand-voice.txt i uploadaj u Claude Project ili u Knowledge\n';
+    t+='svog Custom GPT-a. Osvježi kad se glas promijeni.\n';
+    out.textContent=t;
+    var done=all.filter(function(e){return e.value.trim().length>0}).length;
+    if(bar)bar.style.width=(done/all.length*100)+'%';
+    if(lab)lab.textContent=done+' od '+all.length+' polja ispunjeno';
+  }
+  all.forEach(function(e){e.addEventListener('input',render)});
+  var c=document.getElementById('clr');
+  if(c)c.addEventListener('click',function(){all.forEach(function(e){e.value=''});render()});
+  render();
+})();
+</script>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude ili ChatGPT &mdash; Sve AI tajne, Modul 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 2</div>
+<h1>Claude ili ChatGPT</h1>
+<p class="lede">Dvadeset dva stvarna poslovna zadatka i jasan odgovor za svaki. Bez navijačkih tabora &mdash; oba alata su odlična, ali nisu odlična u istim stvarima.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>22 zadatka</span><span>3 pravila odluke</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Odluka u deset sekundi</h2><p>Ako ne želiš čitati cijelu tablicu, ova tri pravila pokrivaju gotovo sve.</p></div></div>
+<div class="grid g3">
+  <div class="card hero">
+    <h4>Pravilo 1 &mdash; stack koji već radi</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Ako ti tim ili klijent već plaća i koristi jedan od njih &mdash; to je tvoj alat. Nadograđuj što postoji.</p>
+      <p>Bolji alat koji nitko ne otvara gubi od dobrog alata koji svi imaju u trakama.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Pravilo 2 &mdash; tekst i dokumenti</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Dugački dokumenti, pisanje u tvom glasu, ugovori, analiza, kod, agenti &mdash; <b>Claude</b>.</p>
+      <p>Tu je razlika dovoljno velika da se osjeti prvog dana.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Pravilo 3 &mdash; slike, video, glas</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Vizuali, video i razgovor glasom &mdash; <b>ChatGPT</b>. Claude to ne radi.</p>
+      <p>Ovo nije stvar preferencije, nego onoga što alat ima.</p>
+    </div>
+  </div>
+</div>
+<div class="note em" style="margin-top:16px"><strong>Ako moraš birati samo jedan, a radiš pretežno s tekstom, dokumentima i klijentima:</strong> Claude. Za vizuale onda koristiš besplatni ChatGPT ili Canvu. Obrnuto ne radi &mdash; nema besplatnog načina da nadomjestiš kvalitetnu analizu dokumenata.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Zadatak po zadatak</h2><p>Filtriraj po tome što pobjeđuje ili traži svoj konkretan zadatak.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži svoj zadatak &mdash; npr. ugovor, tablica, slika, agent, prezentacija&hellip;" aria-label="Traži zadatak">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Svi zadaci<span class="n">22</span></button><button class="chip" data-cat="claude" aria-pressed="false">Claude<span class="n">8</span></button><button class="chip" data-cat="chatgpt" aria-pressed="false">ChatGPT<span class="n">4</span></button><button class="chip" data-cat="oba" aria-pressed="false">Oba<span class="n">10</span></button></div>
+</div>
+<article class="item" data-cat="claude" data-search="čitanje i analiza ugovora, natječaja, izvještaja ogroman kontekst (1m tokena) i dosljednije citiranje mjesta u dokumentu. manje sklon prepričavanju umjesto analize. za dokumente preko 100 stranica ubaci ih u project, ne u chat."><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Čitanje i analiza ugovora, natječaja, izvještaja</h3></div><div class="item-badges"><span class="badge em">Claude</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Ogroman kontekst (1M tokena) i dosljednije citiranje mjesta u dokumentu. Manje sklon prepričavanju umjesto analize.</p></div><div class="note"><strong>U praksi:</strong> Za dokumente preko 100 stranica ubaci ih u Project, ne u chat.</div></div></article><article class="item" data-cat="claude" data-search="pisanje u tvom glasu — postovi, newsletteri, ponude bolje drži zadani ton kroz dugi tekst i manje pada u generički korporativni jezik. radi samo ako mu daš brand voice dokument i primjere. bez toga su izjednačeni."><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Pisanje u tvom glasu — postovi, newsletteri, ponude</h3></div><div class="item-badges"><span class="badge em">Claude</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Bolje drži zadani ton kroz dugi tekst i manje pada u generički korporativni jezik.</p></div><div class="note"><strong>U praksi:</strong> Radi samo ako mu daš Brand Voice dokument i primjere. Bez toga su izjednačeni.</div></div></article><article class="item" data-cat="chatgpt" data-search="generiranje slika i vizuala claude ne generira slike. chatgpt generira preko gpt image modela, direktno u razgovoru. ovdje nema dileme — vizuali idu kroz chatgpt ili midjourney."><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Generiranje slika i vizuala</h3></div><div class="item-badges"><span class="badge ru">ChatGPT</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Claude ne generira slike. ChatGPT generira preko GPT Image modela, direktno u razgovoru.</p></div><div class="note"><strong>U praksi:</strong> Ovdje nema dileme — vizuali idu kroz ChatGPT ili Midjourney.</div></div></article><article class="item" data-cat="chatgpt" data-search="generiranje videa claude ne generira video. chatgpt ima video generiranje na višim planovima. za ozbiljniju produkciju vidi modul 10 — heygen i descript."><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Generiranje videa</h3></div><div class="item-badges"><span class="badge ru">ChatGPT</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Claude ne generira video. ChatGPT ima video generiranje na višim planovima.</p></div><div class="note"><strong>U praksi:</strong> Za ozbiljniju produkciju vidi Modul 10 — HeyGen i Descript.</div></div></article><article class="item" data-cat="chatgpt" data-search="razgovor glasom claude nema razvijeni glasovni način rada kao chatgpt. za brainstorming u autu ili šetnji — chatgpt."><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Razgovor glasom</h3></div><div class="item-badges"><span class="badge ru">ChatGPT</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Claude nema razvijeni glasovni način rada kao ChatGPT.</p></div><div class="note"><strong>U praksi:</strong> Za brainstorming u autu ili šetnji — ChatGPT.</div></div></article><article class="item" data-cat="claude" data-search="kodiranje i tehnički zadaci claude je jasno napredniji u kodu, a claude code radi direktno s datotekama na tvom računalu. za poduzetnika bez it pozadine ovo je relevantno kod automatizacija i skriptova za obradu podataka."><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Kodiranje i tehnički zadaci</h3></div><div class="item-badges"><span class="badge em">Claude</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Claude je jasno napredniji u kodu, a Claude Code radi direktno s datotekama na tvom računalu.</p></div><div class="note"><strong>U praksi:</strong> Za poduzetnika bez IT pozadine ovo je relevantno kod automatizacija i skriptova za obradu podataka.</div></div></article><article class="item" data-cat="claude" data-search="rad s datotekama na tvom računalu claude code i cowork rade s tvojim folderima — čitaju, uređuju i pišu datoteke na disku. chatgpt radi s uploadanim datotekama, ali ne s tvojim diskom."><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Rad s datotekama na tvom računalu</h3></div><div class="item-badges"><span class="badge em">Claude</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Claude Code i Cowork rade s tvojim folderima — čitaju, uređuju i pišu datoteke na disku.</p></div><div class="note"><strong>U praksi:</strong> ChatGPT radi s uploadanim datotekama, ali ne s tvojim diskom.</div></div></article><article class="item" data-cat="oba" data-search="istraživanje weba s izvorima oba imaju pretraživanje i istraživački način rada. perplexity je za čisto istraživanje često još precizniji u citiranju. praksa koja radi: perplexity ili chatgpt skupi materijal → claude ga sintetizira u odluku."><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Istraživanje weba s izvorima</h3></div><div class="item-badges"><span class="badge gy">Oba / svejedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Oba imaju pretraživanje i istraživački način rada. Perplexity je za čisto istraživanje često još precizniji u citiranju.</p></div><div class="note"><strong>U praksi:</strong> Praksa koja radi: Perplexity ili ChatGPT skupi materijal → Claude ga sintetizira u odluku.</div></div></article><article class="item" data-cat="oba" data-search="analiza excel i csv tablica chatgpt piše i izvršava python nad tvojom tablicom. claude je bolji u interpretaciji nalaza. aritmetiku pusti alatu koji izvršava kod. nikad ne vjeruj izračunu koji nije pokazan."><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Analiza Excel i CSV tablica</h3></div><div class="item-badges"><span class="badge gy">Oba / svejedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> ChatGPT piše i izvršava Python nad tvojom tablicom. Claude je bolji u interpretaciji nalaza.</p></div><div class="note"><strong>U praksi:</strong> Aritmetiku pusti alatu koji izvršava kod. Nikad ne vjeruj izračunu koji nije pokazan.</div></div></article><article class="item" data-cat="claude" data-search="dugi radni dokument koji dorađuješ tjednima artifacts i projects zajedno drže verziju dokumenta i kontekst kroz mnogo razgovora. za ponude i strategije koje žive mjesecima."><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Dugi radni dokument koji dorađuješ tjednima</h3></div><div class="item-badges"><span class="badge em">Claude</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Artifacts i Projects zajedno drže verziju dokumenta i kontekst kroz mnogo razgovora.</p></div><div class="note"><strong>U praksi:</strong> Za ponude i strategije koje žive mjesecima.</div></div></article><article class="item" data-cat="oba" data-search="asistent za tim, s jednim glasom za sve chatgpt custom gpt dijeliš linkom i radi u pregledniku. claude project dijeliš unutar tima. odluči po tome gdje tvoj tim već ima račune. dva alata za istu stvar nitko ne koristi."><div class="item-top"><div class="item-id"><span class="num">11</span><h3>Asistent za tim, s jednim glasom za sve</h3></div><div class="item-badges"><span class="badge gy">Oba / svejedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> ChatGPT Custom GPT dijeliš linkom i radi u pregledniku. Claude Project dijeliš unutar tima.</p></div><div class="note"><strong>U praksi:</strong> Odluči po tome gdje tvoj tim već ima račune. Dva alata za istu stvar nitko ne koristi.</div></div></article><article class="item" data-cat="chatgpt" data-search="zadaci koji se izvršavaju sami u zadano vrijeme chatgpt ima scheduled tasks — npr. tjedni pregled vijesti u industriji svaki ponedjeljak. za ozbiljniju automatizaciju ionako ideš na make ili zapier (moduli 7 i 8)."><div class="item-top"><div class="item-id"><span class="num">12</span><h3>Zadaci koji se izvršavaju sami u zadano vrijeme</h3></div><div class="item-badges"><span class="badge ru">ChatGPT</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> ChatGPT ima scheduled tasks — npr. tjedni pregled vijesti u industriji svaki ponedjeljak.</p></div><div class="note"><strong>U praksi:</strong> Za ozbiljniju automatizaciju ionako ideš na Make ili Zapier (Moduli 7 i 8).</div></div></article><article class="item" data-cat="oba" data-search="povezivanje s tvojim alatima (mail, kalendar, crm, drive) oba imaju konektore. koji ti radi ovisi o tome što konkretno koristiš — provjeri prije nego što platiš. claude: settings → customize → connectors. napomena: m365 konektor ne radi s osobnim outlook računom."><div class="item-top"><div class="item-id"><span class="num">13</span><h3>Povezivanje s tvojim alatima (mail, kalendar, CRM, Drive)</h3></div><div class="item-badges"><span class="badge gy">Oba / svejedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Oba imaju konektore. Koji ti radi ovisi o tome što konkretno koristiš — provjeri prije nego što platiš.</p></div><div class="note"><strong>U praksi:</strong> Claude: Settings → Customize → Connectors. Napomena: M365 konektor ne radi s osobnim Outlook računom.</div></div></article><article class="item" data-cat="claude" data-search="gradnja ai agenata claude skills i agentic rad su napredniji, a claude code omogućuje agente koji stvarno nešto rade, ne samo pišu. modul 3 gradi na ovome."><div class="item-top"><div class="item-id"><span class="num">14</span><h3>Gradnja AI agenata</h3></div><div class="item-badges"><span class="badge em">Claude</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Claude Skills i agentic rad su napredniji, a Claude Code omogućuje agente koji stvarno nešto rade, ne samo pišu.</p></div><div class="note"><strong>U praksi:</strong> Modul 3 gradi na ovome.</div></div></article><article class="item" data-cat="oba" data-search="prezentacije ni jedan ne pravi dobar deck sam. oba pišu dobru strukturu i tekst. struktura i tekst u claude ili chatgpt → dizajn u gamma.app (modul 6)."><div class="item-top"><div class="item-id"><span class="num">15</span><h3>Prezentacije</h3></div><div class="item-badges"><span class="badge gy">Oba / svejedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Ni jedan ne pravi dobar deck sam. Oba pišu dobru strukturu i tekst.</p></div><div class="note"><strong>U praksi:</strong> Struktura i tekst u Claude ili ChatGPT → dizajn u Gamma.app (Modul 6).</div></div></article><article class="item" data-cat="oba" data-search="prevođenje i lokalizacija oba su vrlo dobra na hrvatskom. za marketinški tekst uvijek zatraži dvije verzije i odaberi — prijevod nije lokalizacija."><div class="item-top"><div class="item-id"><span class="num">16</span><h3>Prevođenje i lokalizacija</h3></div><div class="item-badges"><span class="badge gy">Oba / svejedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Oba su vrlo dobra na hrvatskom.</p></div><div class="note"><strong>U praksi:</strong> Za marketinški tekst uvijek zatraži dvije verzije i odaberi — prijevod nije lokalizacija.</div></div></article><article class="item" data-cat="claude" data-search="sažimanje email threadova i sastanaka bolje razdvaja odlučeno od razgovaranog i dosljednije izvlači zadatke s nositeljima. kombiniraj s promptom br. 8 iz system prompt libraryja."><div class="item-top"><div class="item-id"><span class="num">17</span><h3>Sažimanje email threadova i sastanaka</h3></div><div class="item-badges"><span class="badge em">Claude</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Bolje razdvaja odlučeno od razgovaranog i dosljednije izvlači zadatke s nositeljima.</p></div><div class="note"><strong>U praksi:</strong> Kombiniraj s promptom br. 8 iz System Prompt Libraryja.</div></div></article><article class="item" data-cat="oba" data-search="brzi kratki zadaci u toku dana svejedno. koristi onaj koji ti je otvoren. nemoj gubiti vrijeme na odluku za zadatak od 30 sekundi."><div class="item-top"><div class="item-id"><span class="num">18</span><h3>Brzi kratki zadaci u toku dana</h3></div><div class="item-badges"><span class="badge gy">Oba / svejedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Svejedno. Koristi onaj koji ti je otvoren.</p></div><div class="note"><strong>U praksi:</strong> Nemoj gubiti vrijeme na odluku za zadatak od 30 sekundi.</div></div></article><article class="item" data-cat="oba" data-search="osjetljivi poslovni podaci oba imaju plaćene planove s isključenim treniranjem na tvojim podacima. pitanje nije alat, nego plan i postavke. detalji su u ai security cheat sheetu iz modula 0. besplatni planovi — nikad za klijentske podatke."><div class="item-top"><div class="item-id"><span class="num">19</span><h3>Osjetljivi poslovni podaci</h3></div><div class="item-badges"><span class="badge gy">Oba / svejedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Oba imaju plaćene planove s isključenim treniranjem na tvojim podacima. Pitanje nije alat, nego plan i postavke.</p></div><div class="note"><strong>U praksi:</strong> Detalji su u AI Security Cheat Sheetu iz Modula 0. Besplatni planovi — nikad za klijentske podatke.</div></div></article><article class="item" data-cat="claude" data-search="kreativno pisanje i priče manje klišeja i bolji osjećaj za ritam rečenice. subjektivno — probaj isti zadatak u oba i vidi što ti zvuči bolje."><div class="item-top"><div class="item-id"><span class="num">20</span><h3>Kreativno pisanje i priče</h3></div><div class="item-badges"><span class="badge em">Claude</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Manje klišeja i bolji osjećaj za ritam rečenice.</p></div><div class="note"><strong>U praksi:</strong> Subjektivno — probaj isti zadatak u oba i vidi što ti zvuči bolje.</div></div></article><article class="item" data-cat="oba" data-search="matematika i financijski izračuni nijednom ne vjeruj na riječ. oba mogu pogriješiti u dugom izračunu. traži formulu, pa provjeri u excelu. ai interpretira, excel računa."><div class="item-top"><div class="item-id"><span class="num">21</span><h3>Matematika i financijski izračuni</h3></div><div class="item-badges"><span class="badge gy">Oba / svejedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Nijednom ne vjeruj na riječ. Oba mogu pogriješiti u dugom izračunu.</p></div><div class="note"><strong>U praksi:</strong> Traži formulu, pa provjeri u Excelu. AI interpretira, Excel računa.</div></div></article><article class="item" data-cat="oba" data-search="tvoj klijent već koristi jedan od njih tada je odabir već napravljen. alat koji tim već ima i plaća pobjeđuje bolji alat koji nitko ne otvara. ovo pravilo nadjačava cijelu tablicu gore."><div class="item-top"><div class="item-id"><span class="num">22</span><h3>Tvoj klijent već koristi jedan od njih</h3></div><div class="item-badges"><span class="badge gy">Oba / svejedno</span></div></div><div class="item-body"><div class="prose" style="font-size:.95rem"><p><b>Zašto:</b> Tada je odabir već napravljen. Alat koji tim već ima i plaća pobjeđuje bolji alat koji nitko ne otvara.</p></div><div class="note"><strong>U praksi:</strong> Ovo pravilo nadjačava cijelu tablicu gore.</div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi. Probaj kraću riječ.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Kad koristiš oba</h2><p>Najbolji rezultati ne dolaze od odabira alata, nego od lančanja dvaju.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Istraživanje &rarr; odluka</h4>
+    <ol class="steps">
+      <li>Perplexity ili ChatGPT s web pretragom skupi materijal i izvore o temi.</li>
+      <li>Kopiraj sve to u Claude Project.</li>
+      <li>U Claudeu traži sintezu, rizike i preporuku &mdash; s promptom br. 12 ili 13 iz System Prompt Libraryja.</li>
+    </ol>
+    <div class="note">Jedan skuplja, drugi odlučuje. Tražiti od jednog alata oboje daje pola rezultata u obje faze.</div>
+  </div>
+  <div class="card">
+    <h4>Sadržaj &rarr; vizual</h4>
+    <ol class="steps">
+      <li>Claude napiše post ili carousel u tvom glasu, po Brand Voice dokumentu.</li>
+      <li>ChatGPT generira podlogu po promptu iz Vizualnog Prompt Packa (Modul 1) &mdash; bez teksta na slici.</li>
+      <li>Canva spaja: tvoj tekst, tvoj font, tvoj logo.</li>
+    </ol>
+    <div class="note">Tekst i vizual nastaju odvojeno. Zato se i mogu mijenjati odvojeno.</div>
+  </div>
+  <div class="card">
+    <h4>Tablica &rarr; nalaz</h4>
+    <ol class="steps">
+      <li>ChatGPT s analizom podataka izračuna nad tvojim CSV-om i pokaže kod.</li>
+      <li>Rezultate i grafove preneseš u Claude.</li>
+      <li>Claude napiše nalaz, rizike i pitanja za knjigovođu ili tim &mdash; prompt br. 10.</li>
+    </ol>
+    <div class="note ru">Ključne brojeve prije upotrebe provjeri u Excelu. Oba alata mogu pogriješiti u dugom izračunu.</div>
+  </div>
+  <div class="card">
+    <h4>Ručni rad &rarr; automatizacija</h4>
+    <ol class="steps">
+      <li>Prvo isti zadatak dvadeset puta odradi ručno, s promptom.</li>
+      <li>Kad prompt postane stabilan, dokumentiraj ga kao SOP (prompt br. 9).</li>
+      <li>Taj SOP je onda ulaz za Make ili Zapier scenarij &mdash; Moduli 7 i 8.</li>
+    </ol>
+    <div class="note em">Nikad ne automatiziraj proces koji nisi prvo odradio/odradila ručno. Automatizirana greška se ponavlja bez tebe.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Planovi i modeli</h2><p>Stanje na 6. rujna 2026. Nazivi se mijenjaju često &mdash; logika odabira ne.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <div class="item-badges"><h4 style="flex:1 1 auto">Claude</h4><span class="badge em">claude.ai</span></div>
+    <div class="tbl-scroll"><table><thead><tr><th>Model</th><th>Za što</th><th>Kontekst</th></tr></thead><tbody>
+      <tr><td class="k">Fable 5.1</td><td>Najzahtjevnije rezoniranje i dugi agentic rad</td><td>1M</td></tr>
+      <tr class="hl"><td class="k">Opus 5</td><td>Kompleksan rad, agenti, enterprise &mdash; zadana preporuka</td><td>1M</td></tr>
+      <tr><td class="k">Sonnet 5</td><td>Najbolji balans brzine i inteligencije za svakodnevni rad</td><td>1M</td></tr>
+      <tr><td class="k">Haiku 4.5</td><td>Najbrži, za kratke zadatke</td><td>200K</td></tr>
+    </tbody></table></div>
+    <div class="note"><strong>Za poduzetnika:</strong> Sonnet 5 za većinu dana, Opus 5 kad je odluka važna. Kontekst od 1M tokena znači da cijeli natječaj od 300 stranica ide u jedan razgovor.</div>
+  </div>
+  <div class="card">
+    <div class="item-badges"><h4 style="flex:1 1 auto">ChatGPT</h4><span class="badge ru">chatgpt.com</span></div>
+    <div class="tbl-scroll"><table><thead><tr><th>Plan</th><th>Što dobivaš</th></tr></thead><tbody>
+      <tr><td class="k">Free</td><td>GPT-5.6 Luna, ograničeni uploadi i slike. Za isprobavanje.</td></tr>
+      <tr><td class="k">Go</td><td>Više poruka i uploada, dulja memorija.</td></tr>
+      <tr class="hl"><td class="k">Plus</td><td>GPT-6 Astra i GPT-5.6 linija, Projects, Custom GPTs, scheduled tasks, deep research.</td></tr>
+      <tr><td class="k">Pro</td><td>Višestruko veća kvota, maksimalni deep research.</td></tr>
+      <tr><td class="k">Business</td><td>Timski workspace, administracija, kontrola podataka.</td></tr>
+    </tbody></table></div>
+    <div class="note"><strong>Za poduzetnika:</strong> Plus je radna razina &mdash; ispod nje nema Custom GPT-ova ni Projects. Provjeri aktualne cijene na <a href="https://chatgpt.com/pricing" target="_blank" rel="noopener">chatgpt.com/pricing</a>.</div>
+  </div>
+</div>
+<div class="note ru" style="margin-top:16px"><strong>Četvrti alat koji nije u ovoj tablici:</strong> Perplexity. Nije zamjena ni za jedan od ova dva, ali za istraživanje s točnim citiranjem izvora vrijedi svojih 20 dolara &mdash; naročito za tržišne analize i provjeru podataka koje ćeš staviti u ponudu.</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || it.getAttribute('data-search').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':(n>=2&&n<=4?' rezultata':' rezultata'));
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>

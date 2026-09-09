@@ -1,0 +1,1588 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Vault &mdash; Sve AI tajne, Modul 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 1</div>
+<h1>Prompt Vault</h1>
+<p class="lede">50 poslovnih promptova koji su prošli kroz stvarne klijentske projekte. Kopiraj, zamijeni podatke u uglatim zagradama, pošalji. Bez lutanja, bez praznog ekrana.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>50 promptova</span><span>5 kategorija</span><span>ChatGPT &middot; Claude &middot; Perplexity</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Prije nego zalijepiš prvi prompt</h2><p>Tri minute čitanja koje ti štede sat vremena popravljanja outputa.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Anatomija prompta koji radi</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Svaki prompt u ovom dokumentu ima istu skrivenu strukturu. Kad ju prepoznaš, možeš napisati vlastiti za bilo što.</p>
+    </div>
+    <ol class="steps">
+      <li><b>ULOGA</b> &mdash; &bdquo;Ti si moj copywriter za LinkedIn.&ldquo; Dodavanje uloge mijenja kvalitetu odgovora više od bilo čega drugog.</li>
+      <li><b>KONTEKST</b> &mdash; tko si, što radiš, za koga. AI ne zna tvoj biznis dok mu ne kažeš.</li>
+      <li><b>ZADATAK</b> &mdash; jedna jasna stvar. Ne tri.</li>
+      <li><b>FORMAT</b> &mdash; tablica, bullet points, 150 riječi, JSON. Ako ne kažeš, dobivaš zid teksta.</li>
+      <li><b>OGRANIČENJA</b> &mdash; ton, duljina, što <em>ne smije</em> biti u tekstu. Ovdje se dobiva ili gubi bitka.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h4>Tri pravila iteracije</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Prvi output rijetko je zadnji. To nije greška alata &mdash; to je normalan radni tok.</p>
+    </div>
+    <ul class="ticks">
+      <li><b>Ne piši novi prompt, daj feedback.</b> &bdquo;Dobar smjer, ali skrati 30% i izbaci zadnji odlomak.&ldquo; AI već ima kontekst.</li>
+      <li><b>Traži kritiku prije popravka.</b> &bdquo;Navedi 3 slabosti ovog teksta, pa napiši bolju verziju.&ldquo; Dvostruki učinak istog upita.</li>
+      <li><b>Zaustavi se na trećoj rundi.</b> Ako nakon tri iteracije nije dobro, problem je u promptu ili u tome što sam ne znaš što želiš. Vrati se na početak.</li>
+    </ul>
+    <div class="note ru"><strong>Zlatno pravilo:</strong> AI generira, čovjek verificira. Brojeve, citate, zakone, datume i imena provjeri prije nego što išta izađe prema klijentu.</div>
+  </div>
+</div>
+<div class="note em" style="margin-top:16px"><strong>Jedan potez koji štedi najviše:</strong> promptove koje često koristiš ne lijepi svaki put ručno &mdash; pretvori ih u Custom GPT (Modul 1, deliverable 2) ili Claude Project (Modul 2). Onda ne postoji ni copy ni paste.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Biblioteka</h2><p>Traži po ključnoj riječi ili filtriraj po kategoriji. Klik na <em>Kopiraj prompt</em> stavlja cijeli tekst u međuspremnik.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži &mdash; npr. follow-up, ponuda, recenzija, SWOT&hellip;" aria-label="Traži prompt">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Sve<span class="n">50</span></button><button class="chip" data-cat="sadrzaj" aria-pressed="false">Sadržaj<span class="n">12</span></button><button class="chip" data-cat="email" aria-pressed="false">Email<span class="n">9</span></button><button class="chip" data-cat="prodaja" aria-pressed="false">Prodaja<span class="n">10</span></button><button class="chip" data-cat="analiza" aria-pressed="false">Analiza<span class="n">10</span></button><button class="chip" data-cat="cs" aria-pressed="false">Podrška<span class="n">9</span></button></div>
+</div>
+<h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Sadržaj i društvene mreže</h4><article class="item" data-cat="sadrzaj" data-search="linkedin post — thought leadership ti si moj copywriter za linkedin. napiši mi linkedin post na temu: [upiši temu].
+
+kontekst o meni: [tvoje ime, pozicija, industrija, npr. &#x27;ceo konzultantske tvrtke s 10g iskustva u eu projektima&#x27;].
+
+format posta:
+- hook (1-2 rečenice koje zaustavljaju scrollanje)
+- tijelo (3-5 kratkih odlomaka, svaki max 2-3 rečenice)
+- zaključak + cta (pitanje za komentar ili poziv na akciju)
+- bez hashtagova u tekstu (dodaj 3 na kraj)
+
+ton: [profesionalan / humoristično-profesionalan / direktan i bez ukrasa]
+duljina: 150-250 riječi dodaj osobnu priču ili konkretan broj/rezultat u hook — post prolazi 40% bolje ako ima specifičan podatak. primjer: &#x27;izgubio sam klijenta od 50k€ jer nisam napravio ovo.&#x27;" id="p1"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>LinkedIn post — thought leadership</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Ti si moj copywriter za LinkedIn. Napiši mi LinkedIn post na temu: <span class="f">[UPIŠI TEMU</span>].
+
+Kontekst o meni: <span class="f">[Tvoje ime, pozicija, industrija, npr. &#x27;CEO konzultantske tvrtke s 10g iskustva u EU projektima&#x27;</span>].
+
+Format posta:
+- Hook (1-2 rečenice koje zaustavljaju scrollanje)
+- Tijelo (3-5 kratkih odlomaka, svaki max 2-3 rečenice)
+- Zaključak + CTA (pitanje za komentar ili poziv na akciju)
+- Bez hashtagova u tekstu (dodaj 3 na kraj)
+
+Ton: <span class="f">[profesionalan / humoristično-profesionalan / direktan i bez ukrasa</span>]
+Duljina: 150-250 riječi</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Dodaj osobnu priču ili konkretan broj/rezultat u hook — post prolazi 40% bolje ako ima specifičan podatak. Primjer: &#x27;Izgubio sam klijenta od 50k€ jer nisam napravio ovo.&#x27;</div></div></article><article class="item" data-cat="sadrzaj" data-search="linkedin post — case study / rezultat napiši linkedin post koji prikazuje konkretan rezultat mog rada s klijentom.
+
+detalji case study-a:
+- klijent (sektor, veličina — bez naziva): [npr. &#x27;logistička tvrtka s 30 zaposlenih&#x27;]
+- problem koji su imali: [opiši]
+- što smo napravili: [opiši rješenje]
+- rezultat (s brojevima): [npr. &#x27;smanjili administrativni rad za 60%, uštedjeli 12h/tjedan&#x27;]
+- vremenski okvir: [npr. &#x27;6 tjedana&#x27;]
+
+format: before/after struktura. počni s rezultatom (ne s problemom). završi s pitanjem koje potiče komentar.
+ton: samopouzdan, ali ne hvalisav. fokus na klijentov uspjeh, ne moj. uvijek počni s rezultatom (&#x27;klijent je uštedjela 12h tjedno&#x27;) — ne s problemom. mozak ostaje čitati kad vidi outcome, ne setup." id="p2"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>LinkedIn post — case study / rezultat</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši LinkedIn post koji prikazuje konkretan rezultat mog rada s klijentom.
+
+Detalji case study-a:
+- Klijent (sektor, veličina — bez naziva): <span class="f">[npr. &#x27;logistička tvrtka s 30 zaposlenih&#x27;</span>]
+- Problem koji su imali: <span class="f">[OPIŠI</span>]
+- Što smo napravili: <span class="f">[OPIŠI RJEŠENJE</span>]
+- Rezultat (s brojevima): <span class="f">[npr. &#x27;smanjili administrativni rad za 60%, uštedjeli 12h/tjedan&#x27;</span>]
+- Vremenski okvir: <span class="f">[npr. &#x27;6 tjedana&#x27;</span>]
+
+Format: Before/After struktura. Počni s rezultatom (ne s problemom). Završi s pitanjem koje potiče komentar.
+Ton: Samopouzdan, ali ne hvalisav. Fokus na klijentov uspjeh, ne moj.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Uvijek počni s rezultatom (&#x27;Klijent je uštedjela 12h tjedno&#x27;) — ne s problemom. Čitatelj ostaje čitati kad vidi outcome, ne setup.</div></div></article><article class="item" data-cat="sadrzaj" data-search="instagram caption — edukativni post napiši instagram caption za edukativni post na temu: [tema].
+
+moja publika: [opiši ciljnu skupinu, npr. &#x27;vlasnici malih poduzeća 30-45g koji žele digitalizirati poslovanje&#x27;]
+industrija / niche: [tvoja niša]
+
+struktura:
+1. hook (prva rečenica = mora zaustaviti scroll — postavi pitanje ili daj šokantnu izjavu)
+2. vrijednost (3-5 bullet points s konkretnim koracima ili saznanjima)
+3. cta (spremi ovaj post / komentiraj / pošalji nekome kome treba)
+4. hashtagovi: 8-12 hashtagova (mix: 3 velika, 3 srednja niche, 3 micro)
+
+duljina: 150-200 riječi bez hashtagova u hook postavi pitanje na koje je odgovor da — čitatelj automatski ostaje. npr. &#x27;trošiš 2h dnevno na mailove? evo kako to smanjiti na 20 min.&#x27;" id="p3"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Instagram caption — edukativni post</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši Instagram caption za edukativni post na temu: <span class="f">[TEMA</span>].
+
+Moja publika: <span class="f">[Opiši ciljnu skupinu, npr. &#x27;vlasnici malih poduzeća 30-45g koji žele digitalizirati poslovanje&#x27;</span>]
+Industrija / niche: <span class="f">[TVOJA NIŠA</span>]
+
+Struktura:
+1. Hook (prva rečenica = mora zaustaviti scroll — postavi pitanje ili daj šokantnu izjavu)
+2. Vrijednost (3-5 bullet points s konkretnim koracima ili saznanjima)
+3. CTA (spremi ovaj post / komentiraj / pošalji nekome kome treba)
+4. Hashtagovi: 8-12 hashtagova (mix: 3 velika, 3 srednja niche, 3 micro)
+
+Duljina: 150-200 riječi bez hashtagova</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> U hook postavi pitanje na koje je odgovor DA — čitatelj automatski ostaje. Npr. &#x27;Trošiš 2h dnevno na mailove? Evo kako to smanjiti na 20 min.&#x27;</div></div></article><article class="item" data-cat="sadrzaj" data-search="carousel post — 10 slajdova napiši sadržaj za linkedin/instagram carousel na temu: [tema].
+
+moja publika: [opiši]
+cilj carousela: [educirati / prodati / izgraditi autoritet / generirati dm-ove]
+
+za svaki slajd napiši:
+- naslov slajda (max 6 riječi — mora se čitati kao headline)
+- tekst slajda (max 30 riječi — kratko, bold ideje)
+- vizualni prijedlog (što prikazati na slajdu)
+
+struktura:
+slajd 1: hook/naslov koji tjera na &#x27;swipe&#x27;
+slajdovi 2-9: korak-po-korak ili ideje/savjeti
+slajd 10: zaključak + cta (spremi / prati / dm mi)
+
+ukupno: 10 slajdova slajd 1 je najvažniji — mora imati obećanje i intrigu. &#x27;kako sam x postigao za y dana&#x27; ili &#x27;5 grešaka koje te koštaju z&#x27;. koristite kontrast na prvom slajdu." id="p4"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Carousel post — 10 slajdova</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši sadržaj za LinkedIn/Instagram carousel na temu: <span class="f">[TEMA</span>].
+
+Moja publika: <span class="f">[OPIŠI</span>]
+Cilj carousela: <span class="f">[educirati / prodati / izgraditi autoritet / generirati DM-ove</span>]
+
+Za svaki slajd napiši:
+- Naslov slajda (max 6 riječi — mora se čitati kao headline)
+- Tekst slajda (max 30 riječi — kratko, bold ideje)
+- Vizualni prijedlog (što prikazati na slajdu)
+
+Struktura:
+Slajd 1: Hook/naslov koji tjera na &#x27;swipe&#x27;
+Slajdovi 2-9: Korak-po-korak ili ideje/savjeti
+Slajd 10: Zaključak + CTA (spremi / prati / DM mi)
+
+Ukupno: 10 slajdova</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Slajd 1 je najvažniji — mora imati obećanje i intrigu. &#x27;Kako sam X postigao za Y dana&#x27; ili &#x27;5 grešaka koje te koštaju Z&#x27;. Koristite kontrast na prvom slajdu.</div></div></article><article class="item" data-cat="sadrzaj" data-search="youtube shorts / reels script (60 sek) napiši script za 60-sekundni video (youtube shorts / instagram reels) na temu: [tema].
+
+o meni: [pozicija, stručnost, zašto sam relevantan za ovu temu]
+ciljna publika: [opiši]
+
+format scripte:
+- 00:00-00:05: hook (šokantna izjava, kontroverzan stav, ili pitanje)
+- 00:05-00:50: vrijednost (3 ključne točke, svaka max 15 sekundi)
+- 00:50-01:00: cta (što gledatelj treba napraviti — pratiti, komentirati, posjetiti link)
+
+pisanje za video: kratke rečenice (max 10 riječi), govorni jezik, nikakav korporativni ton.
+svaki odlomak = jedna spoken sentence. prvih 3 sekunde su sve. počni in medias res — bez &#x27;hej svima, dobrodošli na moj kanal&#x27;. odmah na stvar. &#x27;evo što nisam znao dok nije bilo prekasno...&#x27;" id="p5"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>YouTube Shorts / Reels script (60 sek)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši script za 60-sekundni video (YouTube Shorts / Instagram Reels) na temu: <span class="f">[TEMA</span>].
+
+O meni: <span class="f">[Pozicija, stručnost, zašto sam relevantan za ovu temu</span>]
+Ciljna publika: <span class="f">[OPIŠI</span>]
+
+Format scripte:
+- 00:00-00:05: HOOK (šokantna izjava, kontroverzan stav, ili pitanje)
+- 00:05-00:50: VRIJEDNOST (3 ključne točke, svaka max 15 sekundi)
+- 00:50-01:00: CTA (što gledatelj treba napraviti — pratiti, komentirati, posjetiti link)
+
+Pisanje za video: kratke rečenice (max 10 riječi), govorni jezik, nikakav korporativni ton.
+Svaki odlomak = jedna spoken sentence.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Prvih 3 sekunde su sve. Počni in medias res — bez &#x27;Hej svima, dobrodošli na moj kanal&#x27;. Odmah na stvar. &#x27;Evo što nisam znao dok nije bilo prekasno...&#x27;</div></div></article><article class="item" data-cat="sadrzaj" data-search="newsletter — uvodni hook napiši uvodni odlomak za moj email newsletter.
+
+tema ovog broja: [tema]
+ime newslettera: [ime]
+moja publika: [opiši pretplatnike — tko su, što ih zanima]
+ton: [formalan / polu-formalan / osoban i direktan]
+
+zahtjevi za uvod:
+- počni s osobnom anegdotom, šokantnom statistikom ili kontroverznim pitanjem
+- max 3 rečenice uvodnog hoooka
+- jasno najavi što će čitatelj dobiti u ovom emailu
+- bez generičnih otvora poput &#x27;dragi čitatelji&#x27; ili &#x27;dobrodošli u novi broj&#x27;
+
+ukupna duljina uvoda: 80-120 riječi zamislite da pišete prijatelju, ne masi pretplatnika. &#x27;prošli tjedan mi se desilo nešto što nisam očekivao...&#x27; — ovako počinju mailovi koje se čitaju." id="p6"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Newsletter — uvodni hook</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Gemini</span></div></div><div class="item-body"><pre class="p">Napiši uvodni odlomak za moj email newsletter.
+
+Tema ovog broja: <span class="f">[TEMA</span>]
+Ime newslettera: <span class="f">[IME</span>]
+Moja publika: <span class="f">[OPIŠI pretplatnike — tko su, što ih zanima</span>]
+Ton: <span class="f">[formalan / polu-formalan / osoban i direktan</span>]
+
+Zahtjevi za uvod:
+- Počni s osobnom anegdotom, šokantnom statistikom ili kontroverznim pitanjem
+- Max 3 rečenice uvodnog hoooka
+- Jasno najavi što će čitatelj dobiti u ovom emailu
+- Bez generičnih otvora poput &#x27;Dragi čitatelji&#x27; ili &#x27;Dobrodošli u novi broj&#x27;
+
+Ukupna duljina uvoda: 80-120 riječi</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Zamislite da pišete prijatelju, ne masi pretplatnika. &#x27;Prošli tjedan mi se desilo nešto što nisam očekivao...&#x27; — ovako počinju mailovi koje se čitaju.</div></div></article><article class="item" data-cat="sadrzaj" data-search="blog post outline (seo optimiziran) kreiraj detaljan outline za seo blog post na temu: [tema / ključna riječ].
+
+kontekst:
+- web stranica / blog za: [tvoja tvrtka, industrija]
+- ciljna publika: [opiši]
+- primarna ključna riječ: [upiši]
+- sekundarne ključne riječi (ako znaš): [upiši ili ostavi prazno]
+
+outline treba sadržavati:
+1. seo naslov (h1) — s ključnom riječju, max 60 znakova
+2. meta opis — 150-160 znakova, s ključnom riječju i cta
+3. uvod (hook + preview sadržaja + ključna riječ u prvoj rečenici)
+4. h2 naslovi (min 5) s opisom što ide pod svaki
+5. h3 poddijeljci gdje je relevantno
+6. zaključak + cta
+7. faq sekcija (5 pitanja za featured snippet) dodaj konkretne podatke ili originalno istraživanje ako možeš — google nagrađuje originalan sadržaj. čak i &#x27;prema našem iskustvu s 50+ klijenata&#x27; je originalan uvid." id="p7"><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Blog post outline (SEO optimiziran)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Perplexity</span></div></div><div class="item-body"><pre class="p">Kreiraj detaljan outline za SEO blog post na temu: <span class="f">[TEMA / KLJUČNA RIJEČ</span>].
+
+Kontekst:
+- Web stranica / blog za: <span class="f">[tvoja tvrtka, industrija</span>]
+- Ciljna publika: <span class="f">[OPIŠI</span>]
+- Primarna ključna riječ: <span class="f">[UPIŠI</span>]
+- Sekundarne ključne riječi (ako znaš): <span class="f">[UPIŠI ili ostavi prazno</span>]
+
+Outline treba sadržavati:
+1. SEO naslov (H1) — s ključnom riječju, max 60 znakova
+2. Meta opis — 150-160 znakova, s ključnom riječju i CTA
+3. Uvod (hook + preview sadržaja + ključna riječ u prvoj rečenici)
+4. H2 naslovi (min 5) s opisom što ide pod svaki
+5. H3 poddijeljci gdje je relevantno
+6. Zaključak + CTA
+7. FAQ sekcija (5 pitanja za featured snippet)</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Dodaj konkretne podatke ili originalno istraživanje ako možeš — Google nagrađuje originalan sadržaj. Čak i &#x27;prema našem iskustvu s 50+ klijenata&#x27; je originalan uvid.</div></div></article><article class="item" data-cat="sadrzaj" data-search="10 ideja za story / reel hook generiraj 10 različitih hook rečenica za instagram story ili reels na temu: [tema].
+
+moja niša / industrija: [upiši]
+ciljana publika: [opiši]
+
+za svaki hook napiši:
+- sam hook (max 1-2 rečenice)
+- tip hooka (pitanje / šok / kontroverza / obećanje / priča / pogreška / statistika)
+- zašto radi (jedna rečenica objašnjenja)
+
+hookovi moraju biti specifični za moju nišu — bez generičnih fraza poput &#x27;ovo moraš znati!&#x27; ili &#x27;nećeš vjerovati!&#x27; testirajte 3-4 različita hooka za isti sadržaj i pratite koji generira više zadržavanja. ai može generirati 10 varijanti — vi a/b testirate." id="p8"><div class="item-top"><div class="item-id"><span class="num">08</span><h3>10 ideja za Story / Reel hook</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Generiraj 10 različitih hook rečenica za Instagram Story ili Reels na temu: <span class="f">[TEMA</span>].
+
+Moja niša / industrija: <span class="f">[UPIŠI</span>]
+Ciljana publika: <span class="f">[OPIŠI</span>]
+
+Za svaki hook napiši:
+- Sam hook (max 1-2 rečenice)
+- Tip hooka (pitanje / šok / kontroverza / obećanje / priča / pogreška / statistika)
+- Zašto radi (jedna rečenica objašnjenja)
+
+Hookovi moraju biti specifični za moju nišu — bez generičnih fraza poput &#x27;Ovo moraš znati!&#x27; ili &#x27;Nećeš vjerovati!&#x27;</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Testirajte 3-4 različita hooka za isti sadržaj i pratite koji generira više zadržavanja. AI može generirati 10 varijanti — vi A/B testirate.</div></div></article><article class="item" data-cat="sadrzaj" data-search="tjedni content plan (7 dana) kreiraj tjedni plan objava za društvene mreže.
+
+moj biznis: [opiši u 2-3 rečenice]
+ciljana publika: [opiši]
+platforme: [linkedin / instagram / facebook — odaberi]
+cilj ovog tjedna: [awareness / leads / prodaja / zajednica]
+
+za svaki dan (pon-pet) kreiraj:
+- tema objave
+- format (post / carousel / reel / story / poll)
+- hook (prva rečenica)
+- ključna poruka (1 rečenica)
+- cta
+- optimalno vrijeme objave
+
+sub i ned: prijedlog ili odmor od objava grupirajte snimanje i pisanje jednom tjedno — stvorite sadržaj za 2 tjedna unaprijed u 2-3h. ai vam pomaže s idejama i draftovima, vi samo uredite i objavite." id="p9"><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Tjedni content plan (7 dana)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Kreiraj tjedni plan objava za društvene mreže.
+
+Moj biznis: <span class="f">[OPIŠI u 2-3 rečenice</span>]
+Ciljana publika: <span class="f">[OPIŠI</span>]
+Platforme: <span class="f">[LinkedIn / Instagram / Facebook — odaberi</span>]
+Cilj ovog tjedna: <span class="f">[Awareness / Leads / Prodaja / Zajednica</span>]
+
+Za svaki dan (Pon-Pet) kreiraj:
+- Tema objave
+- Format (post / carousel / Reel / Story / poll)
+- Hook (prva rečenica)
+- Ključna poruka (1 rečenica)
+- CTA
+- Optimalno vrijeme objave
+
+Sub i Ned: prijedlog ili odmor od objava</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Grupirajte snimanje i pisanje jednom tjedno — stvorite sadržaj za 2 tjedna unaprijed u 2-3h. AI vam pomaže s idejama i draftovima, vi samo uredite i objavite.</div></div></article><article class="item" data-cat="sadrzaj" data-search="facebook post — community engagement napiši facebook post koji generira komentare i reakcije.
+
+tema: [tema]
+moja stranica / zajednica: [opiši kome se obraćaš]
+ton: [topao i osoban / profesionalan / inspirativan]
+
+zahtjevi:
+- počni s osobnim iskustvom ili anegdotom (autentičnost &gt; perfekcija na fb)
+- postavi direktno pitanje na kraju koje tjera na odgovor
+- max 150 riječi
+- bez previše emojija (max 3-4)
+- bez generičnih hashtagova
+
+primjer pitanja za kraj: &#x27;što vi radite kad...?&#x27;, &#x27;koji je bio vaš trenutak kad ste shvatili...?&#x27; facebook algoritam nagrađuje komentare više od likova. pitanje na kraju mora biti dovoljno lako da itko može odgovoriti — ne previše stručno." id="p10"><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Facebook post — community engagement</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Gemini</span></div></div><div class="item-body"><pre class="p">Napiši Facebook post koji generira komentare i reakcije.
+
+Tema: <span class="f">[TEMA</span>]
+Moja stranica / zajednica: <span class="f">[OPIŠI kome se obraćaš</span>]
+Ton: <span class="f">[topao i osoban / profesionalan / inspirativan</span>]
+
+Zahtjevi:
+- Počni s osobnim iskustvom ili anegdotom (autentičnost &gt; perfekcija na FB)
+- Postavi direktno pitanje na kraju koje tjera na odgovor
+- Max 150 riječi
+- Bez previše emojija (max 3-4)
+- Bez generičnih hashtagova
+
+Primjer pitanja za kraj: &#x27;Što vi radite kad...?&#x27;, &#x27;Koji je bio vaš trenutak kad ste shvatili...?&#x27;</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Facebook algoritam nagrađuje komentare više od likova. Pitanje na kraju mora biti dovoljno lako da itko može odgovoriti — ne previše stručno.</div></div></article><article class="item" data-cat="sadrzaj" data-search="repurpose: pretvori blog u 5 formata imam ovaj blog post / dugi tekst. pretvori ga u 5 različitih formata za različite platforme:
+
+[zalijepite tekst ovdje]
+
+kreiraj:
+1. linkedin post (200 riječi, thought leadership ton)
+2. instagram caption (120 riječi + 10 hashtagova)
+3. twitter/x thread (5-7 tweetova)
+4. email newsletter odlomak (150 riječi, osoban ton)
+5. 3 ideje za short-form video (hook + 3 ključne točke za svaku ideju)
+
+za svaki format: prilagodi ton i duljinu platformi. isti sadržaj — drugačiji packaging. ovo je najmoćniji content prompts za uštedu vremena. jedan blog post = 5 komada sadržaja = tjedan dana objava. implementirajte jednom tjedno." id="p11"><div class="item-top"><div class="item-id"><span class="num">11</span><h3>Repurpose: pretvori blog u 5 formata</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Imam ovaj blog post / dugi tekst. Pretvori ga u 5 različitih formata za različite platforme:
+
+<span class="f">[ZALIJEPITE TEKST OVDJE</span>]
+
+Kreiraj:
+1. LinkedIn post (200 riječi, thought leadership ton)
+2. Instagram caption (120 riječi + 10 hashtagova)
+3. Twitter/X thread (5-7 tweetova)
+4. Email newsletter odlomak (150 riječi, osoban ton)
+5. 3 ideje za Short-form video (hook + 3 ključne točke za svaku ideju)
+
+Za svaki format: prilagodi ton i duljinu platformi. Isti sadržaj — drugačiji packaging.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ovo je najmoćniji content prompts za uštedu vremena. Jedan blog post = 5 komada sadržaja = tjedan dana objava. Implementirajte jednom tjedno.</div></div></article><article class="item" data-cat="sadrzaj" data-search="godišnji content pillars (temelji sadržaja) pomozi mi definirati moje content pillare za sljedećih 12 mjeseci.
+
+o mom biznisu:
+- što nudim: [upiši]
+- kome: [ciljna publika]
+- što me razlikuje od konkurencije: [upiši]
+- moj cilj s content marketingom: [leads / autoritet / zajednica / prodaja]
+
+na temelju toga:
+1. predloži 4-5 content pillara (tema koje ću konzistentno pokrivati)
+2. za svaki pillar: objasni zašto je relevantan za moju publiku
+3. predloži 5 konkretnih tema/naslova za svaki pillar
+4. preporuči omjer: koliko % sadržaja po pillaru
+
+krajnji cilj: da imam jasnu content strategiju bez lutanja. content pillari su vaš &#x27;brand filter&#x27; — svaka objava treba spadati u jedan od pillara. bez toga content postaje kaotičan i publike ne zna zašto vas prati." id="p12"><div class="item-top"><div class="item-id"><span class="num">12</span><h3>Godišnji content pillars (temelji sadržaja)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Pomozi mi definirati moje content pillare za sljedećih 12 mjeseci.
+
+O mom biznisu:
+- Što nudim: <span class="f">[UPIŠI</span>]
+- Kome: <span class="f">[CILJNA PUBLIKA</span>]
+- Što me razlikuje od konkurencije: <span class="f">[UPIŠI</span>]
+- Moj cilj s content marketingom: <span class="f">[leads / autoritet / zajednica / prodaja</span>]
+
+Na temelju toga:
+1. Predloži 4-5 content pillara (tema koje ću konzistentno pokrivati)
+2. Za svaki pillar: objasni zašto je relevantan za moju publiku
+3. Predloži 5 konkretnih tema/naslova za svaki pillar
+4. Preporuči omjer: koliko % sadržaja po pillaru
+
+Krajnji cilj: da imam jasnu content strategiju bez lutanja.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Content pillari su vaš &#x27;brand filter&#x27; — svaka objava treba spadati u jedan od pillara. Bez toga content postaje kaotičan i publike ne zna zašto vas prati.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Email komunikacija</h4><article class="item" data-cat="email" data-search="hladni email — prvi kontakt napiši hladni email kojim se predstavljam potencijalnom klijentu kojeg ne poznajem.
+
+o meni: [ime, pozicija, tvrtka, jednolinijski opis što radite]
+potencijalni klijent: [industrija/sektor, veličina tvrtke, pozicija primatelja]
+problem koji rješavamo: [konkretni problem koji ovaj klijent vjerojatno ima]
+naš rezultat / dokaz: [1 konkretni primjer rezultata s brojevima, bez naziva klijenta]
+cta: [što tražim — kratki poziv / 15-min razgovor / odgovor na jedno pitanje]
+
+format emaila:
+- subject line: max 7 riječi, bez &#x27;partnerstvo&#x27; i &#x27;suradnja&#x27;
+- tijelo: max 5 rečenica
+- bez uvoda o sebi, odmah na problem
+- jedan cta, ne više hladni emailovi koji govore o klijentu (problemu) a ne o vama — imaju 3x više odgovora. pravilo: 80% teksta o njima, 20% o vama." id="p13"><div class="item-top"><div class="item-id"><span class="num">13</span><h3>Hladni email — prvi kontakt</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši hladni email kojim se predstavljam potencijalnom klijentu kojeg ne poznajem.
+
+O meni: <span class="f">[Ime, pozicija, tvrtka, jednolinijski opis što radite</span>]
+Potencijalni klijent: <span class="f">[Industrija/sektor, veličina tvrtke, pozicija primatelja</span>]
+Problem koji rješavamo: <span class="f">[Konkretni problem koji ovaj klijent vjerojatno ima</span>]
+Naš rezultat / dokaz: <span class="f">[1 konkretni primjer rezultata s brojevima, bez naziva klijenta</span>]
+CTA: <span class="f">[Što tražim — kratki poziv / 15-min razgovor / odgovor na jedno pitanje</span>]
+
+Format emaila:
+- Subject line: max 7 riječi, bez &#x27;partnerstvo&#x27; i &#x27;suradnja&#x27;
+- Tijelo: max 5 rečenica
+- Bez uvoda o sebi, odmah na problem
+- Jedan CTA, ne više</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Hladni emailovi koji govore o KLIJENTU (problemu) a ne o vama — imaju 3x više odgovora. Pravilo: 80% teksta o njima, 20% o vama.</div></div></article><article class="item" data-cat="email" data-search="follow-up nakon slanja ponude (dan 3) napiši kratki follow-up email koji šaljem 3 dana nakon slanja ponude.
+
+kontekst:
+- poslao/la sam ponudu: [naziv usluge / projekta]
+- klijent: [ime, tvrtka]
+- vrijednost ponude: [iznos ili otprilike]
+- nismo se čuli od slanja
+
+format emaila:
+- subject: neka referira na originalni email (npr. &#x27;re: ponuda za [projekt]&#x27;)
+- max 3 rečenice
+- ton: lagano, bez pritiska, s jednim konkretnim pitanjem
+- ne ponavljaj sadržaj ponude
+- završi s laganim cta (&#x27;imate li možda pitanja?&#x27; ili &#x27;odgovara li vam kratki poziv ove/idućeg tjedna?&#x27;) kratkoća je moć u follow-up emailovima. dugi follow-up = pritisak. kratki follow-up = pažnja. 3 rečenice maksimum." id="p14"><div class="item-top"><div class="item-id"><span class="num">14</span><h3>Follow-up nakon slanja ponude (dan 3)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Copilot</span></div></div><div class="item-body"><pre class="p">Napiši kratki follow-up email koji šaljem 3 dana nakon slanja ponude.
+
+Kontekst:
+- Poslao/la sam ponudu: <span class="f">[Naziv usluge / projekta</span>]
+- Klijent: <span class="f">[Ime, tvrtka</span>]
+- Vrijednost ponude: <span class="f">[IZNOS ili otprilike</span>]
+- Nismo se čuli od slanja
+
+Format emaila:
+- Subject: neka referira na originalni email (npr. &#x27;Re: Ponuda za <span class="f">[projekt</span>]&#x27;)
+- Max 3 rečenice
+- Ton: lagano, bez pritiska, s jednim konkretnim pitanjem
+- Ne ponavljaj sadržaj ponude
+- Završi s laganim CTA (&#x27;Imate li možda pitanja?&#x27; ili &#x27;Odgovara li vam kratki poziv ove/idućeg tjedna?&#x27;)</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Kratkoća je moć u follow-up emailovima. Dugi follow-up = pritisak. Kratki follow-up = pažnja. 3 rečenice maksimum.</div></div></article><article class="item" data-cat="email" data-search="follow-up ponuda — dan 7 (zadnji) napiši zadnji follow-up email koji šaljem 7 dana nakon ponude, bez odgovora.
+
+kontekst:
+- radi se o: [projekt/usluga]
+- klijent: [ime]
+- ovo je moj zadnji follow-up za ovu ponudu
+
+format emaila:
+- subject: lagano naznačuje da je ovo zadnji pokušaj (bez agresivnog tona)
+- max 4 rečenice
+- jasno daj do znanja da zatvaramo ovu temu, ali bez zamjeranja
+- ostavi &#x27;vrata otvorena&#x27; za budućnost
+- ton: profesionalan, bez ljutnje, pomalo human (&#x27;razumijem da možda nije pravi trenutak...&#x27;)
+- ne traži razlog — samo lagano zatvori breakup email koji nije agresivan paradoksalno dobiva najviše odgovora. klijent se osjeća slobodnim reći &#x27;ne&#x27; i često se tada javi s pravim razlogom." id="p15"><div class="item-top"><div class="item-id"><span class="num">15</span><h3>Follow-up ponuda — dan 7 (zadnji)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši zadnji follow-up email koji šaljem 7 dana nakon ponude, bez odgovora.
+
+Kontekst:
+- Radi se o: <span class="f">[projekt/usluga</span>]
+- Klijent: <span class="f">[Ime</span>]
+- Ovo je moj zadnji follow-up za ovu ponudu
+
+Format emaila:
+- Subject: lagano naznačuje da je ovo zadnji pokušaj (bez agresivnog tona)
+- Max 4 rečenice
+- Jasno daj do znanja da zatvaramo ovu temu, ali bez zamjeranja
+- Ostavi &#x27;vrata otvorena&#x27; za budućnost
+- Ton: profesionalan, bez ljutnje, pomalo human (&#x27;Razumijem da možda nije pravi trenutak...&#x27;)
+- Ne traži razlog — samo lagano zatvori</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Breakup email koji nije agresivan paradoksalno dobiva najviše odgovora. Klijent se osjeća slobodnim reći &#x27;ne&#x27; i često se tada javi s pravim razlogom.</div></div></article><article class="item" data-cat="email" data-search="email zahvale nakon poslovnog sastanka napiši email zahvale koji šaljem sat-dva nakon poslovnog sastanka.
+
+detalji sastanka:
+- s kim sam se sastao/la: [ime, pozicija, tvrtka]
+- tema sastanka: [o čemu smo razgovarali]
+- ključni dogovor / next step: [što smo zaključili, što tko treba napraviti]
+- rok za next step: [datum/tjedan]
+
+email treba sadržavati:
+1. kratku zahvalu (1 rečenica, specifična za razgovor — ne generična)
+2. sažetak 2-3 ključnih točaka razgovora (bullet points)
+3. jasno definirani next steps s imenima i rokovima
+4. moj sljedeći korak i kad ga šaljem/radim šaljite ovaj email najkasnije 2 sata nakon sastanka dok je sve svježe. klijent ga dobiva i misli &#x27;wow, ovaj/ova je organiziran/a&#x27;. to je vaš differentiator." id="p16"><div class="item-top"><div class="item-id"><span class="num">16</span><h3>Email zahvale nakon poslovnog sastanka</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Copilot / Claude</span></div></div><div class="item-body"><pre class="p">Napiši email zahvale koji šaljem sat-dva nakon poslovnog sastanka.
+
+Detalji sastanka:
+- S kim sam se sastao/la: <span class="f">[Ime, pozicija, tvrtka</span>]
+- Tema sastanka: <span class="f">[O čemu smo razgovarali</span>]
+- Ključni dogovor / next step: <span class="f">[Što smo zaključili, što tko treba napraviti</span>]
+- Rok za next step: <span class="f">[Datum/tjedan</span>]
+
+Email treba sadržavati:
+1. Kratku zahvalu (1 rečenica, specifična za razgovor — ne generična)
+2. Sažetak 2-3 ključnih točaka razgovora (bullet points)
+3. Jasno definirani next steps s imenima i rokovima
+4. Moj sljedeći korak i kad ga šaljem/radim</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Šaljite ovaj email najkasnije 2 sata nakon sastanka dok je sve svježe. Klijent ga dobiva i misli &#x27;wow, ovaj/ova je organiziran/a&#x27;. To je vaš differentiator.</div></div></article><article class="item" data-cat="email" data-search="email podsjetnik za neplaćeni račun (nježan) napiši email podsjetnik za neplaćeni račun.
+
+detalji:
+- klijent: [ime/tvrtka]
+- broj računa: [broj]
+- iznos: [iznos]
+- datum dospijeća: [datum]
+- koliko dana kasni: [x dana]
+- naš odnos s klijentom: [dugogodiš. klijent / novi klijent]
+
+format:
+- ton: prijatno podsjetiti, ne optužiti — greška se može desiti
+- subject: neutralan, ne alarmiran
+- max 4 rečenice
+- uključi podatke za plaćanje (iban, poziv na broj) ili naznači gdje ih mogu naći
+- cta: potvrda primitka emaila ili informacija o plaćanju 70% kasnih plaćanja su rezultat zaboravljivosti, ne loše volje. ton je ključan — agresivan podsjetnik oštećuje odnos za budući posao." id="p17"><div class="item-top"><div class="item-id"><span class="num">17</span><h3>Email podsjetnik za neplaćeni račun (nježan)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Copilot</span></div></div><div class="item-body"><pre class="p">Napiši email podsjetnik za neplaćeni račun.
+
+Detalji:
+- Klijent: <span class="f">[Ime/Tvrtka</span>]
+- Broj računa: <span class="f">[BROJ</span>]
+- Iznos: <span class="f">[IZNOS</span>]
+- Datum dospijeća: <span class="f">[DATUM</span>]
+- Koliko dana kasni: <span class="f">[X dana</span>]
+- Naš odnos s klijentom: <span class="f">[dugogodiš. klijent / novi klijent</span>]
+
+Format:
+- Ton: prijatno podsjetiti, ne optužiti — greška se može desiti
+- Subject: neutralan, ne alarmiran
+- Max 4 rečenice
+- Uključi podatke za plaćanje (IBAN, poziv na broj) ili naznači gdje ih mogu naći
+- CTA: potvrda primitka emaila ili informacija o plaćanju</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> 70% kasnih plaćanja su rezultat zaboravljivosti, ne loše volje. Ton je ključan — agresivan podsjetnik oštećuje odnos za budući posao.</div></div></article><article class="item" data-cat="email" data-search="email opomena za neplaćeni račun (čvrst) napiši čvršću opomenu za neplaćeni račun koji kasni više od [x dana/tjedana].
+
+detalji:
+- klijent: [ime/tvrtka]
+- broj računa: [broj], iznos: [iznos]
+- slao/la sam već [broj] podsjetnika: [datumi]
+- naredni korak ako se ne plati: [raskid suradnje / pravni koraci / agencija za naplatu]
+
+format:
+- ton: profesionalan, čvrst, bez emocija — poslovni jezik
+- naznači posljedice bez prijetnje
+- daj konkretan rok za plaćanje (najkasnije do [datum])
+- ponudi mogućnost razgovora ako postoji problem s plaćanjem
+- max 6 rečenica koristite pasivnu konstrukciju za prijetnje: &#x27;bit ćemo primorani...&#x27; zvuči manje agresivno od &#x27;moramo vas...&#x27; ali ima isti efekt." id="p18"><div class="item-top"><div class="item-id"><span class="num">18</span><h3>Email opomena za neplaćeni račun (čvrst)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši čvršću opomenu za neplaćeni račun koji kasni više od <span class="f">[X dana/tjedana</span>].
+
+Detalji:
+- Klijent: <span class="f">[Ime/Tvrtka</span>]
+- Broj računa: <span class="f">[BROJ</span>], iznos: <span class="f">[IZNOS</span>]
+- Slao/la sam već <span class="f">[BROJ</span>] podsjetnika: <span class="f">[Datumi</span>]
+- Naredni korak ako se ne plati: <span class="f">[raskid suradnje / pravni koraci / agencija za naplatu</span>]
+
+Format:
+- Ton: profesionalan, čvrst, bez emocija — poslovni jezik
+- Naznači posljedice bez prijetnje
+- Daj konkretan rok za plaćanje (najkasnije do <span class="f">[DATUM</span>])
+- Ponudi mogućnost razgovora ako postoji problem s plaćanjem
+- Max 6 rečenica</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Koristite pasivnu konstrukciju za prijetnje: &#x27;Bit ćemo primorani...&#x27; zvuči manje agresivno od &#x27;Moramo vas...&#x27; ali ima isti efekt.</div></div></article><article class="item" data-cat="email" data-search="email za traženje preporuke od klijenta napiši email kojim tražim pisanu preporuku / testimonial od zadovoljnog klijenta.
+
+kontekst:
+- klijent: [ime, pozicija, tvrtka]
+- što smo radili zajedno: [projekt/usluga, period]
+- rezultat: [konkretni outcome, ako postoji]
+- gdje ću koristiti preporuku: [web stranica / linkedin / prodajni materijali]
+
+email treba:
+- personaliziran hook koji pokazuje da pamtim specifičan detalj suradnje
+- jasno objašnjenje što tražim (pisana preporuka ili linkedin recommendation)
+- vodilice / pitanja koja im olakšavaju pisanje (3 pitanja)
+- alternativa: kratki poziv na 15 min ako radije govore
+- max 5 rečenica + 3 pitanja dajte klijentu 3 konkretna pitanja na koja treba odgovoriti — to smanjuje teret pisanja za 90% i daje vam bolju preporuku nego &#x27;piši što hoćeš&#x27;." id="p19"><div class="item-top"><div class="item-id"><span class="num">19</span><h3>Email za traženje preporuke od klijenta</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši email kojim tražim pisanu preporuku / testimonial od zadovoljnog klijenta.
+
+Kontekst:
+- Klijent: <span class="f">[Ime, pozicija, tvrtka</span>]
+- Što smo radili zajedno: <span class="f">[projekt/usluga, period</span>]
+- Rezultat: <span class="f">[konkretni outcome, ako postoji</span>]
+- Gdje ću koristiti preporuku: <span class="f">[web stranica / LinkedIn / prodajni materijali</span>]
+
+Email treba:
+- Personaliziran hook koji pokazuje da pamtim specifičan detalj suradnje
+- Jasno objašnjenje što tražim (pisana preporuka ili LinkedIn recommendation)
+- Vodilice / pitanja koja im olakšavaju pisanje (3 pitanja)
+- Alternativa: kratki poziv na 15 min ako radije govore
+- Max 5 rečenica + 3 pitanja</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Dajte klijentu 3 konkretna pitanja na koja treba odgovoriti — to smanjuje teret pisanja za 90% i daje vam bolju preporuku nego &#x27;piši što hoćeš&#x27;.</div></div></article><article class="item" data-cat="email" data-search="onboarding email za novog klijenta napiši dobrodošlicu email za novog klijenta koji je upravo potpisao ugovor / kupio uslugu.
+
+detalji:
+- klijent: [ime, tvrtka]
+- usluga koju je kupio: [upiši]
+- što se dešava sljedeće: [kick-off poziv / pristup platformi / slanje materijala]
+- datum sljedećeg koraka: [datum]
+- moji kontakt podaci za pitanja: [email, telefon]
+
+email treba sadržavati:
+1. toplu dobrodošlicu (1 rečenica — specifična, ne generična)
+2. jasno što se dešava u sljedećih 48h i sljedećih 7 dana
+3. što klijent treba pripremiti / dostaviti
+4. moji kontakti za hitna pitanja
+5. ton: uzbuđen, profesionalan, organiziran onboarding email postavlja ton cijele suradnje. organiziranost u prvom emailu = povjerenje klijenta. uključite timeline s datumima — ne samo &#x27;uskoro ćemo...&#x27;" id="p20"><div class="item-top"><div class="item-id"><span class="num">20</span><h3>Onboarding email za novog klijenta</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Copilot</span></div></div><div class="item-body"><pre class="p">Napiši dobrodošlicu email za novog klijenta koji je upravo potpisao ugovor / kupio uslugu.
+
+Detalji:
+- Klijent: <span class="f">[Ime, tvrtka</span>]
+- Usluga koju je kupio: <span class="f">[UPIŠI</span>]
+- Što se dešava sljedeće: <span class="f">[Kick-off poziv / pristup platformi / slanje materijala</span>]
+- Datum sljedećeg koraka: <span class="f">[DATUM</span>]
+- Moji kontakt podaci za pitanja: <span class="f">[EMAIL, TELEFON</span>]
+
+Email treba sadržavati:
+1. Toplu dobrodošlicu (1 rečenica — specifična, ne generična)
+2. Jasno što se dešava u sljedećih 48h i sljedećih 7 dana
+3. Što klijent treba pripremiti / dostaviti
+4. Moji kontakti za hitna pitanja
+5. Ton: uzbuđen, profesionalan, organiziran</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Onboarding email postavlja ton cijele suradnje. Organiziranost u prvom emailu = povjerenje klijenta. Uključite timeline s datumima — ne samo &#x27;uskoro ćemo...&#x27;</div></div></article><article class="item" data-cat="email" data-search="re-engagement email za stare klijente napiši email kojim se javljam starom klijentu s kojim nismo surađivali [x mjeseci/godina].
+
+kontekst:
+- klijent: [ime, tvrtka]
+- posljednja suradnja: [što smo radili, otprilike kada]
+- razlog javljanja: [novo što nudimo / relevantna promjena u tržištu / godišnjica / sezona]
+- što nudim: [nova usluga / posavjetovanje / besplatan audit]
+
+format:
+- ton: topao, kao da se javljaš poznaniku — ne prodajni
+- referenciraj konkretni detalj prošle suradnje (pokazuje da se sjećaš)
+- ponudi vrijednost odmah (ne tražiš sastanak — daješ nešto)
+- lagani cta: kratki razgovor ili besplatni resurs
+- max 5 rečenica stari klijenti konvertiraju 5-7x bolje od hladnih leadova. javljajte se svakih 6-12 mjeseci — ali uvijek s razlogom (ne &#x27;samo da vidim jeste li dobro&#x27;)." id="p21"><div class="item-top"><div class="item-id"><span class="num">21</span><h3>Re-engagement email za stare klijente</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši email kojim se javljam starom klijentu s kojim nismo surađivali <span class="f">[X MJESECI/GODINA</span>].
+
+Kontekst:
+- Klijent: <span class="f">[Ime, tvrtka</span>]
+- Posljednja suradnja: <span class="f">[Što smo radili, otprilike kada</span>]
+- Razlog javljanja: <span class="f">[Novo što nudimo / relevantna promjena u tržištu / godišnjica / sezona</span>]
+- Što nudim: <span class="f">[Nova usluga / posavjetovanje / besplatan audit</span>]
+
+Format:
+- Ton: topao, kao da se javljaš poznaniku — ne prodajni
+- Referenciraj konkretni detalj prošle suradnje (pokazuje da se sjećaš)
+- Ponudi vrijednost odmah (ne tražiš sastanak — daješ nešto)
+- Lagani CTA: kratki razgovor ili besplatni resurs
+- Max 5 rečenica</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Stari klijenti konvertiraju 5-7x bolje od hladnih leadova. Javljajte se svakih 6-12 mjeseci — ali uvijek s razlogom (ne &#x27;samo da vidim jeste li dobro&#x27;).</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Prodaja i bizdev</h4><article class="item" data-cat="prodaja" data-search="ponuda za konzultantske / profesionalne usluge kreiraj strukturu poslovne ponude za sljedeće:
+
+klijent: [ime, tvrtka, sektor]
+naša usluga: [naziv i opis]
+trajanje: [tjedni/mjeseci]
+cijena: [iznos ili range]
+ključni problemi klijenta koje rješavamo: [upiši 2-3]
+naš pristup / metodologija: [upiši]
+3 konkretna ishoda/rezultata koje obećavamo: [upiši]
+reference: [1-2 slična projekta bez naziva]
+
+kreiraj ponudu s ovim sekcijama:
+1. executive summary (zašto mi, zašto sada — max 3 rečenice)
+2. razumijevanje situacije klijenta
+3. naš pristup i metodologija
+4. opseg rada (deliverables)
+5. timeline
+6. investicija i uvjeti plaćanja
+7. sljedeći korak executive summary čita 90% primatelja, ostatak ponude samo 40%. uložite 50% energije u prve 3 rečenice. one moraju pokazati da razumijete njihov problem." id="p22"><div class="item-top"><div class="item-id"><span class="num">22</span><h3>Ponuda za konzultantske / profesionalne usluge</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Kreiraj strukturu poslovne ponude za sljedeće:
+
+Klijent: <span class="f">[Ime, tvrtka, sektor</span>]
+Naša usluga: <span class="f">[NAZIV I OPIS</span>]
+Trajanje: <span class="f">[Tjedni/Mjeseci</span>]
+Cijena: <span class="f">[IZNOS ili range</span>]
+Ključni problemi klijenta koje rješavamo: <span class="f">[UPIŠI 2-3</span>]
+Naš pristup / metodologija: <span class="f">[UPIŠI</span>]
+3 konkretna ishoda/rezultata koje obećavamo: <span class="f">[UPIŠI</span>]
+Reference: <span class="f">[1-2 slična projekta bez naziva</span>]
+
+Kreiraj ponudu s ovim sekcijama:
+1. Executive Summary (zašto mi, zašto sada — max 3 rečenice)
+2. Razumijevanje situacije klijenta
+3. Naš pristup i metodologija
+4. Opseg rada (deliverables)
+5. Timeline
+6. Investicija i uvjeti plaćanja
+7. Sljedeći korak</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Executive Summary čita 90% primatelja, ostatak ponude samo 40%. Uložite 50% energije u prve 3 rečenice. One moraju pokazati da razumijete njihov problem.</div></div></article><article class="item" data-cat="prodaja" data-search="linkedin dm — hladni sales outreach napiši kratku linkedin poruku kojom se obraćam potencijalnom klijentu kojeg ne poznajem.
+
+o kome se radi: [ime, pozicija, tvrtka — pogledaj linkedin profil]
+moj cilj: [zakazati kratki razgovor / podijeliti resurs / dobiti odgovor]
+zašto im pišem (specifičan razlog vezan za njih): [nedavni post / promjena u tvrtki / industrija / zajednička veza]
+vrijednost koju mogu donijeti: [konkretno, 1 rečenica]
+
+format poruke:
+- max 3-4 rečenice
+- počni s njima (ne sa sobom)
+- bez &#x27;drago mi je kontaktirati vas&#x27; i bez copy-paste tona
+- jedan konkretan cta (ne više)
+- bez emojija u poslovnom dm-u personalizacija je sve. ako imaš 30 sekundi za istraživanje profila — uloži ih. jedna specifična referenca (&#x27;vidio sam vaš post o automatizaciji...&#x27;) = 3x više odgovora." id="p23"><div class="item-top"><div class="item-id"><span class="num">23</span><h3>LinkedIn DM — hladni sales outreach</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši kratku LinkedIn poruku kojom se obraćam potencijalnom klijentu kojeg ne poznajem.
+
+O kome se radi: <span class="f">[Ime, pozicija, tvrtka — pogledaj LinkedIn profil</span>]
+Moj cilj: <span class="f">[Zakazati kratki razgovor / podijeliti resurs / dobiti odgovor</span>]
+Zašto im pišem (specifičan razlog vezan za njih): <span class="f">[Nedavni post / promjena u tvrtki / industrija / zajednička veza</span>]
+Vrijednost koju mogu donijeti: <span class="f">[Konkretno, 1 rečenica</span>]
+
+Format poruke:
+- Max 3-4 rečenice
+- Počni s njima (ne sa sobom)
+- Bez &#x27;Drago mi je kontaktirati Vas&#x27; i bez copy-paste tona
+- Jedan konkretan CTA (ne više)
+- Bez emojija u poslovnom DM-u</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Personalizacija je sve. Ako imaš 30 sekundi za istraživanje profila — uloži ih. Jedna specifična referenca (&#x27;Vidio sam vaš post o automatizaciji...&#x27;) = 3x više odgovora.</div></div></article><article class="item" data-cat="prodaja" data-search="odgovor na prigovor: &#x27;preskupo je&#x27; pomozi mi formulirati odgovor na prigovor klijenta koji kaže da je naša ponuda preskupa.
+
+kontekst:
+- naša usluga: [naziv i kratki opis]
+- cijena: [iznos]
+- što klijent dobiva: [ključne koristi — max 3]
+- što je alternativa (ako ne uzme nas): [što inače radi ili gdje ide]
+- konkretni roi: [ako imaš — npr. &#x27;štedi 10h tjedno = x€ mjesečno&#x27;]
+
+napiši:
+1. odgovor koji validira prigovor bez pada cijene
+2. odgovor koji preusmjeri na vrijednost, ne na cijenu
+3. odgovor koji ponudi alternativu (manji opseg / plaćanje na rate)
+4. pitanje koje otvori razgovor o stvarnom razlogu prigovor na cijenu = prigovor na vrijednost. nikad ne spuštajte cijenu odmah. prvo saznajte s čim uspoređuju — možda se uspoređuju s rješenjem koje nije ekvivalent." id="p24"><div class="item-top"><div class="item-id"><span class="num">24</span><h3>Odgovor na prigovor: &#x27;Preskupo je&#x27;</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Pomozi mi formulirati odgovor na prigovor klijenta koji kaže da je naša ponuda preskupa.
+
+Kontekst:
+- Naša usluga: <span class="f">[NAZIV i kratki opis</span>]
+- Cijena: <span class="f">[IZNOS</span>]
+- Što klijent dobiva: <span class="f">[Ključne koristi — max 3</span>]
+- Što je alternativa (ako ne uzme nas): <span class="f">[Što inače radi ili gdje ide</span>]
+- Konkretni ROI: <span class="f">[Ako imaš — npr. &#x27;štedi 10h tjedno = X€ mjesečno&#x27;</span>]
+
+Napiši:
+1. Odgovor koji validira prigovor bez pada cijene
+2. Odgovor koji preusmjeri na vrijednost, ne na cijenu
+3. Odgovor koji ponudi alternativu (manji opseg / plaćanje na rate)
+4. Pitanje koje otvori razgovor o stvarnom razlogu</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Prigovor na cijenu = prigovor na vrijednost. Nikad ne spuštajte cijenu odmah. Prvo saznajte s čim uspoređuju — možda se uspoređuju s rješenjem koje nije ekvivalent.</div></div></article><article class="item" data-cat="prodaja" data-search="odgovor na prigovor: &#x27;moram se posavjetovati&#x27; napiši odgovor na situaciju gdje potencijalni klijent kaže &#x27;moram se posavjetovati s [partner/supružnik/tim/odbor]&#x27;.
+
+naša usluga: [naziv]
+kontekst razgovora: [gdje smo u prodajnom procesu — početak / kraj / pred potpisom]
+
+kreiraj:
+1. odgovor koji poštuje odluku ali ostaje u razgovoru
+2. pitanje koje identificira prave decision-makere
+3. prijedlog: uključiti decision-makera u sljedeći razgovor
+4. kako se osigurati da naš &#x27;champion&#x27; može dobro prezentirati ponudu internom odboru (leave-behind material)
+5. dogovor o konkretnom roku za odluku &#x27;moram se posavjetovati&#x27; je najčešće pristojni način da se kaže &#x27;nisam siguran&#x27;. cilj: saznati je li to pravi prigovor i tko su decision-makers." id="p25"><div class="item-top"><div class="item-id"><span class="num">25</span><h3>Odgovor na prigovor: &#x27;Moram se posavjetovati&#x27;</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši odgovor na situaciju gdje potencijalni klijent kaže &#x27;Moram se posavjetovati s <span class="f">[partner/supružnik/tim/odbor</span>]&#x27;.
+
+Naša usluga: <span class="f">[NAZIV</span>]
+Kontekst razgovora: <span class="f">[Gdje smo u prodajnom procesu — početak / kraj / pred potpisom</span>]
+
+Kreiraj:
+1. Odgovor koji poštuje odluku ali ostaje u razgovoru
+2. Pitanje koje identificira prave decision-makere
+3. Prijedlog: uključiti decision-makera u sljedeći razgovor
+4. Kako se osigurati da naš &#x27;champion&#x27; može dobro prezentirati ponudu internom odboru (leave-behind material)
+5. Dogovor o konkretnom roku za odluku</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> &#x27;Moram se posavjetovati&#x27; je najčešće pristojni način da se kaže &#x27;nisam siguran&#x27;. Cilj: saznati je li to pravi prigovor i tko su decision-makers.</div></div></article><article class="item" data-cat="prodaja" data-search="odgovor na prigovor: &#x27;nemam vremena sada&#x27; napiši odgovor kad potencijalni klijent kaže &#x27;sada nemam vremena / nije pravi trenutak&#x27;.
+
+kontekst:
+- naša usluga / rješenje: [upiši]
+- što klijent propušta ako čeka: [konkretna posljedica čekanja — opcijalno]
+
+kreiraj 3 različita odgovora:
+1. odgovor koji čeka — ali &#x27;parkira&#x27; interes s konkretnim rokom
+2. odgovor koji pokazuje da naše rješenje štedi vrijeme (ne oduzima)
+3. odgovor koji identificira je li &#x27;nema vremena&#x27; pravi prigovor ili izgovor
+
+plus: predloži micro cta koji ne zahtijeva puno vremena (5-min razgovor / async video / kratak email s 3 pitanja) ako rješavate problem nedostatka vremena, &#x27;nemam vremena&#x27; je kontradikcija. pokažite roi vremena: &#x27;ovo vam oduzme 30 min sada, a vrati 5h tjedno.&#x27;" id="p26"><div class="item-top"><div class="item-id"><span class="num">26</span><h3>Odgovor na prigovor: &#x27;Nemam vremena sada&#x27;</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši odgovor kad potencijalni klijent kaže &#x27;Sada nemam vremena / nije pravi trenutak&#x27;.
+
+Kontekst:
+- Naša usluga / rješenje: <span class="f">[UPIŠI</span>]
+- Što klijent propušta ako čeka: <span class="f">[Konkretna posljedica čekanja — opcijalno</span>]
+
+Kreiraj 3 različita odgovora:
+1. Odgovor koji čeka — ali &#x27;parkira&#x27; interes s konkretnim rokom
+2. Odgovor koji pokazuje da naše rješenje ŠTEDI vrijeme (ne oduzima)
+3. Odgovor koji identificira je li &#x27;nema vremena&#x27; pravi prigovor ili izgovor
+
+Plus: predloži micro CTA koji ne zahtijeva puno vremena (5-min razgovor / async video / kratak email s 3 pitanja)</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ako rješavate problem nedostatka vremena, &#x27;nemam vremena&#x27; je kontradikcija. Pokažite ROI vremena: &#x27;Ovo vam oduzme 30 min sada, a vrati 5h tjedno.&#x27;</div></div></article><article class="item" data-cat="prodaja" data-search="pitch za partnerstvo / suradnju napiši pitch email ili poruku za potencijalnog partnera s kojim bih volio/la uspostaviti suradnju.
+
+o nama: [tvrtka, što radimo, veličina, tko nam je klijent]
+partner kojeg ciljam: [tvrtka/osoba, što rade, zašto su relevantni]
+tip suradnje koji predlažem: [referral / white-label / co-marketing / zajednički projekt]
+vrijednost za njih: [što konkretno dobivaju — budite specifični]
+vrijednost za nas: [što mi dobivamo — budite transparentni]
+
+format pitcha:
+- max 150 riječi
+- počni s njima i njihovim benefitom
+- jasni next step: 30-min sync / kratki poziv
+- ton: ravnopravni partner, ne &#x27;molim vas za suradnju&#x27; partnerski pitch mora odgovoriti na &#x27;što ja dobijem?&#x27; u prvim 30 sekundi. vaša priča dolazi tek nakon toga." id="p27"><div class="item-top"><div class="item-id"><span class="num">27</span><h3>Pitch za partnerstvo / suradnju</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši pitch email ili poruku za potencijalnog partnera s kojim bih volio/la uspostaviti suradnju.
+
+O nama: <span class="f">[Tvrtka, što radimo, veličina, tko nam je klijent</span>]
+Partner kojeg ciljam: <span class="f">[Tvrtka/osoba, što rade, zašto su relevantni</span>]
+Tip suradnje koji predlažem: <span class="f">[Referral / White-label / Co-marketing / Zajednički projekt</span>]
+Vrijednost za NJIH: <span class="f">[Što konkretno dobivaju — budite specifični</span>]
+Vrijednost za nas: <span class="f">[Što mi dobivamo — budite transparentni</span>]
+
+Format pitcha:
+- Max 150 riječi
+- Počni s njima i njihovim benefitom
+- Jasni next step: 30-min sync / kratki poziv
+- Ton: ravnopravni partner, ne &#x27;molim vas za suradnju&#x27;</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Partnerski pitch mora odgovoriti na &#x27;Što ja dobijem?&#x27; u prvim 30 sekundi. Vaša priča dolazi tek nakon toga.</div></div></article><article class="item" data-cat="prodaja" data-search="upsell / cross-sell postojećem klijentu napiši email ili skript razgovora kojim predlažem dodatnu uslugu postojećem klijentu.
+
+klijent: [ime, tvrtka]
+trenutna usluga koju koriste: [naziv]
+nova usluga koju predlažem: [naziv]
+veza između dvije usluge: [zašto je logičan sljedeći korak]
+konkretna korist: [što im nova usluga rješava ili poboljšava]
+cijena: [iznos ili &#x27;po dogovoru&#x27;]
+
+format:
+- ton: savjetodavni (&#x27;na temelju vašeg napretka s x, preporučujem y&#x27;)
+- referenciraj konkretan uspjeh s dosadašnjom uslugom
+- bez pritiska — ponuda, ne prodaja
+- max 120 riječi za email lojalni klijenti kupuju 65% lakše od novih. ne nudite sve odjednom — jedna usluga = jedan razgovor. kad vide vrijednost, sami pitaju što još imate." id="p28"><div class="item-top"><div class="item-id"><span class="num">28</span><h3>Upsell / cross-sell postojećem klijentu</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši email ili skript razgovora kojim predlažem dodatnu uslugu postojećem klijentu.
+
+Klijent: <span class="f">[Ime, tvrtka</span>]
+Trenutna usluga koju koriste: <span class="f">[NAZIV</span>]
+Nova usluga koju predlažem: <span class="f">[NAZIV</span>]
+Veza između dvije usluge: <span class="f">[Zašto je logičan sljedeći korak</span>]
+Konkretna korist: <span class="f">[Što im nova usluga rješava ili poboljšava</span>]
+Cijena: <span class="f">[IZNOS ili &#x27;po dogovoru&#x27;</span>]
+
+Format:
+- Ton: savjetodavni (&#x27;Na temelju vašeg napretka s X, preporučujem Y&#x27;)
+- Referenciraj konkretan uspjeh s dosadašnjom uslugom
+- Bez pritiska — ponuda, ne prodaja
+- Max 120 riječi za email</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Lojalni klijenti kupuju 65% lakše od novih. Ne nudite sve odjednom — jedna usluga = jedan razgovor. Kad vide vrijednost, sami pitaju što još imate.</div></div></article><article class="item" data-cat="prodaja" data-search="discovery call — otkrivanje potreba (script) kreiraj script za discovery/consultative sales call od 30-45 minuta.
+
+moja usluga/ponuda: [naziv]
+tipični klijent: [industrija, veličina, pozicija]
+
+script treba sadržavati:
+1. otvaranje (30 sek) — postavljanje agende i stjecanje dozvole za pitanja
+2. situacijska pitanja (5 pitanja) — razumijevanje trenutnog stanja
+3. pitanja o boli (5 pitanja) — otkrivanje stvarnih problema i posljedica
+4. pitanja o implikacijama (3 pitanja) — koliko ih problem košta (novac/vrijeme)
+5. need-payoff pitanja (3 pitanja) — što ako bi imali rješenje?
+6. prelaz na prezentaciju rješenja
+7. zatvaranje na next step (ne na prodaju — na decision) discovery call nije prodajni poziv — to je dijagnostički razgovor. vi ste liječnik, ne prodavač. 80% slušanja, 20% govora." id="p29"><div class="item-top"><div class="item-id"><span class="num">29</span><h3>Discovery call — otkrivanje potreba (script)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Kreiraj script za discovery/consultative sales call od 30-45 minuta.
+
+Moja usluga/ponuda: <span class="f">[NAZIV</span>]
+Tipični klijent: <span class="f">[Industrija, veličina, pozicija</span>]
+
+Script treba sadržavati:
+1. Otvaranje (30 sek) — postavljanje agende i stjecanje dozvole za pitanja
+2. Situacijska pitanja (5 pitanja) — razumijevanje trenutnog stanja
+3. Pitanja o boli (5 pitanja) — otkrivanje stvarnih problema i posljedica
+4. Pitanja o implikacijama (3 pitanja) — koliko ih problem košta (novac/vrijeme)
+5. Need-payoff pitanja (3 pitanja) — što ako bi imali rješenje?
+6. Prelaz na prezentaciju rješenja
+7. Zatvaranje na next step (ne na prodaju — na decision)</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Discovery call nije prodajni poziv — to je dijagnostički razgovor. Vi ste liječnik, ne prodavač. 80% slušanja, 20% govora.</div></div></article><article class="item" data-cat="prodaja" data-search="zatvaranje prodaje (closing script) kreiraj skriptu za zatvaranje prodaje nakon što smo predstavili ponudu i odgovorili na pitanja.
+
+kontekst:
+- naša usluga: [naziv]
+- cijena: [iznos]
+- klijent je pokazao interes ali nema jasnog &#x27;da&#x27;
+- prethodni razgovor: [što smo dosad razgovarali, koji su bili prigovori]
+
+napiši:
+1. sažetak vrijednosti (2 rečenice — što rješavamo, kakav je roi)
+2. pitanje za zatvaranje (assumptive close / alternative close / summary close)
+3. kako odgovoriti ako kaže &#x27;da&#x27;
+4. kako odgovoriti ako kaže &#x27;trebam još razmisliti&#x27;
+5. nikad ne popuštati na cijenu bez nečeg zauzvrat (manji opseg, kraći rok) najboljii closing pitanje nije &#x27;što mislite?&#x27; nego &#x27;s čim biste radije počeli — s [opcija a] ili [opcija b]?&#x27; — to je alternative close koji pretpostavlja pozitivnu odluku." id="p30"><div class="item-top"><div class="item-id"><span class="num">30</span><h3>Zatvaranje prodaje (closing script)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Kreiraj skriptu za zatvaranje prodaje nakon što smo predstavili ponudu i odgovorili na pitanja.
+
+Kontekst:
+- Naša usluga: <span class="f">[NAZIV</span>]
+- Cijena: <span class="f">[IZNOS</span>]
+- Klijent je pokazao interes ali nema jasnog &#x27;da&#x27;
+- Prethodni razgovor: <span class="f">[Što smo dosad razgovarali, koji su bili prigovori</span>]
+
+Napiši:
+1. Sažetak vrijednosti (2 rečenice — što rješavamo, kakav je ROI)
+2. Pitanje za zatvaranje (assumptive close / alternative close / summary close)
+3. Kako odgovoriti ako kaže &#x27;Da&#x27;
+4. Kako odgovoriti ako kaže &#x27;Trebam još razmisliti&#x27;
+5. Nikad ne popuštati na cijenu bez nečeg zauzvrat (manji opseg, kraći rok)</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Najbolje closing pitanje nije &#x27;Što mislite?&#x27; nego &#x27;S čim biste radije počeli — s [opcija A] ili [opcija B]?&#x27; — to je alternative close koji pretpostavlja pozitivnu odluku.</div></div></article><article class="item" data-cat="prodaja" data-search="email sekvenca za lead nurture (3 emaila) kreiraj sekvencu od 3 emaila za osobu koja se prijavila na moj lead magnet / webinar ali još nije kupila.
+
+lead magnet koji je preuzela: [naziv]
+moj core offer: [naziv i kratak opis]
+cijena core offera: [iznos]
+vremenski okvir sekvence: email 1 odmah, email 2 dan 3, email 3 dan 7
+
+email 1 (odmah): isporuka lead magneta + jedno korisno saznanje + previewing što dolazi
+email 2 (dan 3): edukativni sadržaj koji rješava jedan bolni problem + soft mention offera
+email 3 (dan 7): priča/case study + direktna ponuda + urgencija (ograničeno mjesta / rok)
+
+za svaki email: subject line, preview text, tijelo emaila (max 200 riječi) sekvenca mora graditi vrijednost prije prodajnog emaila. ako je email 1 i 2 samo prodaja, otkazat će pretplatu. dajte 80% vrijednosti, 20% pitajte." id="p31"><div class="item-top"><div class="item-id"><span class="num">31</span><h3>Email sekvenca za lead nurture (3 emaila)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Kreiraj sekvencu od 3 emaila za osobu koja se prijavila na moj lead magnet / webinar ali još nije kupila.
+
+Lead magnet koji je preuzela: <span class="f">[NAZIV</span>]
+Moj core offer: <span class="f">[NAZIV i kratak opis</span>]
+Cijena core offera: <span class="f">[IZNOS</span>]
+Vremenski okvir sekvence: Email 1 odmah, Email 2 dan 3, Email 3 dan 7
+
+Email 1 (odmah): Isporuka lead magneta + jedno korisno saznanje + previewing što dolazi
+Email 2 (dan 3): Edukativni sadržaj koji rješava jedan bolni problem + soft mention offera
+Email 3 (dan 7): Priča/case study + direktna ponuda + urgencija (ograničeno mjesta / rok)
+
+Za svaki email: Subject line, Preview text, Tijelo emaila (max 200 riječi)</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Sekvenca mora graditi vrijednost PRIJE prodajnog emaila. Ako je Email 1 i 2 samo prodaja, otkazat će pretplatu. Dajte 80% vrijednosti, 20% pitajte.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Analiza i istraživanje</h4><article class="item" data-cat="analiza" data-search="analiza dugog dokumenta / izvještaja pročitaj sljedeći dokument i napravi mi detaljnu analizu.
+
+[zalijepite dokument ili ključne dijelove]
+
+trebam:
+1. sažetak u 5 rečenica (ključne poruke)
+2. top 5 nalaza / zaključaka (bullet points)
+3. akcijske točke koje iz ovoga proizlaze (što trebam napraviti)
+4. rizici ili upozorenja koje sam možda propustio/la
+5. pitanja koja bi trebao/trebala postaviti autoru ili teamu
+6. ocjena kvalitete dokumenta (ako je relevantno): 1-10, s obrazloženjem
+
+kontekst zašto mi treba analiza: [opiši — npr. &#x27;ovo je ugovor koji trebam potpisati&#x27; / &#x27;ovo je izvještaj koji trebam prezentirati&#x27;] za dugačke dokumente (50+ stranica): uploadajte u claude ili chatgpt u dijelovima ili koristite google notebooklm koji može obraditi cijeli dokument odjednom." id="p32"><div class="item-top"><div class="item-id"><span class="num">32</span><h3>Analiza dugog dokumenta / izvještaja</h3></div><div class="item-badges"><span class="badge gy">Claude / ChatGPT / NotebookLM</span></div></div><div class="item-body"><pre class="p">Pročitaj sljedeći dokument i napravi mi detaljnu analizu.
+
+<span class="f">[ZALIJEPITE DOKUMENT ILI KLJUČNE DIJELOVE</span>]
+
+Trebam:
+1. Sažetak u 5 rečenica (ključne poruke)
+2. Top 5 nalaza / zaključaka (bullet points)
+3. Akcijske točke koje iz ovoga proizlaze (što trebam napraviti)
+4. Rizici ili upozorenja koje sam možda propustio/la
+5. Pitanja koja bi trebao/trebala postaviti autoru ili teamu
+6. Ocjena kvalitete dokumenta (ako je relevantno): 1-10, s obrazloženjem
+
+Kontekst zašto mi treba analiza: <span class="f">[OPIŠI — npr. &#x27;Ovo je ugovor koji trebam potpisati&#x27; / &#x27;Ovo je izvještaj koji trebam prezentirati&#x27;</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Za dugačke dokumente (50+ stranica): uploadajte u Claude ili ChatGPT u dijelovima ili koristite Google NotebookLM koji može obraditi cijeli dokument odjednom.</div></div></article><article class="item" data-cat="analiza" data-search="swot analiza tvrtke / projekta napravi detaljnu swot analizu za:
+
+[naziv tvrtke / projekta / ideje]
+
+kontekst:
+- industrija / sektor: [upiši]
+- veličina / faza: [upiši]
+- tržište: [lokalnog / regionalnog / eu / globalnog karaktera]
+- glavni konkurenti (bez naziva ako ne želiš): [opiši]
+- naš unique positioning: [upiši ako znaš]
+
+za svaku kategoriju swot daj minimum 5 konkretnih točaka (ne generičnih).
+nakon swot matrice:
+- 3 strategije kako iskoristiti s za o (so strategije)
+- 3 strategije kako koristiti s za minimizaciju t (st strategije)
+- 2 prioritetna sljedeća koraka na temelju analize generički swot je beskoristan. inzistirajte da ai bude specifičan — ne &#x27;dobra reputacija&#x27; nego &#x27;nps od 72 s ponovnim kupovinama od 65% klijenata&#x27;." id="p33"><div class="item-top"><div class="item-id"><span class="num">33</span><h3>SWOT analiza tvrtke / projekta</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Perplexity</span></div></div><div class="item-body"><pre class="p">Napravi detaljnu SWOT analizu za:
+
+<span class="f">[Naziv tvrtke / projekta / ideje</span>]
+
+Kontekst:
+- Industrija / sektor: <span class="f">[UPIŠI</span>]
+- Veličina / faza: <span class="f">[UPIŠI</span>]
+- Tržište: <span class="f">[Lokalnog / regionalnog / EU / globalnog karaktera</span>]
+- Glavni konkurenti (bez naziva ako ne želiš): <span class="f">[OPIŠI</span>]
+- Naš unique positioning: <span class="f">[UPIŠI ako znaš</span>]
+
+Za svaku kategoriju SWOT daj minimum 5 konkretnih točaka (ne generičnih).
+Nakon SWOT matrice:
+- 3 strategije kako iskoristiti S za O (SO strategije)
+- 3 strategije kako koristiti S za minimizaciju T (ST strategije)
+- 2 prioritetna sljedeća koraka na temelju analize</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Generički SWOT je beskoristan. Inzistirajte da AI bude specifičan — ne &#x27;dobra reputacija&#x27; nego &#x27;NPS od 72 s ponovnim kupovinama od 65% klijenata&#x27;.</div></div></article><article class="item" data-cat="analiza" data-search="usporedba dvije opcije / ponude (pro-contra) pomozi mi donijeti odluku između dvije opcije.
+
+opcija a: [naziv i kratak opis]
+opcija b: [naziv i kratak opis]
+
+kriteriji koji su mi važni (rangiraj po važnosti 1-5):
+1. [kriterij] — važnost: [1-5]
+2. [kriterij] — važnost: [1-5]
+3. [kriterij] — važnost: [1-5]
+4. [kriterij] — važnost: [1-5]
+5. [kriterij] — važnost: [1-5]
+
+dodatni kontekst: [proračun, rokovi, ograničenja, preferencije]
+
+napravi:
+1. weighted decision matrix (tablica s ocjenama)
+2. pro/contra analizu za svaku opciju
+3. tvoja preporuka i zašto
+4. scenarij: što ako se situacija promijeni za [x faktor] weighted decision matrix eliminira emocionalnu pristranost. definirajte kriterije prije nego što vidite rezultate — inače podsvjesno birate omiljenu opciju." id="p34"><div class="item-top"><div class="item-id"><span class="num">34</span><h3>Usporedba dvije opcije / ponude (pro-contra)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Pomozi mi donijeti odluku između dvije opcije.
+
+Opcija A: <span class="f">[NAZIV i kratak opis</span>]
+Opcija B: <span class="f">[NAZIV i kratak opis</span>]
+
+Kriteriji koji su mi važni (rangiraj po važnosti 1-5):
+1. <span class="f">[Kriterij</span>] — važnost: <span class="f">[1-5</span>]
+2. <span class="f">[Kriterij</span>] — važnost: <span class="f">[1-5</span>]
+3. <span class="f">[Kriterij</span>] — važnost: <span class="f">[1-5</span>]
+4. <span class="f">[Kriterij</span>] — važnost: <span class="f">[1-5</span>]
+5. <span class="f">[Kriterij</span>] — važnost: <span class="f">[1-5</span>]
+
+Dodatni kontekst: <span class="f">[Proračun, rokovi, ograničenja, preferencije</span>]
+
+Napravi:
+1. Weighted decision matrix (tablica s ocjenama)
+2. Pro/contra analizu za svaku opciju
+3. Tvoja preporuka i zašto
+4. Scenarij: što ako se situacija promijeni za <span class="f">[X faktor</span>]</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Weighted decision matrix eliminira emocionalnu pristranost. Definirajte kriterije PRIJE nego vidite rezultate — inače podsvjesno birate omiljenu opciju.</div></div></article><article class="item" data-cat="analiza" data-search="analiza feedbacka klijenata / recenzija analiziraj sljedeće povratne informacije klijenata i ekstrahiraj uvide.
+
+[zalijepite: recenzije, nps komentare, ankete, email odgovore, interview bilješke]
+
+trebam:
+1. sentiment analiza: % pozitivnih / neutralnih / negativnih
+2. top 5 tema koje se ponavljaju (s frekvencijom)
+3. top 3 pohvale (što klijenti cijene)
+4. top 3 pritužbe / prilike za poboljšanje
+5. citirani izrazi koji mogu ići u marketing (testimonials)
+6. preporučene akcije na temelju feedbacka
+7. crvene zastavice (ozbiljni problemi koji zahtijevaju hitnu akciju) grupirajte feedback iz više izvora (google recenzije + nps + intervjui) i analizirajte zajedno — patterns se vide kad imate 20+ odgovora." id="p35"><div class="item-top"><div class="item-id"><span class="num">35</span><h3>Analiza feedbacka klijenata / recenzija</h3></div><div class="item-badges"><span class="badge gy">Claude / ChatGPT / NotebookLM</span></div></div><div class="item-body"><pre class="p">Analiziraj sljedeće povratne informacije klijenata i ekstrahiraj uvide.
+
+<span class="f">[ZALIJEPITE: recenzije, NPS komentare, ankete, email odgovore, interview bilješke</span>]
+
+Trebam:
+1. Sentiment analiza: % pozitivnih / neutralnih / negativnih
+2. Top 5 tema koje se ponavljaju (s frekvencijom)
+3. Top 3 pohvale (što klijenti cijene)
+4. Top 3 pritužbe / prilike za poboljšanje
+5. Citirani izrazi koji mogu ići u marketing (testimonials)
+6. Preporučene akcije na temelju feedbacka
+7. Crvene zastavice (ozbiljni problemi koji zahtijevaju hitnu akciju)</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Grupirajte feedback iz više izvora (Google recenzije + NPS + intervjui) i analizirajte zajedno — patterns se vide kad imate 20+ odgovora.</div></div></article><article class="item" data-cat="analiza" data-search="sažetak dugog email threada pročitaj ovaj email thread i napiši mi sažetak.
+
+[zalijepite cijeli email thread]
+
+trebam:
+1. kratki sažetak o čemu se radilo (3 rečenice)
+2. tko su ključni sudionici i koje su pozicije zauzeli
+3. što je dogovoreno (bullet points)
+4. što još nije dogovoreno / otvorena pitanja
+5. moji action items (što trebam napraviti ja)
+6. action items za druge (tko, što, do kada)
+7. preporučeni next step ako šaljete dug email thread ai-u — počnite s najstarijim emailom na vrhu. claude i chatgpt čitaju kronološki i bolje razumiju kontekst." id="p36"><div class="item-top"><div class="item-id"><span class="num">36</span><h3>Sažetak dugog email threada</h3></div><div class="item-badges"><span class="badge gy">Claude / ChatGPT / Copilot</span></div></div><div class="item-body"><pre class="p">Pročitaj ovaj email thread i napiši mi sažetak.
+
+<span class="f">[ZALIJEPITE CIJELI EMAIL THREAD</span>]
+
+Trebam:
+1. Kratki sažetak o čemu se radilo (3 rečenice)
+2. Tko su ključni sudionici i koje su pozicije zauzeli
+3. Što je dogovoreno (bullet points)
+4. Što JOŠ NIJE dogovoreno / otvorena pitanja
+5. Moji action items (što trebam napraviti ja)
+6. Action items za druge (tko, što, do kada)
+7. Preporučeni next step</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ako šaljete dug email thread AI-u — počnite s najstarijim emailom na vrhu. Claude i ChatGPT čitaju kronološki i bolje razumiju kontekst.</div></div></article><article class="item" data-cat="analiza" data-search="analiza konkurencije (na temelju web stranice) napravi analizu sljedeće konkurentske tvrtke.
+
+web stranica: [url]
+naša tvrtka/usluga za usporedbu: [kratki opis]
+
+analiziraj:
+1. pozicioniranje — kome se obraćaju, koja je njihova ključna poruka
+2. ponuda — koje usluge/proizvode nude, kako su pakirane
+3. cijene — ako su javno dostupne
+4. ključne snage na temelju web stranice i marketinga
+5. slabosti i rupe koje primjećuješ
+6. kako se razlikujemo od njih
+7. što bismo mogli preuzeti / naučiti od njih
+8. prilike za naše diferenciranje
+
+note: koristi perplexity za pretraživanje weba + scraping, claude za analizu. ne analizirajte samo web stranicu — pogledajte linkedin page, google recenzije i trustpilot. tamo je stvarna slika." id="p37"><div class="item-top"><div class="item-id"><span class="num">37</span><h3>Analiza konkurencije (na temelju web stranice)</h3></div><div class="item-badges"><span class="badge gy">Perplexity / ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napravi analizu sljedeće konkurentske tvrtke.
+
+Web stranica: <span class="f">[URL</span>]
+Naša tvrtka/usluga za usporedbu: <span class="f">[KRATKI OPIS</span>]
+
+Analiziraj:
+1. Pozicioniranje — kome se obraćaju, koja je njihova ključna poruka
+2. Ponuda — koje usluge/proizvode nude, kako su pakirane
+3. Cijene — ako su javno dostupne
+4. Ključne snage na temelju web stranice i marketinga
+5. Slabosti i rupe koje primjećuješ
+6. Kako se razlikujemo od njih
+7. Što bismo mogli preuzeti / naučiti od njih
+8. Prilike za naše diferenciranje
+
+Note: Koristi Perplexity za pretraživanje weba + scraping, Claude za analizu.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Ne analizirajte samo web stranicu — pogledajte LinkedIn page, Google recenzije i Trustpilot. Tamo je stvarna slika.</div></div></article><article class="item" data-cat="analiza" data-search="brainstorming — 20 ideja u 10 minuta trebaš mi generirati 20 kreativnih ideja na temu: [tema / izazov].
+
+kontekst: [opiši situaciju — što pokušavamo postići, koji je problem]
+ograničenja: [proračun, resursi, rokovi, tehničke mogućnosti]
+kriteriji za dobru ideju: [što čini ideju relevantnom za vas]
+
+pravila brainstorminga:
+- bez autocenzure — uključi i &#x27;lude&#x27; ideje
+- grupiraj u kategorije (quick wins / middle ground / moon shots)
+- za svaku ideju: kratki opis + zašto bi moglo raditi
+- označi top 3 ideje s objašnjenjem
+
+nakon 20 ideja: odaberi i razradi top 3 s konkretnim next steps. specificitet upita = bolji brainstorming. &#x27;daj mi ideje za marketing&#x27; = generično. &#x27;20 ideja kako generirati 10 novih leadova u srpnju s proračunom do 500€&#x27; = akcijsko." id="p38"><div class="item-top"><div class="item-id"><span class="num">38</span><h3>Brainstorming — 20 ideja u 10 minuta</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Trebaš mi generirati 20 kreativnih ideja na temu: <span class="f">[TEMA / IZAZOV</span>].
+
+Kontekst: <span class="f">[Opiši situaciju — što pokušavamo postići, koji je problem</span>]
+Ograničenja: <span class="f">[Proračun, resursi, rokovi, tehničke mogućnosti</span>]
+Kriteriji za dobru ideju: <span class="f">[Što čini ideju relevantnom za vas</span>]
+
+Pravila brainstorminga:
+- Bez autocenzure — uključi i &#x27;lude&#x27; ideje
+- Grupiraj u kategorije (quick wins / middle ground / moon shots)
+- Za svaku ideju: kratki opis + zašto bi moglo raditi
+- Označi top 3 ideje s objašnjenjem
+
+Nakon 20 ideja: odaberi i razradi top 3 s konkretnim next steps.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Specificitet upita = bolji brainstorming. &#x27;Daj mi ideje za marketing&#x27; = generično. &#x27;20 ideja kako generirati 10 novih leadova u srpnju s proračunom do 500€&#x27; = akcijsko.</div></div></article><article class="item" data-cat="analiza" data-search="priprema za poslovni sastanak pomozi mi pripremiti se za sljedeći poslovni sastanak.
+
+sastanak s: [ime, pozicija, tvrtka]
+tema / svrha sastanka: [upiši]
+što znam o njima: [linkedin, web stranica, prethodni razgovori]
+što ja želem postići s ovim sastankom: [konkretan outcome]
+moguće prigovore ili pitanja koja mogu postaviti: [navedi ako znaš]
+
+pripremi:
+1. 5 istraživačkih pitanja za bolje razumijevanje situacije
+2. 3 moguće prigovore i moje odgovore na svaki
+3. kako otvoriti sastanak (prva 2 min)
+4. kako zatvoriti sastanak s jasnim next stepom
+5. što donijeti / pripremiti materijalno pola sata pripreme = dvostruko bolji sastanak. istraživanje linkedina i web stranice + priprema pitanja = dolazite kao partner, ne kao prodavač." id="p39"><div class="item-top"><div class="item-id"><span class="num">39</span><h3>Priprema za poslovni sastanak</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Perplexity</span></div></div><div class="item-body"><pre class="p">Pomozi mi pripremiti se za sljedeći poslovni sastanak.
+
+Sastanak s: <span class="f">[Ime, pozicija, tvrtka</span>]
+Tema / svrha sastanka: <span class="f">[UPIŠI</span>]
+Što znam o njima: <span class="f">[LinkedIn, web stranica, prethodni razgovori</span>]
+Što ja želem postići s ovim sastankom: <span class="f">[Konkretan outcome</span>]
+Moguće prigovore ili pitanja koja mogu postaviti: <span class="f">[Navedi ako znaš</span>]
+
+Pripremi:
+1. 5 istraživačkih pitanja za bolje razumijevanje situacije
+2. 3 moguće prigovore i moje odgovore na svaki
+3. Kako otvoriti sastanak (prva 2 min)
+4. Kako zatvoriti sastanak s jasnim next stepom
+5. Što donijeti / pripremiti materijalno</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Pola sata pripreme = dvostruko bolji sastanak. Istraživanje LinkedIna i web stranice + priprema pitanja = dolazite kao partner, ne kao prodavač.</div></div></article><article class="item" data-cat="analiza" data-search="analiza tržišnih trendova u mojoj industriji napravi analizu ključnih trendova u mojoj industriji za sljedećih 12-24 mjeseca.
+
+industrija / sektor: [upiši]
+geografski fokus: [hrvatska / eu / globalno]
+moja pozicija u industriji: [kratki opis]
+
+trebam:
+1. top 5 trendova koji mijenjaju industriju (s konkretnim primjerima)
+2. tehnološki trendovi koji utječu na sektor
+3. regulatorne promjene koje dolaze (eu, rh)
+4. što radi vodeća konkurencija drugačije
+5. prilike koje vidim za moj biznis
+6. prijetnje na koje trebam biti spreman/a
+7. 3 konkretne preporuke što napraviti sljedeće
+
+koristi aktualne podatke iz 2024-2025. koristite perplexity za ovaj prompt — citira izvore i koristi aktualne podatke. kombinirajte s claude za strategijsku analizu." id="p40"><div class="item-top"><div class="item-id"><span class="num">40</span><h3>Analiza tržišnih trendova u mojoj industriji</h3></div><div class="item-badges"><span class="badge gy">Perplexity + Claude</span></div></div><div class="item-body"><pre class="p">Napravi analizu ključnih trendova u mojoj industriji za sljedećih 12-24 mjeseca.
+
+Industrija / sektor: <span class="f">[UPIŠI</span>]
+Geografski fokus: <span class="f">[Hrvatska / EU / globalno</span>]
+Moja pozicija u industriji: <span class="f">[KRATKI OPIS</span>]
+
+Trebam:
+1. Top 5 trendova koji mijenjaju industriju (s konkretnim primjerima)
+2. Tehnološki trendovi koji utječu na sektor
+3. Regulatorne promjene koje dolaze (EU, RH)
+4. Što radi vodeća konkurencija drugačije
+5. Prilike koje vidim za moj biznis
+6. Prijetnje na koje trebam biti spreman/a
+7. 3 konkretne preporuke što napraviti sljedeće
+
+Koristi aktualne podatke iz 2024-2025.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Koristite Perplexity za ovaj prompt — citira izvore i koristi aktualne podatke. Kombinirajte s Claude za strategijsku analizu.</div></div></article><article class="item" data-cat="analiza" data-search="analiza financijskih pokazatelja (kpis) analiziraj sljedeće financijske podatke i daj mi uvide.
+
+[zalijepite podatke: excel tablica, financijski izvještaj, ili ručno unesene brojke]
+
+period: [datum od — do]
+industrija za usporedbu: [upiši ako znaš prosječne benchmark vrijednosti]
+
+analiziraj:
+1. prihodi i trend (rast/pad u %)
+2. marže (bruto, neto) i usporedba s prethodnim periodom
+3. ključni cost driveri
+4. cash flow signali
+5. top 3 zabrinjavajuće stavke
+6. top 3 pozitivna pokazatelja
+7. preporuke za poboljšanje performansi
+8. pitanja koja bi trebao/la postaviti računovođi/cfo-u upozorenje: ai može pogriješiti u matematici na složenim tablicama. uvijek verificirajte ključne izračune ručno ili u excelu. koristite ai za interpretaciju, ne za izračun." id="p41"><div class="item-top"><div class="item-id"><span class="num">41</span><h3>Analiza financijskih pokazatelja (KPIs)</h3></div><div class="item-badges"><span class="badge gy">Claude / ChatGPT / Copilot (Excel)</span></div></div><div class="item-body"><pre class="p">Analiziraj sljedeće financijske podatke i daj mi uvide.
+
+<span class="f">[ZALIJEPITE PODATKE: Excel tablica, financijski izvještaj, ili ručno unesene brojke</span>]
+
+Period: <span class="f">[DATUM od — do</span>]
+Industrija za usporedbu: <span class="f">[UPIŠI ako znaš prosječne benchmark vrijednosti</span>]
+
+Analiziraj:
+1. Prihodi i trend (rast/pad u %)
+2. Marže (bruto, neto) i usporedba s prethodnim periodom
+3. Ključni cost driveri
+4. Cash flow signali
+5. Top 3 zabrinjavajuće stavke
+6. Top 3 pozitivna pokazatelja
+7. Preporuke za poboljšanje performansi
+8. Pitanja koja bi trebao/la postaviti računovođi/CFO-u</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> UPOZORENJE: AI može pogriješiti u matematici na složenim tablicama. Uvijek verificirajte ključne izračune ručno ili u Excelu. Koristite AI za interpretaciju, ne za izračun.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Korisnička podrška</h4><article class="item" data-cat="cs" data-search="odgovor na negativnu recenziju (google / trustpilot) napiši profesionalan odgovor na sljedeću negativnu recenziju.
+
+recenzija: [zalijepite tekst recenzije]
+ocjena: [1-3 zvjezdice]
+naša strana priče: [što se zaista desilo — interna verzija]
+je li pritužba opravdana: [da / djelomično / ne]
+
+odgovor treba:
+1. zahvaliti na feedbacku (bez obzira na sadržaj)
+2. pokazati empatiju (validirati osjećaj, ne nužno činjenice)
+3. pojasniti situaciju bez opravdavanja (ako je opravdano)
+4. konkretna akcija koju poduzimamo / ponuditi rješenje
+5. poziv na nastavak razgovora offline (email ili telefon)
+6. max 100 riječi — javni odgovor mora biti kratak
+7. ton: profesionalan, human, bez defensivnosti negativne recenzije su marketing prilike. 88% kupaca čita odgovor tvrtke na negativnu recenziju. dobro napisan odgovor popravlja dojam čak i kod novih kupaca koji nisu iskusili problem." id="p42"><div class="item-top"><div class="item-id"><span class="num">42</span><h3>Odgovor na negativnu recenziju (Google / Trustpilot)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši profesionalan odgovor na sljedeću negativnu recenziju.
+
+Recenzija: <span class="f">[ZALIJEPITE TEKST RECENZIJE</span>]
+Ocjena: <span class="f">[1-3 zvjezdice</span>]
+Naša strana priče: <span class="f">[Što se zaista desilo — interna verzija</span>]
+Je li pritužba opravdana: <span class="f">[Da / Djelomično / Ne</span>]
+
+Odgovor treba:
+1. Zahvaliti na feedbacku (bez obzira na sadržaj)
+2. Pokazati empatiju (validirati osjećaj, ne nužno činjenice)
+3. Pojasniti situaciju bez opravdavanja (ako je opravdano)
+4. Konkretna akcija koju poduzimamo / ponuditi rješenje
+5. Poziv na nastavak razgovora offline (email ili telefon)
+6. Max 100 riječi — javni odgovor mora biti kratak
+7. Ton: profesionalan, human, bez defensivnosti</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Negativne recenzije su marketing prilike. 88% kupaca čita odgovor tvrtke na negativnu recenziju. Dobro napisan odgovor popravlja dojam čak i kod novih kupaca koji nisu iskusili problem.</div></div></article><article class="item" data-cat="cs" data-search="odgovor na pritužbu klijenta (email) napiši profesionalan odgovor na sljedeću pritužbu klijenta emailom.
+
+originalna pritužba: [zalijepite email]
+naša strana: [što se desilo — interni kontekst]
+rješenje koje možemo ponuditi: [refund / popravak / popust / izvinjenje / objašnjenje]
+što ne možemo napraviti: [navedi ograničenja]
+
+odgovor:
+1. prizni primitak i zahvali (konkretno, ne generično)
+2. empatija — potvrdi da razumijemo frustraciju
+3. kratko objašnjenje (ne odugovlačenje — facts only)
+4. konkretno rješenje s rokovima
+5. što radimo da se ovo ne ponovi
+6. kontakt za daljnja pitanja
+7. ton: topao ali profesionalan, ne robotski nikad ne pišite &#x27;žao nam je što se tako osjećate&#x27; — to zvuči kao da ne preuzimate odgovornost. pišite: &#x27;žao nam je što je do ovoga došlo&#x27; — preuzimate odgovornost za situaciju." id="p43"><div class="item-top"><div class="item-id"><span class="num">43</span><h3>Odgovor na pritužbu klijenta (email)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Copilot</span></div></div><div class="item-body"><pre class="p">Napiši profesionalan odgovor na sljedeću pritužbu klijenta emailom.
+
+Originalna pritužba: <span class="f">[ZALIJEPITE EMAIL</span>]
+Naša strana: <span class="f">[Što se desilo — interni kontekst</span>]
+Rješenje koje možemo ponuditi: <span class="f">[Refund / popravak / popust / izvinjenje / objašnjenje</span>]
+Što NE možemo napraviti: <span class="f">[Navedi ograničenja</span>]
+
+Odgovor:
+1. Prizni primitak i zahvali (konkretno, ne generično)
+2. Empatija — potvrdi da razumijemo frustraciju
+3. Kratko objašnjenje (ne odugovlačenje — facts only)
+4. Konkretno rješenje s rokovima
+5. Što radimo da se ovo ne ponovi
+6. Kontakt za daljnja pitanja
+7. Ton: topao ali profesionalan, ne robotski</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Nikad ne pišite &#x27;Žao nam je što se tako osjećate&#x27; — to zvuči kao da ne preuzimate odgovornost. Pišite: &#x27;Žao nam je što je do ovoga došlo&#x27; — preuzimate odgovornost za situaciju.</div></div></article><article class="item" data-cat="cs" data-search="odgovor za zahtjev za povrat / refund napiši email kojim odgovaramo na zahtjev za povrat novca.
+
+situacija:
+- klijent traži: [puni povrat / djelomični povrat / zamjenu]
+- razlog: [što kažu]
+- naša politika povrata: [kakva je vaša standardna politika]
+- naša odluka: [odobravamo / djelomično odobravamo / odbijamo]
+- razlog odluke: [upiši]
+
+napiši odgovor koji:
+- ako odobravamo: jasno objasni proceduru i rokove
+- ako odbijamo: objasni politiku, ponudi alternativu (voucher, popust, produženje), zadrži odnos
+- ton: razumijevanje bez defensivnosti
+- max 120 riječi čak i kad odbijate povrat — ponudite nešto. &#x27;ne mogu vam vratiti novac, ali evo popusta od 30% za sljedeću narudžbu&#x27; je bolje od čistog odbijanja." id="p44"><div class="item-top"><div class="item-id"><span class="num">44</span><h3>Odgovor za zahtjev za povrat / refund</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši email kojim odgovaramo na zahtjev za povrat novca.
+
+Situacija:
+- Klijent traži: <span class="f">[Puni povrat / djelomični povrat / zamjenu</span>]
+- Razlog: <span class="f">[Što kažu</span>]
+- Naša politika povrata: <span class="f">[Kakva je vaša standardna politika</span>]
+- Naša odluka: <span class="f">[Odobravamo / Djelomično odobravamo / Odbijamo</span>]
+- Razlog odluke: <span class="f">[UPIŠI</span>]
+
+Napiši odgovor koji:
+- Ako ODOBRAVAMO: jasno objasni proceduru i rokove
+- Ako ODBIJAMO: objasni politiku, ponudi alternativu (voucher, popust, produženje), zadrži odnos
+- Ton: razumijevanje bez defensivnosti
+- Max 120 riječi</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Čak i kad odbijate povrat — ponudite nešto. &#x27;Ne mogu vam vratiti novac, ali evo popusta od 30% za sljedeću narudžbu&#x27; je bolje od čistog odbijanja.</div></div></article><article class="item" data-cat="cs" data-search="faq generiranje iz opisa usluge / proizvoda generiraj 15 najčešćih pitanja (faq) za sljedeću uslugu ili proizvod.
+
+naziv: [naziv usluge/proizvoda]
+opis: [detaljni opis — što je, kako radi, kome je namijenjeno]
+cijena: [iznos ili &#x27;po dogovoru&#x27;]
+tipična pitanja koja dobivamo od klijenata: [navedi ako znaš]
+
+za svako pitanje:
+- napiši pitanje onako kako bi ga klijent postavio (ne formalno)
+- odgovor: max 3 rečenice — jasan, konkretan, bez praznih fraza
+- grupiraj u kategorije (što je / kako radi / cijena / početak / podrška)
+
+bonus: označi top 3 pitanja koja su najčešća &#x27;decision-making&#x27; pitanja. faq na web stranici smanjuje email upite za 30-50%. uploadajte gotov faq u custom gpt kao knowledge file — automatski rješava upite klijenata." id="p45"><div class="item-top"><div class="item-id"><span class="num">45</span><h3>FAQ generiranje iz opisa usluge / proizvoda</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Generiraj 15 najčešćih pitanja (FAQ) za sljedeću uslugu ili proizvod.
+
+Naziv: <span class="f">[NAZIV USLUGE/PROIZVODA</span>]
+Opis: <span class="f">[DETALJNI OPIS — što je, kako radi, kome je namijenjeno</span>]
+Cijena: <span class="f">[IZNOS ili &#x27;po dogovoru&#x27;</span>]
+Tipična pitanja koja dobivamo od klijenata: <span class="f">[Navedi ako znaš</span>]
+
+Za svako pitanje:
+- Napiši pitanje onako kako bi ga klijent postavio (ne formalno)
+- Odgovor: max 3 rečenice — jasan, konkretan, bez praznih fraza
+- Grupiraj u kategorije (Što je / Kako radi / Cijena / Početak / Podrška)
+
+Bonus: označi top 3 pitanja koja su najčešća &#x27;decision-making&#x27; pitanja.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> FAQ na web stranici smanjuje email upite za 30-50%. Uploadajte gotov FAQ u Custom GPT kao knowledge file — automatski rješava upite klijenata.</div></div></article><article class="item" data-cat="cs" data-search="whatsapp / chat odgovor na upit klijenta napiši kratki, profesionalan whatsapp/chat odgovor na sljedeći upit klijenta.
+
+upit klijenta: [zalijepite poruku]
+naša usluga / kontekst: [kratki opis]
+odgovor koji im trebam dati: [informacija / cijena / dostupnost / kako naručiti]
+ton za ovog klijenta: [formalan / prijatno neformalan] — na temelju njihovog tona
+
+format:
+- max 3-5 rečenica
+- jedan konkretan podatak (broj, datum, cijena, link)
+- završi s jednim cta ili pitanjem koje vodi prema sljedećem koraku
+- bez dugih uvoda — whatsapp je brza komunikacija za ponavljajuće whatsapp upite: napravite 10-15 templates koje samo prilagodite imenom i datumom. smanjuje response time za 80%." id="p46"><div class="item-top"><div class="item-id"><span class="num">46</span><h3>WhatsApp / chat odgovor na upit klijenta</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Copilot</span></div></div><div class="item-body"><pre class="p">Napiši kratki, profesionalan WhatsApp/chat odgovor na sljedeći upit klijenta.
+
+Upit klijenta: <span class="f">[ZALIJEPITE PORUKU</span>]
+Naša usluga / kontekst: <span class="f">[KRATKI OPIS</span>]
+Odgovor koji im trebam dati: <span class="f">[Informacija / cijena / dostupnost / kako naručiti</span>]
+Ton za ovog klijenta: <span class="f">[formalan / prijatno neformalan</span>] — na temelju njihovog tona
+
+Format:
+- Max 3-5 rečenica
+- Jedan konkretan podatak (broj, datum, cijena, link)
+- Završi s jednim CTA ili pitanjem koje vodi prema sljedećem koraku
+- Bez dugih uvoda — WhatsApp je brza komunikacija</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Za ponavljajuće WhatsApp upite: napravite 10-15 templates koje samo prilagodite imenom i datumom. Smanjuje response time za 80%.</div></div></article><article class="item" data-cat="cs" data-search="onboarding poruka za novog klijenta (whatsapp niz) napiši seriju od 3 whatsapp poruke za onboarding novog klijenta.
+
+usluga / proizvod koji su uzeli: [naziv]
+što se dešava u prvom tjednu: [koraci 1-3]
+ključne informacije koje trebaju znati: [kontakt, dokumenti, pristup, rokovi]
+ton branda: [formalan / prijatno profesionalan / ležeran]
+
+poruka 1 (odmah po kupnji): dobrodošlica + što se dešava sljedeće
+poruka 2 (dan 2-3): provjera jesu li sve informacije jasne + 1 korisni savjet
+poruka 3 (tjedan 1): check-in — kako napreduje, ima li pitanja + najavite sljedeći korak
+
+svaka poruka: max 5 rečenica, osobna, s imenom klijenta. automatizacija ove sekvence putem whatsapp business api + make.com = klijent dobiva pravo iskustvo bez vašeg ručnog rada. roi: 2-3h/tjedno." id="p47"><div class="item-top"><div class="item-id"><span class="num">47</span><h3>Onboarding poruka za novog klijenta (WhatsApp niz)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT + Make.com</span></div></div><div class="item-body"><pre class="p">Napiši seriju od 3 WhatsApp poruke za onboarding novog klijenta.
+
+Usluga / proizvod koji su uzeli: <span class="f">[NAZIV</span>]
+Što se dešava u prvom tjednu: <span class="f">[Koraci 1-3</span>]
+Ključne informacije koje trebaju znati: <span class="f">[Kontakt, dokumenti, pristup, rokovi</span>]
+Ton branda: <span class="f">[formalan / prijatno profesionalan / ležeran</span>]
+
+Poruka 1 (odmah po kupnji): Dobrodošlica + što se dešava sljedeće
+Poruka 2 (dan 2-3): Provjera jesu li sve informacije jasne + 1 korisni savjet
+Poruka 3 (tjedan 1): Check-in — kako napreduje, ima li pitanja + najavite sljedeći korak
+
+Svaka poruka: max 5 rečenica, osobna, s imenom klijenta.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Automatizacija ove sekvence putem WhatsApp Business API + Make.com = klijent dobiva pravo iskustvo bez vašeg ručnog rada. ROI: 2-3h/tjedno.</div></div></article><article class="item" data-cat="cs" data-search="nps follow-up — promotori (9-10) napiši personaliziran follow-up email za klijenta koji je dao nps ocjenu 9 ili 10.
+
+klijent: [ime, tvrtka]
+nps ocjena: [9 ili 10]
+komentar koji su ostavili (ako postoji): [komentar]
+naša usluga koju koriste: [naziv]
+
+email treba:
+1. iskrena zahvala (specifična na njihov komentar)
+2. prijedlog za testimonial / recenziju na google/linkedin
+3. referral prijedlog — pitati poznaju li nekoga kome bi naša usluga koristila
+4. kratka nagrada za referral (ako postoji program): [upiši]
+5. ton: topao, osoban, kratko — max 100 riječi promotori su vaš najjeftiniji marketing kanal. javljajte im se u roku 24h od nps odgovora — dok je iskustvo svježe. automatizacija: make.com + nps alat + chatgpt." id="p48"><div class="item-top"><div class="item-id"><span class="num">48</span><h3>NPS follow-up — promotori (9-10)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši personaliziran follow-up email za klijenta koji je dao NPS ocjenu 9 ili 10.
+
+Klijent: <span class="f">[Ime, tvrtka</span>]
+NPS ocjena: <span class="f">[9 ili 10</span>]
+Komentar koji su ostavili (ako postoji): <span class="f">[KOMENTAR</span>]
+Naša usluga koju koriste: <span class="f">[NAZIV</span>]
+
+Email treba:
+1. Iskrena zahvala (specifična na njihov komentar)
+2. Prijedlog za testimonial / recenziju na Google/LinkedIn
+3. Referral prijedlog — pitati poznaju li nekoga kome bi naša usluga koristila
+4. Kratka nagrada za referral (ako postoji program): <span class="f">[UPIŠI</span>]
+5. Ton: topao, osoban, kratko — max 100 riječi</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Promotori su vaš najjeftiniji marketing kanal. Javljajte im se u roku 24h od NPS odgovora — dok je iskustvo svježe. Automatizacija: Make.com + NPS alat + ChatGPT.</div></div></article><article class="item" data-cat="cs" data-search="nps follow-up — kritičari (1-6) napiši personaliziran follow-up email za klijenta koji je dao nps ocjenu 1-6.
+
+klijent: [ime, tvrtka]
+nps ocjena: [upiši]
+komentar koji su ostavili (ako postoji): [komentar]
+što mislimo da je razlog nezadovoljstva: [vaša procjena]
+
+email treba:
+1. zahvala za iskrenost (bez defensivnosti)
+2. empatija — iskreno priznat da nismo ispunili očekivanja
+3. konkretno pitanje: što bismo mogli napraviti bolje?
+4. poziv na 15-min razgovor da bolje razumijemo
+5. konkretna akcija/popravljanje ako možemo odmah
+6. ton: human, skroman, rješenje-orijentiran
+7. max 100 riječi 76% nezadovoljnih klijenata koji dobiju dobar follow-up ostaju. svaki kritičar je prilike da popravite i zadržite klijenta. javljajte se u roku 24h." id="p49"><div class="item-top"><div class="item-id"><span class="num">49</span><h3>NPS follow-up — kritičari (1-6)</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude</span></div></div><div class="item-body"><pre class="p">Napiši personaliziran follow-up email za klijenta koji je dao NPS ocjenu 1-6.
+
+Klijent: <span class="f">[Ime, tvrtka</span>]
+NPS ocjena: <span class="f">[UPIŠI</span>]
+Komentar koji su ostavili (ako postoji): <span class="f">[KOMENTAR</span>]
+Što mislimo da je razlog nezadovoljstva: <span class="f">[Vaša procjena</span>]
+
+Email treba:
+1. Zahvala za iskrenost (bez defensivnosti)
+2. Empatija — iskreno priznat da nismo ispunili očekivanja
+3. Konkretno pitanje: što bismo mogli napraviti bolje?
+4. Poziv na 15-min razgovor da bolje razumijemo
+5. Konkretna akcija/popravljanje ako možemo odmah
+6. Ton: human, skroman, rješenje-orijentiran
+7. Max 100 riječi</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> 76% nezadovoljnih klijenata koji dobiju dobar follow-up ostaju. Svaki kritičar je prilike da popravite i zadržite klijenta. Javljajte se u roku 24h.</div></div></article><article class="item" data-cat="cs" data-search="interna eskalacija — prosljeđivanje pritužbe napiši interni email kojim eskalacijom obaviještavam nadređenog/tim o ozbiljnoj pritužbi klijenta.
+
+klijent: [ime, tvrtka — interni naziv ako je potreban]
+pritužba: [kratki opis situacije]
+kada se desilo: [datum]
+što smo dosad pokušali: [akcije i odgovori]
+zašto eskaliram: [klijent nije zadovoljan / situacija zahtijeva odluku višeg nivoa / prijetnja pravnim korakom]
+što trebam od nadređenog/tima: [ovlaštenje za refund / pojašnjenje politike / direktna intervencija]
+rok za odgovor: [datum]
+
+format: kratak, facts-based, bez emocija. max 150 riječi. interni eskalacijski email treba imati sve činjenice bez interpretacije. nadređeni donosi odluku na temelju vaše prezentacije — budite precizni i neutralni." id="p50"><div class="item-top"><div class="item-id"><span class="num">50</span><h3>Interna eskalacija — prosljeđivanje pritužbe</h3></div><div class="item-badges"><span class="badge gy">ChatGPT / Claude / Copilot</span></div></div><div class="item-body"><pre class="p">Napiši interni email kojim eskalacijom obaviještavam nadređenog/tim o ozbiljnoj pritužbi klijenta.
+
+Klijent: <span class="f">[Ime, tvrtka — interni naziv ako je potreban</span>]
+Pritužba: <span class="f">[Kratki opis situacije</span>]
+Kada se desilo: <span class="f">[DATUM</span>]
+Što smo dosad pokušali: <span class="f">[Akcije i odgovori</span>]
+Zašto eskaliram: <span class="f">[Klijent nije zadovoljan / situacija zahtijeva odluku višeg nivoa / prijetnja pravnim korakom</span>]
+Što trebam od nadređenog/tima: <span class="f">[Ovlaštenje za refund / pojašnjenje politike / direktna intervencija</span>]
+Rok za odgovor: <span class="f">[DATUM</span>]
+
+Format: kratak, facts-based, bez emocija. Max 150 riječi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button><a class="btn ghost" href="#top" style="font-size:.76rem;padding:7px 12px">↑ Na vrh</a></div><div class="note"><strong>Savjet:</strong> Interni eskalacijski email treba imati sve činjenice bez interpretacije. Nadređeni donosi odluku na temelju vaše prezentacije — budite precizni i neutralni.</div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi. Probaj kraću riječ ili očisti filter.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Što dalje</h2></div></div>
+<div class="grid g3">
+  <div class="card"><h4>Ovaj tjedan</h4><div class="prose" style="font-size:.94rem"><p>Odaberi <b>tri</b> prompta koja rješavaju tvoj najčešći zadatak. Samo tri. Koristi ih svaki dan sedam dana.</p></div></div>
+  <div class="card"><h4>Za dva tjedna</h4><div class="prose" style="font-size:.94rem"><p>Prompte koje si najviše koristio/la prepiši s <em>tvojim</em> podacima već upisanima u zagrade. Više ne popunjavaš polja.</p></div></div>
+  <div class="card"><h4>Za mjesec</h4><div class="prose" style="font-size:.94rem"><p>Te prilagođene promptove pretvori u Custom GPT ili Claude Project. Tu prestaješ biti korisnik alata i počinješ imati sustav.</p></div></div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Izvor sadržaja: GoThrive_Prompt_Vault (svibanj 2026.), proširen i pretvoren u interaktivni format.</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || it.getAttribute('data-search').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':(n>=2&&n<=4?' rezultata':' rezultata'));
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>

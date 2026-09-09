@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>AI Stack za Sve AI tajne</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+  :root{
+    --paper:#f6f8f5;
+    --surface:#ffffff;
+    --surface-sunk:#eef2ee;
+    --ink:#1b2620;
+    --ink-soft:#3d4a43;
+    --muted:#6d7a72;
+    --line:#d8e0d9;
+    --line-strong:#b9c5bd;
+    --emerald:#0e6a4d;
+    --emerald-soft:#e2efe8;
+    --rust:#b1522a;
+    --rust-soft:#f6e8e0;
+    --amber:#8a6410;
+    --shadow:0 1px 0 rgba(27,38,32,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0f1512;
+      --surface:#161e1a;
+      --surface-sunk:#111814;
+      --ink:#e8efe9;
+      --ink-soft:#c2cec6;
+      --muted:#8d9a92;
+      --line:#25332c;
+      --line-strong:#33453b;
+      --emerald:#5fc79c;
+      --emerald-soft:#163025;
+      --rust:#e79a74;
+      --rust-soft:#332016;
+      --amber:#d7ac52;
+      --shadow:none;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0f1512;
+    --surface:#161e1a;
+    --surface-sunk:#111814;
+    --ink:#e8efe9;
+    --ink-soft:#c2cec6;
+    --muted:#8d9a92;
+    --line:#25332c;
+    --line-strong:#33453b;
+    --emerald:#5fc79c;
+    --emerald-soft:#163025;
+    --rust:#e79a74;
+    --rust-soft:#332016;
+    --amber:#d7ac52;
+    --shadow:none;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+    font-size:17px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px 96px}
+
+  /* ---------- type ---------- */
+  h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+  h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+  h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+  h3{font-size:1.28rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.2}
+  h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+  p{margin:0}
+  a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+  a:focus-visible,.btn:focus-visible{outline:2px solid var(--rust);outline-offset:3px;border-radius:2px}
+  .eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+  .lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+  .prose{max-width:66ch}
+  code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+  /* ---------- masthead ---------- */
+  header.mast{padding:56px 0 32px;display:flex;flex-direction:column;gap:22px}
+  .mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+    font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+  .rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+  /* ---------- callout: Claude first ---------- */
+  .priority{
+    background:var(--rust-soft);
+    border:1px solid var(--rust);
+    border-radius:3px;
+    padding:26px 28px;
+    display:flex;flex-direction:column;gap:14px;
+    margin:36px 0 8px;
+  }
+  .priority h2{color:var(--rust)}
+  .priority p{max-width:64ch}
+
+  /* ---------- TOC ---------- */
+  nav.toc{margin:44px 0 12px;border-top:1px solid var(--line-strong);padding-top:18px}
+  .toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:4px 28px;margin-top:14px;list-style:none;padding:0}
+  .toc-grid li{border-bottom:1px dotted var(--line);padding:6px 0;display:flex;justify-content:space-between;gap:12px;font-size:.95rem}
+  .toc-grid .t{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--muted);align-self:center}
+
+  /* ---------- tier sections ---------- */
+  section.tier{margin-top:64px}
+  .tier-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:14px}
+  .tier-num{font-size:2.6rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+  .tier-head .txt{display:flex;flex-direction:column;gap:5px}
+  .tier-head p{font-size:.98rem;color:var(--ink-soft);max-width:58ch}
+
+  /* ---------- tool ---------- */
+  article.tool{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:3px;
+    box-shadow:var(--shadow);
+    margin-top:22px;
+    overflow:hidden;
+  }
+  article.tool.hero{border:1px solid var(--rust);border-left-width:5px}
+  .tool-top{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:baseline;justify-content:space-between;
+    padding:20px 24px 16px;border-bottom:1px solid var(--line)}
+  .tool-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+  .role{font-size:.9rem;color:var(--muted);font-style:italic}
+  .badge{display:inline-block;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+    padding:3px 8px;border-radius:2px;white-space:nowrap}
+  .badge.aff{background:var(--emerald-soft);color:var(--emerald)}
+  .badge.noaff{background:var(--surface-sunk);color:var(--muted)}
+  .badge.must{background:var(--rust);color:#fff}
+  :root[data-theme="dark"] .badge.must{color:#160d08}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .badge.must{color:#160d08}}
+
+  .tool-body{padding:20px 24px 24px;display:flex;flex-direction:column;gap:20px}
+  .tool-body > p{max-width:66ch;color:var(--ink-soft)}
+
+  table{width:100%;border-collapse:collapse;font-size:.92rem}
+  .tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px}
+  th{text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+    font-weight:700;padding:9px 12px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;font-variant-numeric:tabular-nums}
+  tr:last-child td{border-bottom:0}
+  td.plan{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+  tr.pick td{background:var(--emerald-soft)}
+  tr.pick td.plan{color:var(--emerald)}
+
+  ol.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:9px}
+  ol.steps li{counter-increment:s;position:relative;padding-left:34px;font-size:.97rem;color:var(--ink-soft)}
+  ol.steps li::before{
+    content:counter(s);position:absolute;left:0;top:1px;
+    width:23px;height:23px;border-radius:50%;
+    background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+    font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;
+    display:flex;align-items:center;justify-content:center;
+  }
+  article.tool.hero ol.steps li::before{background:var(--rust);border-color:var(--rust);color:#fff}
+  :root[data-theme="dark"] article.tool.hero ol.steps li::before{color:#160d08}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) article.tool.hero ol.steps li::before{color:#160d08}}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;align-self:flex-start;
+    background:var(--ink);color:var(--paper);text-decoration:none;
+    font-size:.86rem;font-weight:600;letter-spacing:.01em;
+    padding:11px 18px;border-radius:2px;border:1px solid var(--ink)}
+  .btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+  article.tool.hero .btn{background:var(--rust);border-color:var(--rust);color:#fff}
+  article.tool.hero .btn:hover{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+  .btn .arrow{font-family:"IBM Plex Mono",monospace}
+  .linknote{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--muted);word-break:break-all}
+
+  .note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+    font-size:.92rem;color:var(--ink-soft)}
+  .note strong{color:var(--ink)}
+
+  /* ---------- budget ---------- */
+  .budget{margin-top:64px;border:1px solid var(--line-strong);border-radius:3px;overflow:hidden}
+  .budget-head{padding:20px 24px;border-bottom:1px solid var(--line-strong);background:var(--surface-sunk)}
+  .budget-body{padding:22px 24px;background:var(--surface);display:flex;flex-direction:column;gap:18px}
+  .total{display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline;border-top:2px solid var(--ink);padding-top:14px}
+  .total .n{font-family:"Bricolage Grotesque",sans-serif;font-size:1.9rem;font-weight:800;letter-spacing:-.02em;color:var(--emerald)}
+  .total .l{font-size:.9rem;color:var(--muted)}
+
+  footer.end{margin-top:64px;border-top:1px solid var(--line);padding-top:20px;
+    font-size:.86rem;color:var(--muted);display:flex;flex-direction:column;gap:8px}
+
+  @media (max-width:620px){
+    body{font-size:16px}
+    .wrap{padding:0 18px 72px}
+    .tool-top,.tool-body{padding-left:18px;padding-right:18px}
+    .tier-num{font-size:2rem}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="rule-thick"></div>
+  <span class="eyebrow">Sve AI tajne · Automatiziraj, skaliraj, boostaj biznis</span>
+  <h1>AI Stack za Sve AI tajne</h1>
+  <p class="lede">Svaki alat iz agende tečaja: koji plan trebate, koliko košta i kako se registrirati korak po korak. Pripremite ovo prije radionice pa na radionici gradimo, a ne postavljamo račune.</p>
+  <div class="mast-meta">
+    <span>GoThrive · Katarina Zubatović</span>
+    <span>Cijene provjerene 5. rujna 2026.</span>
+    <span>Svi iznosi u USD, bez PDV-a</span>
+  </div>
+</header>
+
+<div class="priority">
+  <span class="eyebrow" style="color:var(--rust)">Ako registrirate samo jedan alat</span>
+  <h2>Registrirajte Claude. To je alat u kojem ćemo najviše raditi.</h2>
+  <p>Claude je radni stol cijelog tečaja. U njemu gradimo promptove, Projects, System Promptove, agente, dokumente i skillove — i u njemu ćete na radionici <strong>uživo napraviti vlastito rješenje</strong> za svoj posao.</p>
+  <p>Ako dođete s aktivnim Claude računom (idealno Pro), možemo vam pomoći na licu mjesta: sjednemo uz vas, otvorimo vaš projekt i izađete s nečim što stvarno radi u vašem biznisu. Ako račun tek postavljate na radionici, izgubit ćete najvrijedniji dio dana na verifikaciju e-maila i SMS koda.</p>
+  <p><strong>Ostali alati su korisni, ali zamjenjivi. Claude nije.</strong></p>
+</div>
+
+<nav class="toc" aria-label="Sadržaj">
+  <h4>Alati po prioritetu</h4>
+  <ul class="toc-grid">
+    <li><a href="#claude">Claude</a><span class="t">Modul 2</span></li>
+    <li><a href="#chatgpt">ChatGPT</a><span class="t">Modul 1</span></li>
+    <li><a href="#make">Make.com</a><span class="t">Modul 8</span></li>
+    <li><a href="#zapier">Zapier</a><span class="t">Modul 7</span></li>
+    <li><a href="#gamma">Gamma</a><span class="t">Modul 6</span></li>
+    <li><a href="#apollo">Apollo.io</a><span class="t">Modul 4</span></li>
+    <li><a href="#instantly">Instantly.ai</a><span class="t">Modul 4</span></li>
+    <li><a href="#perplexity">Perplexity</a><span class="t">Modul 5</span></li>
+    <li><a href="#elevenlabs">ElevenLabs</a><span class="t">Modul 10</span></li>
+    <li><a href="#heygen">HeyGen</a><span class="t">Modul 10</span></li>
+    <li><a href="#descript">Descript</a><span class="t">Modul 10</span></li>
+    <li><a href="#wispr">Wispr Flow</a><span class="t">Bonus</span></li>
+    <li><a href="#monday">monday.com</a><span class="t">Bonus</span></li>
+    <li><a href="#budzet">Budžet i minimum</a><span class="t">Sažetak</span></li>
+  </ul>
+</nav>
+
+<!-- ============ RAZINA 1 ============ -->
+<section class="tier">
+  <div class="tier-head">
+    <span class="tier-num">1</span>
+    <div class="txt">
+      <h2>Obavezno prije radionice</h2>
+      <p>Bez ovoga ne možemo raditi s vama jedan na jedan. Odvojite 15 minuta i riješite danas.</p>
+    </div>
+  </div>
+
+  <article class="tool hero" id="claude">
+    <div class="tool-top">
+      <div class="tool-title">
+        <h3>Claude</h3>
+        <span class="role">glavni radni alat tečaja</span>
+      </div>
+      <div><span class="badge must">Obavezno</span> <span class="badge noaff">Bez affiliatea</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Anthropicov AI asistent. Koristimo ga za strategiju, analizu dugih dokumenata, Projects (dugotrajno pamćenje po klijentu), System Promptove, Artifacts, Skills i izgradnju agenata. Modul 2 je cijeli o njemu, ali Claude se provlači kroz sve module.</p>
+
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr><td class="plan">Free</td><td>$0</td><td>Chat, web search, memory, konektori. <strong>Claude Code nije uključen.</strong> Limiti se potroše brzo na dužim zadacima.</td></tr>
+            <tr class="pick"><td class="plan">Pro</td><td>$20/mj<br><span class="mono">$17/mj godišnje</span></td><td><strong>Naša preporuka.</strong> Projects, Claude Code, Cowork, više modela, min. 5× više korištenja od Free plana.</td></tr>
+            <tr><td class="plan">Max 5×</td><td>$100/mj</td><td>5× kapacitet Pro plana. Uzmite samo ako Pro limiti stvarno koče vaš dan.</td></tr>
+            <tr><td class="plan">Max 20×</td><td>$200/mj</td><td>20× kapacitet Pro plana.</td></tr>
+            <tr><td class="plan">Team</td><td>$25/sjedalo/mj<br><span class="mono">$20 godišnje</span></td><td>Za tim od 2+ osobe, dijeljena administracija.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note"><strong>Zašto Pro, a ne Free?</strong> Na radionici radimo duge sesije s velikim dokumentima. Na Free planu ćete udariti u limit nakon 20 minuta i čekati reset — a to je vrijeme u kojem smo mi uz vas. Pro je $20 za mjesec u kojem izgradite sustav; možete ga otkazati kasnije.</div>
+
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite <span class="mono">claude.ai</span> i kliknite <em>Sign up</em>.</li>
+        <li>Upišite e-mail (preporučeno poslovni, na vlastitoj domeni) ili se prijavite preko Googlea.</li>
+        <li>Potvrdite kod koji dolazi na e-mail.</li>
+        <li><strong>Verificirajte broj mobitela SMS kodom.</strong> Ovaj korak se ne može preskočiti — riješite ga kod kuće, ne na radionici.</li>
+        <li>Za Pro: gore desno na svoj inicijal → <em>Settings</em> → <em>Billing</em> → <em>Upgrade to Pro</em> → kartica.</li>
+        <li>Provjera da je sve spremno: napravite prvi projekt (<em>Projects</em> → <em>New project</em>) i nazovite ga imenom svoje firme. Na radionici počinjemo odatle.</li>
+      </ol>
+
+      <a class="btn" href="https://claude.ai" target="_blank" rel="noopener">Registrirajte Claude <span class="arrow">→</span></a>
+      <p class="linknote">Cjenik: claude.com/pricing · GoThrive još nije u Anthropicovom partnerskom programu, pa je ovo obični link.</p>
+    </div>
+  </article>
+</section>
+
+<!-- ============ RAZINA 2 ============ -->
+<section class="tier">
+  <div class="tier-head">
+    <span class="tier-num">2</span>
+    <div class="txt">
+      <h2>Radit ćemo u njima na radionici</h2>
+      <p>Svi imaju besplatan plan koji je dovoljan za radionicu. Registrirajte se, plaćanje možete odlučiti kasnije.</p>
+    </div>
+  </div>
+
+  <article class="tool" id="chatgpt">
+    <div class="tool-top">
+      <div class="tool-title"><h3>ChatGPT</h3><span class="role">Custom GPT-ovi, vizuali, drugo mišljenje</span></div>
+      <div><span class="badge noaff">Bez affiliatea</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Modul 1: prompt engineering, Custom GPT-ovi, memorija i personalizacija. Kod nas ChatGPT ima jasnu ulogu — <strong>vizuali i generiranje slika</strong>, plus druga perspektiva na isti problem. Teški radni zadaci idu u Claude.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr class="pick"><td class="plan">Free</td><td>$0</td><td><strong>Dovoljno za radionicu.</strong> Chat, slike, glasovni mod, memory. Bez naprednih modela i scheduled taskova.</td></tr>
+            <tr><td class="plan">Go</td><td>$8/mj</td><td>Više poruka i uploada, projects, tasks, Custom GPT-ovi. Može uključivati oglase.</td></tr>
+            <tr><td class="plan">Plus</td><td>$19,99/mj</td><td>Napredni reasoning modeli, scheduled tasks, širi deep research.</td></tr>
+            <tr><td class="plan">Pro</td><td>$100–200/mj</td><td>5×/20× kapacitet. Ne treba vam na tečaju.</td></tr>
+            <tr><td class="plan">Business</td><td>$25/sjedalo/mj</td><td>Min. 2 korisnika, SSO, bez treniranja na vašim podacima.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite <span class="mono">chatgpt.com</span> → <em>Sign up</em>.</li>
+        <li>E-mail + potvrda, ili prijava preko Googlea / Microsofta / Applea.</li>
+        <li>Ako se zatraži, potvrdite broj mobitela SMS kodom.</li>
+        <li>Kartica nije potrebna za Free plan.</li>
+        <li>Ako plaćate: profil dolje lijevo → <em>Upgrade plan</em>.</li>
+      </ol>
+      <a class="btn" href="https://chatgpt.com" target="_blank" rel="noopener">Registrirajte ChatGPT <span class="arrow">→</span></a>
+      <p class="linknote">OpenAI nema affiliate program, pa je ovo obični link.</p>
+    </div>
+  </article>
+
+  <article class="tool" id="make">
+    <div class="tool-top">
+      <div class="tool-title"><h3>Make.com</h3><span class="role">napredna automatizacija, Modul 8</span></div>
+      <div><span class="badge aff">GoThrive link</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Vizualni no-code builder za automatizacije. Ovdje gradimo složenije tokove nego u Zapieru — routere, filtere, više koraka, AI korake. Za većinu polaznika Make će biti glavni automatizacijski motor.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr class="pick"><td class="plan">Free</td><td>$0</td><td><strong>Dovoljno za radionicu.</strong> 1.000 kredita/mj, 2 aktivna scenarija, minimalni interval 15 min, 7 dana logova.</td></tr>
+            <tr><td class="plan">Core</td><td>$12/mj<br><span class="mono">~$102/god</span></td><td>10.000 kredita/mj, neograničeno aktivnih scenarija, kraći intervali. Najbolji odnos cijene i vrijednosti.</td></tr>
+            <tr><td class="plan">Pro</td><td>$21/mj</td><td>Custom varijable, prioritetno izvršavanje.</td></tr>
+            <tr><td class="plan">Teams</td><td>$38/mj</td><td>Dijeljeni prostor za tim.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><strong>Pazite kod registracije:</strong> Make traži da odaberete regiju — <strong>EU ili US</strong>. Odaberite <strong>EU</strong> (<span class="mono">eu2.make.com</span>) zbog GDPR-a i jer su vam podaci klijenata u EU. Regija se kasnije ne mijenja lako.</div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite GoThrive link ispod — na njemu dobivate <strong>1 mjesec Pro plana besplatno</strong>.</li>
+        <li>Odaberite regiju <strong>EU</strong>.</li>
+        <li>Poslovni e-mail + lozinka (min. 12 znakova, veliko i malo slovo, cifra, specijalni znak) ili prijava preko Googlea.</li>
+        <li>Potvrdite e-mail.</li>
+        <li>Kartica nije potrebna.</li>
+      </ol>
+      <a class="btn" href="https://www.make.com/en/register?pc=gothrive" target="_blank" rel="noopener">Registrirajte Make.com <span class="arrow">→</span></a>
+      <p class="linknote">make.com/en/register?pc=gothrive — provjereno, radi</p>
+    </div>
+  </article>
+
+  <article class="tool" id="zapier">
+    <div class="tool-top">
+      <div class="tool-title"><h3>Zapier</h3><span class="role">osnove automatizacije, Modul 7</span></div>
+      <div><span class="badge noaff">Affiliate u obradi</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Najjednostavniji ulaz u automatizaciju: trigger → akcija. Modul 7 su fundamentals i live workshop u kojem gradite prvi Zap. Zapier ima najviše integracija, Make ima bolju cijenu i fleksibilnost — na tečaju vidite oba pa birate.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr class="pick"><td class="plan">Free</td><td>$0</td><td><strong>Dovoljno za radionicu.</strong> 100 taskova/mj, ali samo dvostepeni Zapovi (trigger + 1 akcija), bez webhookova.</td></tr>
+            <tr><td class="plan">Professional</td><td>od $19,99/mj<br><span class="mono">$239,88/god</span></td><td>Multi-step Zapovi, webhookovi, premium appovi, AI polja.</td></tr>
+            <tr><td class="plan">Team</td><td>od $69/mj</td><td>Do 25 korisnika, dijeljeni pool taskova.</td></tr>
+            <tr><td class="plan">Agents</td><td>Free 400 aktivnosti/mj<br>Pro $33,33/mj</td><td>Odvojena linija proizvoda, naplaćuje se zasebno.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><strong>Iskoristite trial:</strong> novi računi dobiju <strong>14 dana Professional plana besplatno, bez kartice</strong>. Registrirajte se dan-dva prije radionice pa ćete na radionici moći graditi i multi-step Zapove.</div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite <span class="mono">zapier.com</span> → <em>Sign up</em>.</li>
+        <li>E-mail + lozinka ili prijava preko Googlea / Microsofta.</li>
+        <li>Potvrdite e-mail.</li>
+        <li>Kartica nije potrebna. Trial Professional plana se aktivira automatski.</li>
+      </ol>
+      <a class="btn" href="https://zapier.com/sign-up" target="_blank" rel="noopener">Registrirajte Zapier <span class="arrow">→</span></a>
+      <p class="linknote">GoThrive prijava u Zapierov partnerski program je u obradi, pa je ovo obični link.</p>
+    </div>
+  </article>
+
+  <article class="tool" id="gamma">
+    <div class="tool-top">
+      <div class="tool-title"><h3>Gamma</h3><span class="role">prezentacije i dokumenti, Modul 6</span></div>
+      <div><span class="badge aff">GoThrive link</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Iz prompta ili dokumenta napravi prezentaciju, web stranicu ili social post. Koristimo ga u modulu Operacije i produktivnost — za ponude, izvještaje klijentima i lead magnete.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Krediti / mj</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr class="pick"><td class="plan">Free</td><td>50k input tokena</td><td><strong>Dovoljno za radionicu.</strong> Do 10 slajdova po promptu, import PDF/PPTX, export u PDF, PPTX, PNG i Google Slides.</td></tr>
+            <tr><td class="plan">Plus</td><td>1.000</td><td>Najbolji ulazni plaćeni plan za solo poduzetnika. Godišnje plaćanje = 28% popusta.</td></tr>
+            <tr><td class="plan">Pro</td><td>4.000</td><td>Ako Gamma postane glavni alat za klijentske deliverable.</td></tr>
+            <tr><td class="plan">Ultra</td><td>20.000</td><td>Za timove koji produciraju svakodnevno.</td></tr>
+            <tr><td class="plan">Business</td><td>—</td><td>$40 po članu/mj, samo godišnja naplata.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><strong>Napomena o cijenama:</strong> Gamma cijene planova Plus/Pro/Ultra prikazuje samo u pregledniku, pa ih ovdje ne navodimo da vas ne dezinformiramo. Otvorite <span class="mono">gamma.app/pricing</span> i vidjet ćete aktualne brojeve. Potvrđeno je: godišnja naplata daje 28% popusta.</div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite GoThrive link ispod.</li>
+        <li>E-mail ili prijava preko Googlea.</li>
+        <li>Potvrdite e-mail. Kartica nije potrebna za Free.</li>
+        <li>Napravite jednu probnu prezentaciju iz prompta da vidite kako radi.</li>
+      </ol>
+      <a class="btn" href="https://try.gamma.app/khm062f8gf3f" target="_blank" rel="noopener">Registrirajte Gamma <span class="arrow">→</span></a>
+      <p class="linknote">try.gamma.app/khm062f8gf3f — provjereno, radi</p>
+    </div>
+  </article>
+</section>
+
+<!-- ============ RAZINA 3 ============ -->
+<section class="tier">
+  <div class="tier-head">
+    <span class="tier-num">3</span>
+    <div class="txt">
+      <h2>Lead generation i prodaja</h2>
+      <p>Modul 4 i dio Modula 5. Registrirajte ih ako vam je cilj tečaja dovođenje klijenata. Ako niste u prodaji, preskočite bez brige.</p>
+    </div>
+  </div>
+
+  <article class="tool" id="apollo">
+    <div class="tool-top">
+      <div class="tool-title"><h3>Apollo.io</h3><span class="role">baza kontakata i lead generation</span></div>
+      <div><span class="badge aff">GoThrive link</span></div>
+    </div>
+    <div class="tool-body">
+      <p>240+ milijuna kontakata: pronalaženje idealnih kupaca, e-mail adrese, telefoni, enrichment. U Modulu 4 gradimo cijeli lead gen tok od ICP-a do liste.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr class="pick"><td class="plan">Free</td><td>$0</td><td><strong>Dovoljno za radionicu.</strong> Pristup e-mail podacima, mjesečni krediti, telefoni ograničeno vrijeme.</td></tr>
+            <tr><td class="plan">Basic</td><td>$49/korisnik/mj</td><td>Spajanje ne-Gmail inboxa, više kredita.</td></tr>
+            <tr><td class="plan">Professional</td><td>$99/korisnik/mj</td><td>Napredne sekvence i analitika.</td></tr>
+            <tr><td class="plan">Enterprise</td><td>na upit</td><td>Za timove.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><strong>Ovo je najvažniji savjet za Apollo:</strong> registrirajte se s <strong>e-mailom na vlastitoj domeni</strong> (npr. <span class="mono">ime@vasafirma.hr</span>), ne s Gmailom. S poslovnom domenom dobivate <strong>10.000 kredita mjesečno</strong>; s privatnim e-mailom samo <strong>100</strong>. Razlika je 100×.</div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite GoThrive link ispod.</li>
+        <li>Registrirajte se <strong>poslovnim e-mailom na svojoj domeni</strong>.</li>
+        <li>Potvrdite e-mail.</li>
+        <li>Kartica nije potrebna za Free plan ni za trial.</li>
+        <li>Provjerite u <em>Settings → Credits</em> da vidite 10.000 kredita. Ako vidite 100, domena nije prepoznata kao poslovna.</li>
+      </ol>
+      <a class="btn" href="https://get.apollo.io/z1exx91v0req" target="_blank" rel="noopener">Registrirajte Apollo.io <span class="arrow">→</span></a>
+      <p class="linknote">get.apollo.io/z1exx91v0req — provjereno, radi</p>
+    </div>
+  </article>
+
+  <article class="tool" id="instantly">
+    <div class="tool-top">
+      <div class="tool-title"><h3>Instantly.ai</h3><span class="role">cold email i warmup</span></div>
+      <div><span class="badge noaff">Bez affiliatea</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Slanje cold email kampanja s neograničenim brojem inboxa i automatskim warmupom domena. Modul 4, lekcija 2. Ovo je jedini alat na listi bez besplatnog trajnog plana.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena (godišnje/mj)</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr class="pick"><td class="plan">Outreach<br>Growth</td><td>$47/mj</td><td><strong>Najniži realan ulaz.</strong> Slanje i warmup, bez baze leadova (koristite Apollo za liste).</td></tr>
+            <tr><td class="plan">Starter</td><td>$85/mj<br><span class="mono">$94 mjesečno</span></td><td>5.000 e-mailova/mj, 1.000 kontakata, 1.500 kredita, pristup bazi 450M+ leadova.</td></tr>
+            <tr><td class="plan">Scale</td><td>$175/mj</td><td>100.000 e-mailova/mj, 25.000 kontakata.</td></tr>
+            <tr><td class="plan">Agency</td><td>$500/mj</td><td>500.000 e-mailova/mj. Za agencije.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><strong>Nemojte plaćati prije radionice.</strong> Instantly ima smisla samo ako stvarno pokrećete cold outreach. Napravite besplatan račun (kartica nije potrebna za registraciju), pogledajte sučelje na radionici pa odlučite. Warmup domene traje 2–3 tjedna, pa ionako ne šaljete istog dana.</div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite <span class="mono">instantly.ai</span> → <em>Sign up</em>.</li>
+        <li>E-mail + potvrda. Kartica nije potrebna za registraciju.</li>
+        <li>Za stvarni rad kasnije spajate vlastite inboxe (Google / Microsoft / SMTP) i domene za warmup — to radimo zajedno na radionici.</li>
+      </ol>
+      <a class="btn" href="https://instantly.ai" target="_blank" rel="noopener">Registrirajte Instantly.ai <span class="arrow">→</span></a>
+      <p class="linknote">GoThrive affiliate link za Instantly trenutno ne radi (404), pa je ovo obični link.</p>
+    </div>
+  </article>
+
+  <article class="tool" id="perplexity">
+    <div class="tool-top">
+      <div class="tool-title"><h3>Perplexity</h3><span class="role">istraživanje tržišta i konkurencije</span></div>
+      <div><span class="badge noaff">Bez affiliatea</span></div>
+    </div>
+    <div class="tool-body">
+      <p>AI pretraživač s citiranim izvorima. Koristimo ga za brzo istraživanje prije pisanja sadržaja i prije prodajnog razgovora — kad trebate provjerene, izvorima potkrijepljene podatke.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr class="pick"><td class="plan">Free</td><td>$0</td><td><strong>Dovoljno za radionicu.</strong> 3 Pro searcha dnevno, 1 Research query mjesečno.</td></tr>
+            <tr><td class="plan">Pro</td><td>$20/mj</td><td>Napredni modeli, 10× više citata, veći uploadi, generiranje slika.</td></tr>
+            <tr><td class="plan">Education Pro</td><td>$10/mj</td><td>Uz verifikaciju studentskog statusa.</td></tr>
+            <tr><td class="plan">Max</td><td>$200/mj<br><span class="mono">$2.000/god</span></td><td>Za intenzivan dnevni research.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite <span class="mono">perplexity.ai</span> → <em>Sign up</em>.</li>
+        <li>E-mail (dobivate magic link) ili prijava preko Googlea / Applea.</li>
+        <li>Kartica nije potrebna za Free plan.</li>
+      </ol>
+      <a class="btn" href="https://www.perplexity.ai" target="_blank" rel="noopener">Registrirajte Perplexity <span class="arrow">→</span></a>
+      <p class="linknote">GoThrive nema affiliate program s Perplexityjem, pa je ovo obični link.</p>
+    </div>
+  </article>
+</section>
+
+<!-- ============ RAZINA 4 ============ -->
+<section class="tier">
+  <div class="tier-head">
+    <span class="tier-num">4</span>
+    <div class="txt">
+      <h2>Video, glas i bonus alati</h2>
+      <p>Modul 10 je bonus modul. Registrirajte ove alate kad dođete do njih — ne trebaju vam na radionici.</p>
+    </div>
+  </div>
+
+  <article class="tool" id="elevenlabs">
+    <div class="tool-top">
+      <div class="tool-title"><h3>ElevenLabs</h3><span class="role">AI glas i voiceover</span></div>
+      <div><span class="badge aff">GoThrive link</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Najbolji AI glas na tržištu, uključujući hrvatski. Voiceover za reelove, video lekcije i podcaste, plus kloniranje vlastitog glasa.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena</th><th>Krediti / mj</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr><td class="plan">Free</td><td>$0</td><td>10.000</td><td><strong>Bez komercijalne licence i bez voice cloninga.</strong> Dobro za probu, ne za klijentski rad.</td></tr>
+            <tr class="pick"><td class="plan">Starter</td><td>$6/mj<br><span class="mono">$5 godišnje</span></td><td>30.000</td><td><strong>Naša preporuka.</strong> Otključava komercijalnu licencu i Instant Voice Cloning za smiješne novce.</td></tr>
+            <tr><td class="plan">Creator</td><td>$22/mj<br><span class="mono">$18,33 godišnje</span></td><td>121.000</td><td>Professional Voice Cloning, za redovnu produkciju sadržaja.</td></tr>
+            <tr><td class="plan">Pro</td><td>$99/mj</td><td>600.000</td><td>Za studio i agencijski volumen.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><strong>Ako radite za klijente, Free plan nije opcija.</strong> Komercijalna licenca počinje od Starter plana ($6/mj). Objavljivanje audija s Free plana na klijentskom kanalu je kršenje licence.</div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite GoThrive link ispod.</li>
+        <li>E-mail ili prijava preko Googlea → potvrda e-maila.</li>
+        <li>Kartica nije potrebna za Free plan.</li>
+        <li>Godišnje plaćanje = <strong>2 mjeseca besplatno</strong> (plaćate 10 mjeseci).</li>
+      </ol>
+      <a class="btn" href="https://try.elevenlabs.io/lt9n4nea8y5s" target="_blank" rel="noopener">Registrirajte ElevenLabs <span class="arrow">→</span></a>
+      <p class="linknote">try.elevenlabs.io/lt9n4nea8y5s — provjereno, radi</p>
+    </div>
+  </article>
+
+  <article class="tool" id="heygen">
+    <div class="tool-top">
+      <div class="tool-title"><h3>HeyGen</h3><span class="role">AI avatari i video</span></div>
+      <div><span class="badge noaff">Affiliate u obradi</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Napravite video avatar sebe i snimajte sadržaj bez kamere, na 175+ jezika. Koristi se za onboarding videe, kratke edukativne isječke i personalizirani outreach.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr><td class="plan">Free</td><td>$0</td><td>3 videa/mj, do 1 minute, 1 custom avatar, 500+ stock avatara. Watermark, bez 1080p.</td></tr>
+            <tr class="pick"><td class="plan">Creator</td><td>$29/mj<br><span class="mono">$24 godišnje</span></td><td><strong>Naša preporuka.</strong> Videa do 30 min, 1080p export, voice cloning, 175+ jezika, 600 kredita/mj.</td></tr>
+            <tr><td class="plan">Pro</td><td>$49–240/mj</td><td>1.000–5.000 kredita/mj, 4K export.</td></tr>
+            <tr><td class="plan">Business</td><td>$149/mj + $20/sjedalo</td><td>Za timove.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite <span class="mono">heygen.com</span> → <em>Sign up</em>.</li>
+        <li>E-mail ili prijava preko Googlea → potvrda e-maila. Kartica nije potrebna.</li>
+        <li>Za vlastiti avatar snimite kratki video i verificirajte pristanak (consent snimka) — HeyGen to zahtijeva.</li>
+        <li>Snimajte pri dobrom svjetlu i mirno gledajte u kameru; kvaliteta te snimke određuje kvalitetu avatara.</li>
+      </ol>
+      <a class="btn" href="https://www.heygen.com" target="_blank" rel="noopener">Registrirajte HeyGen <span class="arrow">→</span></a>
+      <p class="linknote">GoThrive prijava u HeyGenov partnerski program je u obradi, pa je ovo obični link.</p>
+    </div>
+  </article>
+
+  <article class="tool" id="descript">
+    <div class="tool-top">
+      <div class="tool-title"><h3>Descript</h3><span class="role">montaža videa i audija tekstom</span></div>
+      <div><span class="badge aff">GoThrive link</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Montirate video tako da brišete riječi u transkriptu. Najbrži način da iz jednog snimljenog razgovora izvučete deset kratkih isječaka za društvene mreže.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena (godišnje/mj)</th><th>Sati medija / mj</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr><td class="plan">Free</td><td>$0</td><td>1</td><td>Transkripcija na 25 jezika. <strong>Watermark, max 720p</strong>, 100 jednokratnih AI kredita, 5 GB.</td></tr>
+            <tr class="pick"><td class="plan">Hobbyist</td><td>$16/mj<br><span class="mono">$24 mjesečno</span></td><td>10</td><td><strong>Naša preporuka.</strong> Bez watermarka — najmanji plan koji daje isječke koje se smije objaviti.</td></tr>
+            <tr><td class="plan">Creator</td><td>$24/mj<br><span class="mono">$35 mjesečno</span></td><td>30</td><td>Napredniji AI alati, za redovno snimanje.</td></tr>
+            <tr><td class="plan">Business</td><td>$50/mj<br><span class="mono">$65 mjesečno</span></td><td>40</td><td>Za timove i klijentski rad u volumenu.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite GoThrive link ispod — vodi na Descriptov referral program.</li>
+        <li>Registrirajte se e-mailom ili preko Googlea. Kartica nije potrebna za Free.</li>
+        <li>Radi u pregledniku, ali skinite i desktop aplikaciju (macOS/Windows) — brža je za montažu.</li>
+      </ol>
+      <a class="btn" href="https://descript.cello.so/J2XK0L1C5TZ" target="_blank" rel="noopener">Registrirajte Descript <span class="arrow">→</span></a>
+      <p class="linknote">descript.cello.so/J2XK0L1C5TZ — provjereno, radi</p>
+    </div>
+  </article>
+
+  <article class="tool" id="wispr">
+    <div class="tool-top">
+      <div class="tool-title"><h3>Wispr Flow</h3><span class="role">diktiranje umjesto tipkanja</span></div>
+      <div><span class="badge aff">GoThrive link</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Nije u agendi, ali je alat koji najviše ubrza rad s AI-em. Diktirate promptove i tekst glasom u bilo koju aplikaciju, na 100+ jezika. Kad promptove govorite umjesto da ih tipkate, pišete duže i bolje promptove.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Cijena</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr class="pick"><td class="plan">Free</td><td>$0</td><td><strong>Počnite ovdje.</strong> 2.000 riječi/tjedno na računalu, 100+ jezika, Mac, Windows, iOS, Android.</td></tr>
+            <tr><td class="plan">Pro</td><td>$15/mj<br><span class="mono">$12 godišnje</span></td><td>Bez tjednog limita. Uzmite kad vas Free limit počne kočiti — a počne brzo.</td></tr>
+            <tr><td class="plan">Growth</td><td>od $23/korisnik/mj</td><td>Za timove.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite GoThrive link ispod i skinite aplikaciju za svoj sustav.</li>
+        <li>Napravite račun e-mailom. Kartica nije potrebna — Free je trajni plan, ne trial.</li>
+        <li>Dopustite pristup mikrofonu i pristupačnosti (accessibility) u postavkama sustava.</li>
+        <li>Vježbajte tjedan dana na Free planu prije nego platite.</li>
+      </ol>
+      <a class="btn" href="https://ref.wisprflow.ai/go-thrive-platform-ltd" target="_blank" rel="noopener">Registrirajte Wispr Flow <span class="arrow">→</span></a>
+      <p class="linknote">ref.wisprflow.ai/go-thrive-platform-ltd — provjereno, radi</p>
+    </div>
+  </article>
+
+  <article class="tool" id="monday">
+    <div class="tool-top">
+      <div class="tool-title"><h3>monday.com</h3><span class="role">gdje sve to živi</span></div>
+      <div><span class="badge aff">GoThrive link</span></div>
+    </div>
+    <div class="tool-body">
+      <p>Radna platforma u kojoj GoThrive vodi sve procese. U Modulu 9 gradimo vaš AI sustav — SOP-ove, onboarding tima, mjerenje ROI-a — i negdje to mora živjeti. monday se spaja i s Claudeom i s Makeom.</p>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Plan</th><th>Što dobivate</th></tr></thead>
+          <tbody>
+            <tr class="pick"><td class="plan">Free</td><td><strong>Neograničeno vrijeme na Free planu, bez kartice.</strong> Dovoljno da postavite prvi sustav i vidite radi li vam.</td></tr>
+            <tr><td class="plan">Plaćeni planovi</td><td>Stupnjevito po korisniku i po proizvodu (work management, CRM, dev, service). Aktualni cjenik je na linku.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4>Registracija korak po korak</h4>
+      <ol class="steps">
+        <li>Otvorite GoThrive link ispod → <em>Get Started</em>.</li>
+        <li>Poslovni e-mail ili prijava preko Googlea. Kartica nije potrebna.</li>
+        <li>Preskočite predložene template i napravite jednu praznu ploču — na radionici je punimo vašim procesom.</li>
+      </ol>
+      <a class="btn" href="https://try.monday.com/croatia" target="_blank" rel="noopener">Registrirajte monday.com <span class="arrow">→</span></a>
+      <p class="linknote">try.monday.com/croatia — provjereno, radi</p>
+    </div>
+  </article>
+</section>
+
+<!-- ============ BUDGET ============ -->
+<section class="budget" id="budzet">
+  <div class="budget-head">
+    <h2>Koliko vas ovo stvarno košta</h2>
+  </div>
+  <div class="budget-body">
+    <div class="prose">
+      <h4>Apsolutni minimum za radionicu</h4>
+      <p style="margin-top:8px">Claude Pro, i ništa više. Sve ostalo iz Razine 2 ima besplatan plan koji je dovoljan za dan radionice.</p>
+    </div>
+    <div class="total">
+      <span class="n">$20</span>
+      <span class="l">mjesečno · Claude Pro · $17/mj ako plaćate godišnje</span>
+    </div>
+
+    <div class="prose" style="margin-top:14px">
+      <h4>Realan radni stack nakon tečaja</h4>
+      <p style="margin-top:8px">Kad odlučite stvarno voditi posao kroz AI, ovo je stack koji preporučamo. Godišnje plaćanje gdje je moguće.</p>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Alat</th><th>Plan</th><th>Mjesečno</th></tr></thead>
+        <tbody>
+          <tr><td class="plan">Claude</td><td>Pro (godišnje)</td><td>$17</td></tr>
+          <tr><td class="plan">Make.com</td><td>Core</td><td>$12</td></tr>
+          <tr><td class="plan">Wispr Flow</td><td>Pro (godišnje)</td><td>$12</td></tr>
+          <tr><td class="plan">Gamma</td><td>Plus (godišnje)</td><td>vidi cjenik</td></tr>
+          <tr><td class="plan">ChatGPT</td><td>Free ili Go</td><td>$0–8</td></tr>
+          <tr><td class="plan">Perplexity</td><td>Free</td><td>$0</td></tr>
+          <tr><td class="plan">Zapier</td><td>Free (rezerva za appove koje Make ne pokriva)</td><td>$0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="total">
+      <span class="n">~$41–49</span>
+      <span class="l">mjesečno, bez Gamme i bez alata iz Razine 3 i 4</span>
+    </div>
+    <div class="note"><strong>Ne plaćajte sve odjednom.</strong> Plaćajte alat onda kad vas besplatni plan stvarno počne kočiti — ne prije. Jedina iznimka je Claude, jer u njemu radimo cijeli tečaj.</div>
+  </div>
+</section>
+
+<footer class="end">
+  <p>Sve cijene provjerene 5. rujna 2026. na službenim cjenicima proizvođača. Iznosi su u USD i bez PDV-a — za hrvatskog kupca bez važećeg VAT ID-a najčešće se dodaje PDV.</p>
+  <p>Linkovi označeni <strong>GoThrive link</strong> su naši partnerski linkovi i svi su provjereni da rade. Ako ih koristite, GoThrive dobiva proviziju — vaša cijena je ista, a kod Makea dobivate i mjesec Pro plana besplatno.</p>
+  <p>Pitanja prije radionice? Pišite nam na <a href="mailto:katarina@gothrive.hr">katarina@gothrive.hr</a>.</p>
+</footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Custom GPT Blueprint &mdash; Sve AI tajne, Modul 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 1</div>
+<h1>Custom GPT Blueprint</h1>
+<p class="lede">Popuni polja, a dokument sam sastavi gotove upute za tvoj Custom GPT. Kopiraj ih u ChatGPT Builder i asistent je živ. Bez kodiranja, bez lutanja po postavkama.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>16 polja</span><span>Generira upute</span><span>Checklista baze znanja</span><span>4 testa</span><span>Rujan 2026.</span></div>
+</header>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Što gradimo i zašto</h2></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Razlika koja se osjeti</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Običan razgovor s ChatGPT-om počinje od nule. Svaki put ponovno objašnjavaš čime se baviš, kome pišeš i kojim tonom.</p>
+      <p>Custom GPT to zna unaprijed. Ti napišeš &bdquo;follow-up za Petrovića, treći dan, nema odgovora&ldquo; &mdash; i dobiješ email u svom tonu, sa svojim potpisom i svojim pravilima.</p>
+      <p>Kad ga podijeliš s timom, svi pišu istim glasom. To je stvarna vrijednost.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Put do gotovog GPT-a</h4>
+    <ol class="steps">
+      <li>Otvori <a href="https://chatgpt.com/gpts/mine" target="_blank" rel="noopener">chatgpt.com/gpts/mine</a> i klikni <b>Create</b>.</li>
+      <li>Prebaci se na tab <b>Configure</b>. Builder chat preskoči &mdash; ručno je brže i točnije.</li>
+      <li>Popuni sekciju 02 ovdje, klikni <b>Kopiraj upute</b> i zalijepi u polje <b>Instructions</b>.</li>
+      <li>Dodaj ime, opis i četiri conversation startera (sekcija 03).</li>
+      <li>Uploadaj dokumente iz sekcije 04 u <b>Knowledge</b>.</li>
+      <li>Uključi mogućnosti iz sekcije 05 i prođi kroz četiri testa.</li>
+      <li>Klikni <b>Save</b> i odaberi koče ga vidi &mdash; samo ja, link, ili svi.</li>
+    </ol>
+    <div class="note"><strong>Potreban plan:</strong> izrada Custom GPT-ova dostupna je na plaćenim planovima (Plus i više).</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Generator uputa</h2><p>Popunjavaj polja lijevo &mdash; upute se sastavljaju u stvarnom vremenu. Prazna polja ostaju kao označeni placeholderi da vidiš što ti fali.</p></div></div>
+<div class="note ru">Podaci se ne šalju nikamo i ne spremaju &mdash; sve ostaje u tvom pregledniku. Ako zatvoriš stranicu, upisano se gubi, pa kopiraj rezultat kad završiš.</div>
+<div class="grid g2" style="margin-top:18px;align-items:start">
+  <div class="card">
+    <h4>Tvoji podaci</h4>
+    <div class="field"><label for="gptName">Ime GPT-a</label><div class="hint">Najviše 30 znakova. Neka opisuje funkciju, ne tvrtku.</div><input type="text" id="gptName" data-f="gptName" placeholder="npr. InboxZero Asistent"></div><div class="field"><label for="company">Naziv tvrtke ili osobnog branda</label><div class="hint">Onako kako se pojavljuje na svim materijalima.</div><input type="text" id="company" data-f="company" placeholder="npr. Mobile 4U d.o.o."></div><div class="field"><label for="purpose">Svrha u jednoj rečenici</label><div class="hint">Što ovaj GPT radi. Jedna stvar, ne pet.</div><input type="text" id="purpose" data-f="purpose" placeholder="npr. piše i dorađuje poslovne emailove i ponude u tonu našeg branda"></div><div class="field"><label for="users">Kome služi</label><div class="hint">Tko će ga stvarno koristiti i koliko ih je.</div><input type="text" id="users" data-f="users" placeholder="npr. meni i timu od 4 osobe u prodaji"></div><div class="field"><label for="industry">Industrija / sektor</label><input type="text" id="industry" data-f="industry" placeholder="npr. veleprodaja telekom opreme"></div><div class="field"><label for="market">Lokacija i tržište</label><input type="text" id="market" data-f="market" placeholder="npr. Hrvatska, klijenti u HR i BiH"></div><div class="field"><label for="services">Usluge ili proizvodi</label><div class="hint">Jedan po retku. Tri do pet je dovoljno.</div><textarea id="services" data-f="services" rows="3" placeholder="Servis mobilnih uređaja
+Prodaja opreme
+B2B ugovori za flote"></textarea></div><div class="field"><label for="client">Idealni klijent</label><div class="hint">Veličina, industrija, pozicija osobe koja odlučuje.</div><input type="text" id="client" data-f="client" placeholder="npr. tvrtke s 20-200 zaposlenih, kontakt je nabava ili IT"></div><div class="field"><label for="usp">Što nas razlikuje</label><div class="hint">Iz perspektive klijenta, ne naše.</div><input type="text" id="usp" data-f="usp" placeholder="npr. servis u 24h i zamjenski uređaj za to vrijeme"></div><div class="field"><label for="tone">Ton komunikacije</label><input type="text" id="tone" data-f="tone" placeholder="npr. profesionalan i direktan, bez korporativnog žargona"></div><div class="field"><label for="language">Jezik</label><div class="hint">Ako oba, napiši pravilo kad koji.</div><input type="text" id="language" data-f="language" placeholder="npr. hrvatski; engleski samo ako klijent piše na engleskom"></div><div class="field"><label for="length">Duljina odgovora</label><input type="text" id="length" data-f="length" placeholder="npr. kratko, najviše tri odlomka"></div><div class="field"><label for="never">NIKAD ne koristi</label><div class="hint">Fraze i ponašanja koja ne želiš. Ovo je najkorisnije polje u cijelom templateu.</div><textarea id="never" data-f="never" rows="3" placeholder="npr. 'Odlično pitanje!', uskličnike, riječi sinergija i disruptivno, obećanja rokova"></textarea></div><div class="field"><label for="always">UVIJEK koristi</label><textarea id="always" data-f="always" rows="3" placeholder="npr. konkretne brojeve, ime klijenta, jedan jasan next step na kraju"></textarea></div><div class="field"><label for="tasks">Ključni zadaci</label><div class="hint">Jedan po retku. Najviše pet &mdash; GPT koji radi sve ne radi ništa dobro.</div><textarea id="tasks" data-f="tasks" rows="3" placeholder="Pisanje follow-up emailova
+Dorada ponuda
+Sažimanje email threadova
+Odgovori na najčešća pitanja"></textarea></div><div class="field"><label for="escalate">Kad uputiti na čovjeka</label><div class="hint">Situacije u kojima GPT ne smije improvizirati.</div><textarea id="escalate" data-f="escalate" rows="3" placeholder="npr. pritužbe, pravna pitanja, iznosi iznad 5.000 EUR &rarr; katarina@gothrive.hr"></textarea></div>
+    <button class="btn ghost" type="button" id="clr">Očisti sva polja</button>
+  </div>
+  <div class="card" style="position:sticky;top:16px">
+    <div class="item-badges"><h4 style="flex:1 1 auto">Gotove upute &mdash; polje Instructions</h4><span class="badge em">Live</span></div>
+    <pre class="p" id="out" style="max-height:560px;overflow:auto"></pre>
+    <div class="actions">
+      <button class="copybtn" type="button" data-target="#out">Kopiraj upute</button>
+    </div>
+    <div class="note"><strong>Nakon lijepljenja:</strong> pročitaj upute još jednom u Builderu. Ako nešto zvuči općenito, i GPT će biti općenit. Najveći utjecaj imaju polja <em>NIKAD ne koristi</em> i <em>Ključni zadaci</em>.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Ime, opis i četiri gumba</h2><p>Ovo je jedino što korisnik vidi prije prve poruke.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Ime i opis</h4>
+    <div class="prose" style="font-size:.94rem">
+      <p><b>Ime</b> &mdash; do 30 znakova, opisuje funkciju. <em>InboxZero Asistent</em>, <em>Ponude Copilot</em>, <em>Support Hero</em>. Emoji na početku pomaže prepoznavanju u listi.</p>
+      <p><b>Opis</b> &mdash; jedna do dvije rečenice, napisane kao da objašnjavaš funkciju novom zaposleniku. Vidi ga i tvoj tim.</p>
+    </div>
+    <div class="note em"><strong>Primjer:</strong> &bdquo;Pomažem timu Mobile 4U s pisanjem i doradom poslovnih emailova i ponuda u konzistentnom tonu branda. Specijaliziran za veleprodaju telekom opreme.&ldquo;</div>
+  </div>
+  <div class="card">
+    <h4>Četiri conversation startera</h4>
+    <div class="prose" style="font-size:.94rem">
+      <p>To su gumbi koji se prikazuču pri otvaranju GPT-a. Moraju biti konkretni prečaci za stvarne zadatke, ne opći pozivi.</p>
+    </div>
+    <ul class="ticks">
+      <li><b>Loše:</b> &bdquo;Kako ti mogu pomoći?&ldquo; &mdash; to nije starter, to je prazna stranica.</li>
+      <li><b>Dobro:</b> &bdquo;&#9993;&#65039; Follow-up klijentu koji nije odgovorio&ldquo;</li>
+      <li><b>Dobro:</b> &bdquo;&#128203; Sažmi ovaj email thread i izvuci moje zadatke&ldquo;</li>
+      <li><b>Dobro:</b> &bdquo;&#128161; Napiši ponudu za [usluga] za [tip klijenta]&ldquo;</li>
+      <li><b>Dobro:</b> &bdquo;&#128202; Odgovori na pritužbu &mdash; zalijepiću je ispod&ldquo;</li>
+    </ul>
+    <div class="note"><strong>Pravilo:</strong> četiri startera = četiri najčešća zadatka iz tvog tjedna. Ako ne znaš koja su &mdash; pogledaj svoju poslanu poštu od prošlog tjedna.</div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Baza znanja</h2><p>Do 20 dokumenata koje GPT uvijek &bdquo;zna&ldquo;. Bez njih radiš s pametnim strancem; s njima &mdash; s kolegom koji poznaje tvrtku.</p></div></div>
+<div class="card">
+  <div class="item-badges"><h4 style="flex:1 1 auto">Checklista dokumenata</h4><span class="count" id="klab"></span></div>
+  <div class="progressbar"><i id="kbar"></i></div>
+  <div><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Brand Voice Document</b><span>Tko ste, kojim tonom komunicirate, primjeri dobrog i lošeg pisanja.</span><span style="color:var(--emerald)">Bez ovoga GPT nema tvoj glas. Template je deliverable br. 3 ovog modula.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>FAQ dokument</b><span>Najčešća pitanja klijenata s odgovorima. Minimalno deset.</span><span style="color:var(--emerald)">Dvadeset i više Q&amp;A i GPT sam rješava većinu upita.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Cjenik i opis usluga</b><span>Detaljan opis svake usluge, cijene, uvjeti.</span><span style="color:var(--emerald)">Bez ovoga GPT izmišlja cijene. Ako ne želiš cijene unutra, izričito napiši da ih ne smije navoditi.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Primjeri tvojih dobrih emailova</b><span>Pet do deset emailova koje bi ponovno poslao/la bez izmjena.</span><span style="color:var(--emerald)">Najbrži način da GPT nauči tvoj stil.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>SOP-ovi i procedure</b><span>Interni procesi i upute za tim.</span><span style="color:var(--emerald)">Za GPT-ove koji služe timu, ne klijentima.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Primjeri ponuda ili ugovora</b><span>Anonimizirani &mdash; bez imena i iznosa stvarnih klijenata.</span><span style="color:var(--emerald)">GPT generira u tvom formatu, ne u svom.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Profili klijenata (persone)</b><span>Anonimizirani opisi tipova kupaca.</span><span style="color:var(--emerald)">Bolja personalizacija poruka.</span></span></label><label class="chk"><input type="checkbox" class="kchk"><span class="t"><b>Kratki opis konkurencije</b><span>Tko su alternative i čime se razlikujete.</span><span style="color:var(--emerald)">Za prodajne GPT-ove.</span></span></label></div>
+  <div class="note ru"><strong>Prije uploada, obavezno:</strong> izbaci imena stvarnih klijenata, iznose ugovora, osobne podatke i sve što ne bi želio/željela vidjeti u tuđem odgovoru. Anonimizirani primjer radi jednako dobro kao pravi.</div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">05</div><div class="txt"><h2>Mogućnosti</h2><p>Uključi samo ono što GPT-u stvarno treba. Svaka nepotrebna mogućnost je još jedan način da odgovori pogrešno.</p></div></div>
+<div class="tbl-scroll"><table><thead><tr><th>Mogućnost</th><th>Preporuka</th><th>Kada</th></tr></thead><tbody><tr><td class="k">Web Search</td><td class="k">Uključi</td><td>Ako GPT treba aktualne podatke &mdash; cijene, regulativu, vijesti. Inače odgovara iz treninga.</td></tr><tr><td class="k">Canvas</td><td class="k">Uključi</td><td>Za sve što je dulje od tri odlomka &mdash; ponude, članci, dokumenti.</td></tr><tr><td class="k">Generiranje slika</td><td class="k">Po potrebi</td><td>Samo za marketinške GPT-ove. Inače nepotrebno proširuje opseg.</td></tr><tr><td class="k">Code Interpreter / analiza podataka</td><td class="k">Uključi za analitičke GPT-ove</td><td>Za obradu Excela, CSV-a i PDF-ova s brojevima.</td></tr></tbody></table></div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">06</div><div class="txt"><h2>Četiri testa prije nego što ga pustiš u rad</h2><p>Deset minuta testiranja štedi tjedan popravljanja tuđih pogrešaka.</p></div></div>
+<article class="item"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>Test identiteta</h3></div></div><div class="item-body"><pre class="p">Tko si ti i što možeš napraviti?</pre><div class="actions"><button class="copybtn" type="button">Kopiraj</button></div><div class="note">Provjeravaš: odgovara li u točnom tonu, navodi li točne usluge, drži li se jezika koji si zadao/la.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Test glavnog zadatka</h3></div></div><div class="item-body"><pre class="p">Pošalji najčešći zadatak koji će GPT dobivati u praksi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj</button></div><div class="note">Provjeravaš: kvalitetu i format outputa. Je li spreman za korištenje ili treba dorada?</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Test granice</h3></div></div><div class="item-body"><pre class="p">Pošalji nešto što GPT <em>ne smije</em> raditi &mdash; npr. pitaj za pravni savjet ili za popust.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj</button></div><div class="note">Provjeravaš: poštuje li ograničenja i eskalacijsko pravilo iz uputa. Ako ne, pojačaj tu sekciju.</div></div></article><article class="item"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Test u tuđim rukama</h3></div></div><div class="item-body"><pre class="p">Daj ga kolegi bez ikakvog objašnjenja i gledaj što napravi.</pre><div class="actions"><button class="copybtn" type="button">Kopiraj</button></div><div class="note">Provjeravaš: jesu li conversation starters dovoljno jasni. Ako kolega ne zna što napisati &mdash; starteri su loši.</div></div></article>
+<div class="note em" style="margin-top:16px"><strong>Kad prođe sva četiri:</strong> podijeli link timu i zapiši u SOP kad se koji GPT koristi. Bez toga tim se vraća na obični ChatGPT i sve što si izgradio/la stoji neiskorišteno.</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Izvor: GoThrive_Custom_GPT_Blueprint (svibanj 2026.), pretvoren u interaktivni generator.</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+(function(){
+  var out = document.getElementById('out');
+  function v(id, fb){
+    var el = document.getElementById(id);
+    var t = el ? el.value.trim() : '';
+    return t || fb;
+  }
+  function vp(id, fb){            // vrijednost bez dvostruke tocke na kraju
+    var t = v(id, fb);
+    return t.replace(/\.+$/, '');
+  }
+  function bullets(id, fb){
+    var el = document.getElementById(id);
+    var t = el ? el.value.trim() : '';
+    if(!t) return '• ' + fb;
+    return t.split(/\r?\n/).filter(function(l){return l.trim()})
+            .map(function(l){return '• ' + l.trim()}).join('\n');
+  }
+  function numbered(id, fb){
+    var el = document.getElementById(id);
+    var t = el ? el.value.trim() : '';
+    if(!t) return '1. ' + fb;
+    return t.split(/\r?\n/).filter(function(l){return l.trim()})
+            .map(function(l,i){return (i+1) + '. ' + l.trim()}).join('\n');
+  }
+  function render(){
+    var s = ''
++ '## ULOGA I IDENTITET\n'
++ 'Ti si ' + vp('gptName','[IME GPT-A]') + ', AI asistent za ' + vp('company','[NAZIV TVRTKE]') + '.\n'
++ 'Tvoja primarna svrha: ' + vp('purpose','[JEDNA REČENICA — što ovaj GPT radi]') + '.\n'
++ 'Radiš za: ' + vp('users','[opis korisnika]') + '.\n\n'
++ '---\n'
++ '## KONTEKST O TVRTKI\n'
++ 'Naziv: ' + v('company','[NAZIV]') + '\n'
++ 'Industrija: ' + v('industry','[UPIŠI]') + '\n'
++ 'Lokacija i tržište: ' + v('market','[UPIŠI]') + '\n'
++ 'Usluge i proizvodi:\n' + bullets('services','[Usluga 1]') + '\n'
++ 'Naš idealni klijent: ' + v('client','[opis]') + '\n'
++ 'Ono što nas razlikuje: ' + v('usp','[USP]') + '\n\n'
++ '---\n'
++ '## TON I STIL\n'
++ 'Komuniciraj ovim tonom: ' + v('tone','[ton]') + '\n'
++ 'Jezik: ' + v('language','[jezik i pravilo]') + '\n'
++ 'Duljina odgovora: ' + v('length','[kratko / detaljno]') + '\n'
++ 'NIKAD ne koristi:\n' + bullets('never','[fraze i ponašanja koja ne želiš]') + '\n'
++ 'UVIJEK koristi:\n' + bullets('always','[što mora biti u svakom odgovoru]') + '\n\n'
++ '---\n'
++ '## KLJUČNI ZADACI\n'
++ numbered('tasks','[Zadatak 1]') + '\n\n'
++ 'Korisnik opisuje situaciju, ti predlažeš gotov tekst ili rješenje. Ne traži dodatna\n'
++ 'pojašnjenja ako možeš napraviti razumnu pretpostavku — navedi je i nastavi.\n\n'
++ '---\n'
++ '## SIGURNOSNA PRAVILA\n'
++ 'NIKAD ne dijeli: lozinke, API ključeve, interne cijene i marže, osobne podatke klijenata.\n'
++ 'NIKAD ne nastupaj kao pravnik, liječnik ili poreski savjetnik — uputi na stručnjaka.\n'
++ 'Ako nisi siguran: reci "Nisam siguran, ovo treba provjeriti" umjesto da pogodiš.\n'
++ 'Ne izmišljaj brojeve, datume, nazive ni reference. Ako podatak nemaš — traži ga.\n'
++ 'Uputi na čovjeka u ovim situacijama:\n' + bullets('escalate','[situacije i kontakt osoba]') + '\n\n'
++ '---\n'
++ '## FORMAT ODGOVORA\n'
++ 'Za zadatke pisanja: daj gotov tekst spreman za korištenje, bez uvoda i bez objašnjavanja\n'
++ 'kako si do njega došao. Tekst prvo, komentar samo ako je nužan.\n'
++ 'Za analize: strukturiran odgovor s naslovima, ključni nalaz na početku.\n'
++ 'Nakon teksta ponudi: "Treba li varijacija ili prilagodba?"\n'
++ 'Nakon analize ponudi: "Koji dio da razradim detaljnije?"\n';
+    out.textContent = s;
+  }
+  [].slice.call(document.querySelectorAll('[data-f]')).forEach(function(el){
+    el.addEventListener('input', render);
+  });
+  var clr = document.getElementById('clr');
+  if(clr) clr.addEventListener('click', function(){
+    [].slice.call(document.querySelectorAll('[data-f]')).forEach(function(el){el.value=''});
+    render();
+  });
+  render();
+
+  // knowledge checklist progress
+  var chks = [].slice.call(document.querySelectorAll('.kchk')),
+      bar = document.getElementById('kbar'), lab = document.getElementById('klab');
+  function prog(){
+    var n = chks.filter(function(c){return c.checked}).length;
+    if(bar) bar.style.width = (n/chks.length*100) + '%';
+    if(lab) lab.textContent = n + ' od ' + chks.length + ' pripremljeno';
+  }
+  chks.forEach(function(c){c.addEventListener('change', prog)});
+  prog();
+})();
+</script>
+
+</div>
+</body>
+</html>

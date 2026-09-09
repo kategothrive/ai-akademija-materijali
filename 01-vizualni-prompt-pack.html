@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vizualni Prompt Pack &mdash; Sve AI tajne, Modul 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* ==========================================================================
+   GoThrive paleta — izvor: GoThrive Brand Book v1.0, srpanj 2026., točka 5.
+   Bijela #FFFFFF (60%) · Navy #1A1F4E (30%) · Sage #8A9A6B (10%)
+   Svijetla sage #F2F4EE (pozadine sekcija, kartice, tablice)
+   Tamno siva #333333 (body tekst)
+   Pravilo kontrasta: tekst na navy podlozi uvijek bijel; sage nikad kao
+   boja velikih blokova teksta. Sage za tekst je zato potamnjena izvedenica.
+   ========================================================================== */
+:root{
+  --paper:#ffffff; --surface:#ffffff; --surface-sunk:#f2f4ee;
+  --ink:#1a1f4e; --ink-soft:#333333; --muted:#5f6484;
+  --line:#e1e4da; --line-strong:#c4cbb6;
+  --emerald:#5d6b42; --emerald-soft:#eaeee0;
+  --rust:#1a1f4e; --rust-soft:#e9ebf3;
+  --amber:#6e7391; --amber-soft:#eeeff4;
+  --shadow:0 1px 0 rgba(26,31,78,.05);
+  --code-bg:#f7f8f4;
+  --brand-navy:#1a1f4e; --brand-sage:#8a9a6b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+    --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+    --line:#282d52; --line-strong:#3a4170;
+    --emerald:#aabf82; --emerald-soft:#1c2440;
+    --rust:#9aa6ee; --rust-soft:#1b2145;
+    --amber:#b6bbd4; --amber-soft:#191d38;
+    --shadow:none; --code-bg:#0b0e22;
+    --brand-navy:#aab2e0; --brand-sage:#aabf82;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1128; --surface:#171b38; --surface-sunk:#12152e;
+  --ink:#ffffff; --ink-soft:#d9dcea; --muted:#9aa0bf;
+  --line:#282d52; --line-strong:#3a4170;
+  --emerald:#aabf82; --emerald-soft:#1c2440;
+  --rust:#9aa6ee; --rust-soft:#1b2145;
+  --amber:#b6bbd4; --amber-soft:#191d38;
+  --shadow:none; --code-bg:#0b0e22;
+  --brand-navy:#aab2e0; --brand-sage:#aabf82;
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 96px}
+
+h1,h2,h3,h4,.eyebrow,.badge,.btn,.tier-num,th,.chip,.pill,.kbd,.stepnum{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.35rem,3vw,1.75rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.25}
+h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+p{margin:0}
+a{color:var(--emerald);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:2px}
+.eyebrow{font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+.lede{font-size:1.16rem;color:var(--ink-soft);max-width:62ch}
+.prose{max-width:66ch;color:var(--ink-soft);display:flex;flex-direction:column;gap:14px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+
+header.mast{padding:52px 0 30px;display:flex;flex-direction:column;gap:20px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--muted);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.rule-thick{height:4px;background:var(--ink);border-radius:2px}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:18px;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:22px}
+.sec-num{font-family:"Bricolage Grotesque",sans-serif;font-size:2.4rem;font-weight:800;line-height:.85;color:var(--line-strong);letter-spacing:-.04em}
+.sec-head .txt{display:flex;flex-direction:column;gap:5px}
+.sec-head p{font-size:.97rem;color:var(--ink-soft);max-width:60ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  padding:22px 24px;display:flex;flex-direction:column;gap:16px}
+.card.hero{border-color:var(--rust);border-left-width:5px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+.badge{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;border:1px solid transparent}
+.badge.em{background:var(--emerald-soft);color:var(--emerald)}
+.badge.ru{background:var(--rust-soft);color:var(--rust)}
+.badge.am{background:var(--amber-soft);color:var(--amber)}
+.badge.gy{background:var(--surface-sunk);color:var(--muted);border-color:var(--line)}
+.badge.solid{background:var(--rust);color:#fff}
+
+.note{border-left:3px solid var(--amber);background:var(--surface-sunk);padding:12px 16px;border-radius:0 3px 3px 0;
+  font-size:.92rem;color:var(--ink-soft)}
+.note strong{color:var(--ink)}
+.note.em{border-left-color:var(--emerald)}
+.note.ru{border-left-color:var(--rust)}
+
+ol.steps,ul.steps{margin:0;padding-left:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+ol.steps li{counter-increment:s;position:relative;padding-left:36px;font-size:.97rem;color:var(--ink-soft)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+ul.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.ticks li{position:relative;padding-left:26px;font-size:.96rem;color:var(--ink-soft)}
+ul.ticks li::before{content:"→";position:absolute;left:0;top:0;color:var(--emerald);font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--surface)}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  font-weight:700;padding:10px 13px;background:var(--surface-sunk);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.k{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;white-space:nowrap}
+tr.hl td{background:var(--emerald-soft)}
+
+.kbd{display:inline-block;font-size:.76rem;font-weight:600;padding:3px 7px;border-radius:3px;
+  background:var(--surface-sunk);border:1px solid var(--line-strong);border-bottom-width:2px;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;cursor:pointer;
+  background:var(--ink);color:var(--paper);text-decoration:none;font-size:.84rem;font-weight:600;
+  padding:10px 17px;border-radius:2px;border:1px solid var(--ink)}
+.btn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-sunk);color:var(--ink);border-color:var(--ink)}
+
+/* toolbar / filters */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:12px 0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search],input[type=text],textarea,select{font-family:"Source Serif 4",Georgia,serif;font-size:.95rem;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:3px;padding:9px 12px;width:100%}
+input[type=search]{flex:1 1 240px;width:auto}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+::placeholder{color:var(--muted);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;opacity:.65;margin-left:5px}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+/* prompt item */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);
+  margin-bottom:14px;overflow:hidden}
+.item-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;padding:16px 20px 13px;
+  border-bottom:1px solid var(--line)}
+.item-id{display:flex;align-items:baseline;gap:11px;flex:1 1 260px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted);font-weight:600;min-width:2.1em}
+.item-badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:14px}
+pre.p{margin:0;background:var(--code-bg);border:1px solid var(--line);border-radius:3px;padding:15px 16px;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82rem;line-height:1.62;color:var(--ink);
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;max-height:none}
+pre.p b,pre.p .f{color:var(--rust);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.copybtn{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:.78rem;font-weight:600;
+  padding:7px 14px;border-radius:2px;background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+.copybtn:hover{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.copybtn.ok{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);font-style:italic}
+
+/* checkbox list */
+.chk{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px dotted var(--line)}
+.chk:last-child{border-bottom:0}
+.chk input{margin:5px 0 0;width:17px;height:17px;accent-color:var(--emerald);flex:none}
+.chk .t{display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+.chk .t b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600}
+.chk .t span{font-size:.87rem;color:var(--muted)}
+.chk input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+
+/* builder form */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-family:"Bricolage Grotesque",sans-serif;font-size:.86rem;font-weight:600}
+.field .hint{font-size:.82rem;color:var(--muted);line-height:1.45}
+.progressbar{height:6px;background:var(--surface-sunk);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progressbar i{display:block;height:100%;background:var(--emerald);width:0;transition:width .25s}
+
+footer.foot{margin-top:72px;border-top:2px solid var(--ink);padding-top:20px;display:flex;flex-direction:column;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted)}
+
+@media print{
+  .toolbar,.copybtn,.btn,.actions,nav.toc{display:none!important}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  .wrap{max-width:100%;padding:0}
+  .item,.card,.tbl-scroll{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  section{margin-top:24px}
+  pre.p{background:#f5f5f5;font-size:8.5pt}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a id="top"></a>
+<header class="mast">
+<div class="eyebrow">GoThrive AI Academy &middot; Sve AI tajne &middot; Modul 1</div>
+<h1>Vizualni Prompt Pack</h1>
+<p class="lede">Dvadeset promptova za poslovne vizuale &mdash; LinkedIn banner, carousel cover, thumbnail, hero pozadina, cover lead magneta. Kopiraj, zamijeni polja, generiraj. Tekst dodaješ kasnije u Canvi.</p>
+<div class="rule-thick"></div>
+<div class="mast-meta"><span>20 promptova</span><span>5 kategorija</span><span>ChatGPT &middot; Midjourney</span><span>Rujan 2026.</span></div>
+</header>
+
+<div class="note ru" style="margin-top:28px"><strong>Naziv &bdquo;DALL-E&ldquo; i stvarno stanje:</strong> u tečaju i na Thinkificu ovaj materijal stoji pod imenom <em>DALL-E Prompt Pack</em> jer je taj naziv ušao u široku upotrebu. ChatGPT danas generira slike preko novije <em>GPT Image</em> linije modela (aktualni je <span class="mono">gpt-image-2</span>) &mdash; DALL-E 3 je zamijenjen. Za tebe se u praksi ništa ne mijenja: opis slike napišeš u chat kao i prije, samo su rezultati bolji i točniji u praćenju uputa.</div>
+
+<section style="margin-top:40px">
+<div class="sec-head"><div class="sec-num">01</div><div class="txt"><h2>Četiri pravila koja čine razliku</h2><p>Ista četiri pravila stoje iza svakog prompta u ovom paketu.</p></div></div>
+<div class="grid g2">
+  <div class="card">
+    <h4>Generiraj bez teksta</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Ovo je najvažnije pravilo cijelog paketa. Svi promptovi izričito kažu <em>no text</em>.</p>
+      <p>Modeli pišu tekst na slici sve bolje, ali još uvijek griješe u hrvatskim znakovima, ne drže font i ne možeš ga poslije popraviti bez ponovnog generiranja.</p>
+      <p>Generiraj čistu podlogu, tekst dodaj u Canvi. Tamo imaš punu kontrolu i možeš napraviti deset varijanti u minuti.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Specifičnost, ne pridjevi</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>&bdquo;Lijepa moderna slika&ldquo; daje slučajan rezultat. Navedi stil, paletu, pozadinu, kompoziciju i format.</p>
+      <p>Boje piši kao HEX &mdash; <span class="mono">#1A1F4E</span>, ne &bdquo;tamnoplava&ldquo;. Tako dobivaš svoj brand, a ne interpretaciju.</p>
+    </div>
+    <div class="note"><strong>Midjourney zastavice:</strong> <span class="mono">--ar</span> zadaje omjer, <span class="mono">--style raw</span> smanjuje &bdquo;AI uljepšani&ldquo; izgled, <span class="mono">--no</span> izbacuje neželjeno. Oznake verzije (<span class="mono">--v 6</span>) provjeri prije korištenja &mdash; Midjourney ih redovno mijenja. U ChatGPT-u zastavice ne trebaju, opiši format riječima.</div>
+  </div>
+  <div class="card">
+    <h4>Testiraj u malom</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Thumbnail se u feedu vidi kao 120 piksela širok. Podcast cover na Spotify listi je manji od nokta.</p>
+      <p>Nakon generiranja smanji sliku na tu veličinu i pogledaj je. Ako se ne raspoznaje &mdash; jedan veliki element umjesto pet malih.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Generiraj četiri, biraj jednu</h4>
+    <div class="prose" style="font-size:.95rem">
+      <p>Prvi rezultat rijetko je najbolji. Generiraj četiri varijante, odaberi najbližu, pa traži promjenu samo jednog elementa: &bdquo;zadrži sve, promijeni pozadinu u #1A1F4E&ldquo;.</p>
+      <p>To je brže od pisanja novog prompta i zadržavaš ono što je već dobro.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">02</div><div class="txt"><h2>Dvadeset promptova</h2><p>Traži po ključnoj riječi ili filtriraj po namjeni.</p></div></div>
+<div class="toolbar">
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="Traži &mdash; npr. banner, thumbnail, carousel, hero, ebook&hellip;" aria-label="Traži prompt">
+    <span class="count" id="cnt"></span>
+  </div>
+  <div class="chips"><button class="chip" data-cat="all" aria-pressed="true">Sve<span class="n">20</span></button><button class="chip" data-cat="brand" aria-pressed="false">Personal brand<span class="n">4</span></button><button class="chip" data-cat="social" aria-pressed="false">Social<span class="n">4</span></button><button class="chip" data-cat="deck" aria-pressed="false">Prezentacije<span class="n">4</span></button><button class="chip" data-cat="mkt" aria-pressed="false">Marketing<span class="n">4</span></button><button class="chip" data-cat="video" aria-pressed="false">Video<span class="n">4</span></button></div>
+</div>
+<h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">LinkedIn i personal brand</h4><article class="item" data-cat="brand" data-search="linkedin banner / cover professional linkedin banner for [your name/brand], [job title/expertise].
+
+visual style: clean, modern, minimalist. deep navy blue (#1a1a2e) background with subtle geometric shapes.
+text elements: name in bold white, tagline &#x27;[your tagline]&#x27; in light blue.
+right side: abstract illustration of [your industry — e.g. &#x27;data flow / business growth / digital connections&#x27;].
+no stock photo feel. premium, corporate but human.
+dimensions: 1584x396px wide banner format.
+--ar 4:1 --style raw --v 6 ceo / konzultanti / speaker brand"><div class="item-top"><div class="item-id"><span class="num">01</span><h3>LinkedIn Banner / Cover</h3></div><div class="item-badges"><span class="badge em">1584×396</span><span class="badge gy">CEO / konzultanti / speaker brand</span></div></div><div class="item-body"><pre class="p">Professional LinkedIn banner for <span class="f">[YOUR NAME/BRAND</span>], <span class="f">[JOB TITLE/EXPERTISE</span>].
+
+Visual style: Clean, modern, minimalist. Deep navy blue (#1A1A2E) background with subtle geometric shapes.
+Text elements: Name in bold white, tagline &#x27;<span class="f">[YOUR TAGLINE</span>]&#x27; in light blue.
+Right side: Abstract illustration of <span class="f">[your industry — e.g. &#x27;data flow / business growth / digital connections&#x27;</span>].
+No stock photo feel. Premium, corporate but human.
+Dimensions: 1584x396px wide banner format.
+<b>--ar 4:1</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Mijenjajte boju pozadine prema vašem brand koloru. Za osobni brand: dodajte &#x27;with subtle portrait silhouette on right&#x27;. Midjourney daje bolje rezultate za banner formate.</div></div></article><article class="item" data-cat="brand" data-search="professional headshot background studio portrait photography background. clean, soft bokeh effect.
+background: gradient from [brand color, e.g. &#x27;warm cream&#x27;] to soft white.
+subtle architectural element: blurred office bookshelf / glass wall / modern interior.
+lighting: professional studio lighting, bright and even, slight warm tone.
+no people, just background for composite photography.
+photorealistic, high quality.
+--ar 3:4 --style raw personal brand, linkedin, web"><div class="item-top"><div class="item-id"><span class="num">02</span><h3>Professional Headshot Background</h3></div><div class="item-badges"><span class="badge em">Portretno</span><span class="badge gy">Personal brand, LinkedIn, web</span></div></div><div class="item-body"><pre class="p">Studio portrait photography background. Clean, soft bokeh effect.
+Background: Gradient from <span class="f">[brand color, e.g. &#x27;warm cream&#x27;</span>] to soft white.
+Subtle architectural element: blurred office bookshelf / glass wall / modern interior.
+Lighting: Professional studio lighting, bright and even, slight warm tone.
+No people, just background for composite photography.
+Photorealistic, high quality.
+<b>--ar 3:4</b> <b>--style</b> raw</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Koristite kao pozadinu za vašu headshot fotografiju u Canvi. Removebg.com za uklanjanje pozadine s vaše fotografije, zatim kombinirajte.</div></div></article><article class="item" data-cat="brand" data-search="thought leadership post visual minimalist data visualization illustration for linkedin post about [topic, e.g. &#x27;ai productivity&#x27;, &#x27;business growth&#x27;, &#x27;team management&#x27;].
+
+style: flat design, infographic-style. color palette: [2-3 brand colors].
+central visual metaphor: [e.g. &#x27;ascending bar chart becoming a rocket&#x27;, &#x27;puzzle pieces forming a brain&#x27;, &#x27;clock transforming into coins&#x27;].
+clean white background. subtle grid lines.
+no text (will be added separately).
+professional, modern, shareworthy.
+1:1 square format.
+--ar 1:1 --style raw --v 6 linkedin post vizuali, carousel cover"><div class="item-top"><div class="item-id"><span class="num">03</span><h3>Thought Leadership Post Visual</h3></div><div class="item-badges"><span class="badge em">1:1 kvadrat</span><span class="badge gy">LinkedIn post vizuali, carousel cover</span></div></div><div class="item-body"><pre class="p">Minimalist data visualization illustration for LinkedIn post about <span class="f">[TOPIC, e.g. &#x27;AI productivity&#x27;, &#x27;business growth&#x27;, &#x27;team management&#x27;</span>].
+
+Style: Flat design, infographic-style. Color palette: <span class="f">[2-3 brand colors</span>].
+Central visual metaphor: [e.g. &#x27;ascending bar chart becoming a rocket&#x27;, &#x27;puzzle pieces forming a brain&#x27;, &#x27;clock transforming into coins&#x27;].
+Clean white background. Subtle grid lines.
+No text (will be added separately).
+Professional, modern, shareworthy.
+1:1 square format.
+<b>--ar 1:1</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Generirajte bez teksta — dodajte tekst u Canvi. Lakše za editiranje i precizno pozicioniranje. Za različite teme: mijenjajte &#x27;Central visual metaphor&#x27;.</div></div></article><article class="item" data-cat="brand" data-search="personal brand pattern / texture abstract brand pattern/texture for personal brand [name].
+brand colors: [color 1] and [color 2].
+style: modern geometric pattern. subtle, not overwhelming. works as background.
+elements: [e.g. &#x27;interlocking circles representing connection&#x27;, &#x27;flowing lines representing data&#x27;, &#x27;diamond grid representing structure&#x27;].
+seamless tiling pattern. professional, premium feel.
+no text, no faces.
+--ar 1:1 --tile --style raw brand materijali, prezentacije"><div class="item-top"><div class="item-id"><span class="num">04</span><h3>Personal Brand Pattern / Texture</h3></div><div class="item-badges"><span class="badge em">Uzorak/Tile</span><span class="badge gy">Brand materijali, prezentacije</span></div></div><div class="item-body"><pre class="p">Abstract brand pattern/texture for personal brand <span class="f">[NAME</span>].
+Brand colors: <span class="f">[COLOR 1</span>] and <span class="f">[COLOR 2</span>].
+Style: Modern geometric pattern. Subtle, not overwhelming. Works as background.
+Elements: [e.g. &#x27;interlocking circles representing connection&#x27;, &#x27;flowing lines representing data&#x27;, &#x27;diamond grid representing structure&#x27;].
+Seamless tiling pattern. Professional, premium feel.
+No text, no faces.
+<b>--ar 1:1</b> <b>--tile</b> <b>--style</b> raw</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Koristiti kao pozadinu na prezentacijama, email templateima, materijalima. --tile flag (Midjourney) = seamless repeating pattern.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Social media sadržaj</h4><article class="item" data-cat="social" data-search="instagram post — educational flat design infographic illustration for instagram educational post.
+topic: [topic, e.g. &#x27;5 steps to better time management&#x27;].
+style: clean, modern infographic. bold typography spaces (no actual text).
+color palette: [3 brand colors].
+visual flow: numbered steps/sections clearly delineated.
+white background, subtle shadows on elements.
+engaging, scroll-stopping visual hierarchy.
+--ar 1:1 --style raw instagram edukativni postovi"><div class="item-top"><div class="item-id"><span class="num">05</span><h3>Instagram Post — Educational</h3></div><div class="item-badges"><span class="badge em">1080×1080</span><span class="badge gy">Instagram edukativni postovi</span></div></div><div class="item-body"><pre class="p">Flat design infographic illustration for Instagram educational post.
+Topic: <span class="f">[TOPIC, e.g. &#x27;5 steps to better time management&#x27;</span>].
+Style: Clean, modern infographic. Bold typography spaces (no actual text).
+Color palette: <span class="f">[3 brand colors</span>].
+Visual flow: numbered steps/sections clearly delineated.
+White background, subtle shadows on elements.
+Engaging, scroll-stopping visual hierarchy.
+<b>--ar 1:1</b> <b>--style</b> raw</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Generirajte vizualnu strukturu bez teksta. Dodajte tekst/brojeve u Canvi gdje imate punu kontrolu nad fontom. Mijenjajte topic = nova slika.</div></div></article><article class="item" data-cat="social" data-search="instagram story — announcement eye-catching instagram story announcement graphic template.
+announcement type: [e.g. &#x27;new product launch&#x27;, &#x27;webinar announcement&#x27;, &#x27;sale&#x27;].
+style: bold, energetic, modern. gradient background [color 1] to [color 2].
+central element: abstract burst/explosion graphic suggesting excitement and urgency.
+visual space for title text at top and cta at bottom (no actual text).
+vertical format, bright and engaging.
+--ar 9:16 --style raw --v 6 instagram/facebook stories"><div class="item-top"><div class="item-id"><span class="num">06</span><h3>Instagram Story — Announcement</h3></div><div class="item-badges"><span class="badge em">1080×1920</span><span class="badge gy">Instagram/Facebook Stories</span></div></div><div class="item-body"><pre class="p">Eye-catching Instagram Story announcement graphic template.
+Announcement type: <span class="f">[e.g. &#x27;New product launch&#x27;, &#x27;Webinar announcement&#x27;, &#x27;Sale&#x27;</span>].
+Style: Bold, energetic, modern. Gradient background <span class="f">[COLOR 1</span>] to <span class="f">[COLOR 2</span>].
+Central element: Abstract burst/explosion graphic suggesting excitement and urgency.
+Visual space for title text at top and CTA at bottom (no actual text).
+Vertical format, bright and engaging.
+<b>--ar 9:16</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Stories trebaju biti bold i čitljive na mobitelu — izbjegavajte sitne detalje. Gradient pozadine rade bolje od solid boja za Stories.</div></div></article><article class="item" data-cat="social" data-search="carousel cover slide premium carousel cover slide for linkedin/instagram.
+topic: &#x27;[carousel title, e.g. 5 mistakes ceos make with ai]&#x27;
+style: magazine-cover quality. dark background [navy/black/deep color].
+central graphic: [relevant icon/illustration — e.g. &#x27;circuit board brain&#x27;, &#x27;broken chain&#x27;, &#x27;upward arrow&#x27;].
+bottom strip: lighter color band for subtitle space.
+left-aligned composition. clean and authoritative.
+no text (will add in canva).
+--ar 4:5 --style raw --v 6 linkedin/instagram carousel"><div class="item-top"><div class="item-id"><span class="num">07</span><h3>Carousel Cover Slide</h3></div><div class="item-badges"><span class="badge em">1080×1350</span><span class="badge gy">LinkedIn/Instagram carousel</span></div></div><div class="item-body"><pre class="p">Premium carousel cover slide for LinkedIn/Instagram.
+Topic: &#x27;<span class="f">[CAROUSEL TITLE, e.g. 5 Mistakes CEOs Make With AI</span>]&#x27;
+Style: Magazine-cover quality. Dark background <span class="f">[navy/black/deep color</span>].
+Central graphic: <span class="f">[Relevant icon/illustration — e.g. &#x27;circuit board brain&#x27;, &#x27;broken chain&#x27;, &#x27;upward arrow&#x27;</span>].
+Bottom strip: lighter color band for subtitle space.
+Left-aligned composition. Clean and authoritative.
+No text (will add in Canva).
+<b>--ar 4:5</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Carousel cover je vaš &#x27;knjižna korica&#x27; — investirajte u dizajn. Bold vizual + intrigantan naslov = više swipeova. Generirajte 3-4 opcije i odaberite.</div></div></article><article class="item" data-cat="social" data-search="quote graphic background abstract artistic background for inspirational business quote graphic.
+mood: [professional/energetic/calm/bold — odaberite]
+style: watercolor-inspired abstract shapes. color palette: [2-3 colors].
+composition: left third darker (for text contrast), right side more abstract and light.
+no text, no people, no obvious elements.
+premium, editorial feel.
+--ar 1:1 --style raw quote postovi, sadržaj o vrijednostima"><div class="item-top"><div class="item-id"><span class="num">08</span><h3>Quote Graphic Background</h3></div><div class="item-badges"><span class="badge em">1:1 ili 4:5</span><span class="badge gy">Quote postovi, sadržaj o vrijednostima</span></div></div><div class="item-body"><pre class="p">Abstract artistic background for inspirational business quote graphic.
+Mood: <span class="f">[Professional/Energetic/Calm/Bold — odaberite</span>]
+Style: Watercolor-inspired abstract shapes. Color palette: <span class="f">[2-3 colors</span>].
+Composition: Left third darker (for text contrast), right side more abstract and light.
+No text, no people, no obvious elements.
+Premium, editorial feel.
+<b>--ar 1:1</b> <b>--style</b> raw</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Quote grafike rade dobro na svim platformama jer su laki za konzumaciju. Koristite Canva tekst editor za dodavanje citata s vašim brendiranjem.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Prezentacije i izvještaji</h4><article class="item" data-cat="deck" data-search="presentation hero slide background professional presentation hero slide background.
+industry/topic: [e.g. &#x27;digital transformation&#x27;, &#x27;financial services&#x27;, &#x27;sustainability&#x27;].
+style: premium, corporate. dark background with subtle light elements.
+color scheme: [company colors or &#x27;deep navy and gold&#x27;, &#x27;dark gray and blue&#x27;, &#x27;black and white with green accent&#x27;].
+visual: abstract geometric or technology-themed illustration on right 40% of image.
+left 60% clear dark area for title text.
+widescreen format.
+--ar 16:9 --style raw --v 6 powerpoint, google slides, keynote"><div class="item-top"><div class="item-id"><span class="num">09</span><h3>Presentation Hero Slide Background</h3></div><div class="item-badges"><span class="badge em">16:9 widescreen</span><span class="badge gy">PowerPoint, Google Slides, Keynote</span></div></div><div class="item-body"><pre class="p">Professional presentation hero slide background.
+Industry/topic: <span class="f">[e.g. &#x27;Digital transformation&#x27;, &#x27;Financial services&#x27;, &#x27;Sustainability&#x27;</span>].
+Style: Premium, corporate. Dark background with subtle light elements.
+Color scheme: [Company colors or &#x27;deep navy and gold&#x27;, &#x27;dark gray and blue&#x27;, &#x27;black and white with green accent&#x27;].
+Visual: Abstract geometric or technology-themed illustration on right 40% of image.
+Left 60% clear dark area for title text.
+Widescreen format.
+<b>--ar 16:9</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Presentation vizuali trebaju biti &#x27;quiet&#x27; — ne smiju se natjecati s tekstom. Dark pozadina + bijeli tekst = premium dojam. Generirajte 3-5 varijanti za deck.</div></div></article><article class="item" data-cat="deck" data-search="data/chart illustration abstract illustration representing data, analytics and insights.
+style: isometric 3d illustration. clean, tech-forward.
+elements: floating charts, graphs, data points, connecting lines — all abstract.
+color palette: [brand colors]. background: white or very light gray.
+professional, modern, slightly editorial.
+not literal/photorealistic — conceptual illustration.
+--ar 16:9 --style raw --v 6 analytics, izvještajni slides"><div class="item-top"><div class="item-id"><span class="num">10</span><h3>Data/Chart Illustration</h3></div><div class="item-badges"><span class="badge em">16:9 ili 1:1</span><span class="badge gy">Analytics, izvještajni slides</span></div></div><div class="item-body"><pre class="p">Abstract illustration representing data, analytics and insights.
+Style: Isometric 3D illustration. Clean, tech-forward.
+Elements: Floating charts, graphs, data points, connecting lines — all abstract.
+Color palette: <span class="f">[Brand colors</span>]. Background: white or very light gray.
+Professional, modern, slightly editorial.
+Not literal/photorealistic — conceptual illustration.
+<b>--ar 16:9</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Isometric ilustracije su trend u business vizualima 2024-2026. Koristite za slides koji prikazuju analitiku, dashboarde ili &#x27;data-driven&#x27; poruke.</div></div></article><article class="item" data-cat="deck" data-search="process / timeline illustration clean process flow or timeline illustration.
+number of steps: [3/4/5/6]
+style: minimal flat design. horizontal flow with clear numbered steps.
+visual metaphor: [e.g. &#x27;road with milestones&#x27;, &#x27;ascending staircase&#x27;, &#x27;pipeline with nodes&#x27;].
+colors: [brand palette]. white background.
+each step clearly delineated, arrow or flow indicators.
+no text labels (will add separately).
+--ar 16:9 --style raw process dokumenti, prezentacije"><div class="item-top"><div class="item-id"><span class="num">11</span><h3>Process / Timeline Illustration</h3></div><div class="item-badges"><span class="badge em">16:9</span><span class="badge gy">Process dokumenti, prezentacije</span></div></div><div class="item-body"><pre class="p">Clean process flow or timeline illustration.
+Number of steps: <span class="f">[3/4/5/6</span>]
+Style: Minimal flat design. Horizontal flow with clear numbered steps.
+Visual metaphor: <span class="f">[e.g. &#x27;road with milestones&#x27;, &#x27;ascending staircase&#x27;, &#x27;pipeline with nodes&#x27;</span>].
+Colors: <span class="f">[Brand palette</span>]. White background.
+Each step clearly delineated, arrow or flow indicators.
+No text labels (will add separately).
+<b>--ar 16:9</b> <b>--style</b> raw</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Za prikazivanje procesa, onboarding koraka, projektnih faza. Mijenjajte broj koraka u promptu. Dodajte oznake u Canvi ili PowerPoint.</div></div></article><article class="item" data-cat="deck" data-search="team / culture visual diverse professional team collaboration illustration.
+style: modern flat design illustration (not photography). diverse characters.
+scene: [e.g. &#x27;team around whiteboard brainstorming&#x27;, &#x27;people collaborating on laptops&#x27;, &#x27;diverse group in modern office meeting&#x27;].
+color palette: [brand colors for clothing and accents]. clean white/light background.
+inclusive representation: different ages, backgrounds, genders.
+friendly, warm, professional.
+--ar 16:9 --style raw about us, hr materijali, web"><div class="item-top"><div class="item-id"><span class="num">12</span><h3>Team / Culture Visual</h3></div><div class="item-badges"><span class="badge em">16:9 ili 1:1</span><span class="badge gy">About Us, HR materijali, web</span></div></div><div class="item-body"><pre class="p">Diverse professional team collaboration illustration.
+Style: Modern flat design illustration (NOT photography). Diverse characters.
+Scene: [e.g. &#x27;team around whiteboard brainstorming&#x27;, &#x27;people collaborating on laptops&#x27;, &#x27;diverse group in modern office meeting&#x27;].
+Color palette: <span class="f">[Brand colors for clothing and accents</span>]. Clean white/light background.
+Inclusive representation: different ages, backgrounds, genders.
+Friendly, warm, professional.
+<b>--ar 16:9</b> <b>--style</b> raw</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Koristi se za About Us slides, team pages, HR materijale. Ilustracije (ne fotografije) su bolje za corporate vizuale jer nema copyright pitanja.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Brand i marketing</h4><article class="item" data-cat="mkt" data-search="service/product feature visual product/service feature illustration for website or marketing material.
+service/product: [opis vaše usluge ili proizvoda]
+style: premium 3d illustration or flat design.
+visual representation: [konkretna metafora — e.g. &#x27;shield protecting data&#x27;, &#x27;rocket launching from laptop&#x27;, &#x27;gears interlocking perfectly&#x27;].
+color palette: [brand colors].
+clean background, ready for text overlay.
+high-end, trustworthy feel.
+--ar 4:3 --style raw --v 6 web stranica, landing page, brošure"><div class="item-top"><div class="item-id"><span class="num">13</span><h3>Service/Product Feature Visual</h3></div><div class="item-badges"><span class="badge em">4:3 ili 16:9</span><span class="badge gy">Web stranica, landing page, brošure</span></div></div><div class="item-body"><pre class="p">Product/service feature illustration for website or marketing material.
+Service/product: <span class="f">[OPIS vaše usluge ili proizvoda</span>]
+Style: Premium 3D illustration or flat design.
+Visual representation: [Konkretna metafora — e.g. &#x27;shield protecting data&#x27;, &#x27;rocket launching from laptop&#x27;, &#x27;gears interlocking perfectly&#x27;].
+Color palette: <span class="f">[Brand colors</span>].
+Clean background, ready for text overlay.
+High-end, trustworthy feel.
+<b>--ar 4:3</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Vizuali usluga pomažu klijentima &#x27;vidjeti&#x27; što kupuju. Metafore koje rade: zaštita=štit, brzina=raketa, organizacija=puzzle, rast=biljka/stablo.</div></div></article><article class="item" data-cat="mkt" data-search="email header visual professional email newsletter header image.
+brand name: [brand name] — note: just leave space, no actual text rendering.
+style: clean, branded banner. solid or gradient background.
+brand colors: [color 1] and [color 2].
+abstract decorative element: subtle geometric shapes or wave pattern.
+left side: space for logo. center: space for headline text. right: abstract graphic element.
+width: 600px email format, narrow horizontal banner.
+--ar 6:1 --style raw email newsletter, kampanje"><div class="item-top"><div class="item-id"><span class="num">14</span><h3>Email Header Visual</h3></div><div class="item-badges"><span class="badge em">600×100 px banner</span><span class="badge gy">Email newsletter, kampanje</span></div></div><div class="item-body"><pre class="p">Professional email newsletter header image.
+Brand name: <span class="f">[BRAND NAME</span>] — note: just leave space, no actual text rendering.
+Style: Clean, branded banner. Solid or gradient background.
+Brand colors: <span class="f">[COLOR 1</span>] and <span class="f">[COLOR 2</span>].
+Abstract decorative element: subtle geometric shapes or wave pattern.
+Left side: space for logo. Center: space for headline text. Right: abstract graphic element.
+Width: 600px email format, narrow horizontal banner.
+<b>--ar 6:1</b> <b>--style</b> raw</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Email headeri trebaju biti lagani (&lt; 200KB) — generirajte, kompresirajte na tinypng.com. Koristite isti header za sve newslettere za branding konzistentnost.</div></div></article><article class="item" data-cat="mkt" data-search="lead magnet / ebook cover professional ebook or lead magnet cover design.
+title space: [2-3 word title placeholder]. author/brand space at bottom.
+style: premium, editorial. resembles a quality business book or report.
+color scheme: [brand colors, e.g. &#x27;deep navy with gold accents&#x27;].
+visual element: [relevant industry illustration — abstract, not literal].
+3d book mockup angle showing front cover.
+trustworthy, authoritative, high-perceived-value feel.
+--ar 2:3 --style raw --v 6 lead magneti, ebooks, pdf vodiči"><div class="item-top"><div class="item-id"><span class="num">15</span><h3>Lead Magnet / Ebook Cover</h3></div><div class="item-badges"><span class="badge em">2:3 portret</span><span class="badge gy">Lead magneti, ebooks, PDF vodiči</span></div></div><div class="item-body"><pre class="p">Professional ebook or lead magnet cover design.
+Title space: <span class="f">[2-3 word title placeholder</span>]. Author/brand space at bottom.
+Style: Premium, editorial. Resembles a quality business book or report.
+Color scheme: <span class="f">[Brand colors, e.g. &#x27;deep navy with gold accents&#x27;</span>].
+Visual element: <span class="f">[Relevant industry illustration — abstract, not literal</span>].
+3D book mockup angle showing front cover.
+Trustworthy, authoritative, high-perceived-value feel.
+<b>--ar 2:3</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> 3D book angle povećava perceived value lead magneta. Generirajte cover, dodajte tekst u Canvi, exportirajte kao 3D mockup za web. Besplatno: canva.com/mockups</div></div></article><article class="item" data-cat="mkt" data-search="website hero section background premium website hero section background image.
+industry: [e.g. &#x27;b2b consulting&#x27;, &#x27;tech startup&#x27;, &#x27;professional services&#x27;, &#x27;e-learning&#x27;].
+mood: [professional / innovative / trustworthy / dynamic].
+style: abstract photographic or illustrative background. dark or light version: [odaberite].
+dominant colors: [brand palette].
+composition: central area clear for hero text, interesting visual elements on edges.
+no text, no people. works as full-screen background behind white text.
+--ar 16:9 --style raw --v 6 web stranica, landing page"><div class="item-top"><div class="item-id"><span class="num">16</span><h3>Website Hero Section Background</h3></div><div class="item-badges"><span class="badge em">1920×1080 full</span><span class="badge gy">Web stranica, landing page</span></div></div><div class="item-body"><pre class="p">Premium website hero section background image.
+Industry: <span class="f">[e.g. &#x27;B2B consulting&#x27;, &#x27;tech startup&#x27;, &#x27;professional services&#x27;, &#x27;e-learning&#x27;</span>].
+Mood: <span class="f">[Professional / Innovative / Trustworthy / Dynamic</span>].
+Style: Abstract photographic or illustrative background. Dark or light version: <span class="f">[odaberite</span>].
+Dominant colors: <span class="f">[Brand palette</span>].
+Composition: Central area clear for hero text, interesting visual elements on edges.
+No text, no people. Works as full-screen background behind white text.
+<b>--ar 16:9</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Hero pozadine trebaju raditi i na mobilnom — testirajte kako izgledaju na 9:16 mobitel formatu. Dodajte dark overlay (40-60% opacity) za bolji kontrast teksta.</div></div></article><h4 style="margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line-strong)">Video thumbnaili i coveri</h4><article class="item" data-cat="video" data-search="youtube thumbnail eye-catching youtube thumbnail illustration for video about [topic].
+style: bold, high-contrast. colorful with dark background.
+main visual element: [relevant icon or illustration — not text, not face].
+e.g. &#x27;large glowing ai brain&#x27;, &#x27;exploding clock&#x27;, &#x27;staircase to success&#x27;.
+color palette: [2-3 bold contrasting colors]. very high visual contrast.
+right side: clear space for text overlay.
+scroll-stopping, curiosity-inducing composition.
+--ar 16:9 --v 6 --style raw youtube shorts, video sadržaj"><div class="item-top"><div class="item-id"><span class="num">17</span><h3>YouTube Thumbnail</h3></div><div class="item-badges"><span class="badge em">1280×720</span><span class="badge gy">YouTube Shorts, video sadržaj</span></div></div><div class="item-body"><pre class="p">Eye-catching YouTube thumbnail illustration for video about <span class="f">[TOPIC</span>].
+Style: Bold, high-contrast. Colorful with dark background.
+Main visual element: <span class="f">[Relevant icon or illustration — NOT text, NOT face</span>].
+e.g. &#x27;large glowing AI brain&#x27;, &#x27;exploding clock&#x27;, &#x27;staircase to success&#x27;.
+Color palette: <span class="f">[2-3 bold contrasting colors</span>]. Very high visual contrast.
+Right side: clear space for text overlay.
+Scroll-stopping, curiosity-inducing composition.
+<b>--ar 16:9</b> <b>--v 6</b> <b>--style</b> raw</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> YouTube thumbnails trebaju raditi na 120×90px (miniature u sidebar) — koristite jedan VELIKI vizualni element, ne više malih. Testirajte u malom formatu.</div></div></article><article class="item" data-cat="video" data-search="podcast cover art podcast cover art for show called &#x27;[podcast name]&#x27;.
+hosts: [brief description — no actual faces].
+style: bold, graphic, memorable. podcast-cover aesthetic.
+color scheme: [brand colors, bold and contrasting].
+central visual: abstract representation of [podcast theme, e.g. &#x27;business strategy = chess pieces&#x27;, &#x27;ai = digital brain&#x27;, &#x27;leadership = compass&#x27;].
+typography space: show title area at top, episode subtitle space at bottom.
+square format, works at small sizes.
+--ar 1:1 --style raw --v 6 podcast, audio sadržaj"><div class="item-top"><div class="item-id"><span class="num">18</span><h3>Podcast Cover Art</h3></div><div class="item-badges"><span class="badge em">3000×3000 square</span><span class="badge gy">Podcast, audio sadržaj</span></div></div><div class="item-body"><pre class="p">Podcast cover art for show called &#x27;<span class="f">[PODCAST NAME</span>]&#x27;.
+Hosts: <span class="f">[brief description — no actual faces</span>].
+Style: Bold, graphic, memorable. Podcast-cover aesthetic.
+Color scheme: <span class="f">[Brand colors, bold and contrasting</span>].
+Central visual: Abstract representation of [podcast theme, e.g. &#x27;business strategy = chess pieces&#x27;, &#x27;AI = digital brain&#x27;, &#x27;leadership = compass&#x27;].
+Typography space: Show title area at top, episode subtitle space at bottom.
+Square format, works at small sizes.
+<b>--ar 1:1</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Podcast cover mora biti prepoznatljiv na 3×3cm (Spotify lista). Jednostavan, bold, visoki kontrast. Generirajte 5 varijanti i testirajte na mobilnom.</div></div></article><article class="item" data-cat="video" data-search="webinar / event cover professional webinar or online event promotional banner.
+event type: [webinar / workshop / masterclass / summit].
+topic area: [e.g. &#x27;ai for business&#x27;, &#x27;sales growth&#x27;, &#x27;leadership&#x27;].
+style: premium event poster aesthetic. dark background, dramatic lighting.
+visual elements: abstract tech illustration or geometric shapes suggesting the topic.
+color palette: [brand colors]. clear spaces for title, date, speaker name.
+no actual text. professional, high-perceived-value.
+--ar 16:9 --style raw --v 6 webinar, online eventi, linkedin ads"><div class="item-top"><div class="item-id"><span class="num">19</span><h3>Webinar / Event Cover</h3></div><div class="item-badges"><span class="badge em">1200×628 ili 16:9</span><span class="badge gy">Webinar, online eventi, LinkedIn ads</span></div></div><div class="item-body"><pre class="p">Professional webinar or online event promotional banner.
+Event type: <span class="f">[Webinar / Workshop / Masterclass / Summit</span>].
+Topic area: <span class="f">[e.g. &#x27;AI for business&#x27;, &#x27;Sales growth&#x27;, &#x27;Leadership&#x27;</span>].
+Style: Premium event poster aesthetic. Dark background, dramatic lighting.
+Visual elements: Abstract tech illustration or geometric shapes suggesting the topic.
+Color palette: <span class="f">[Brand colors</span>]. Clear spaces for title, date, speaker name.
+No actual text. Professional, high-perceived-value.
+<b>--ar 16:9</b> <b>--style</b> raw <b>--v 6</b></pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> Webinar banneri trebaju komunicirati &#x27;ovo je vrijedno mog vremena&#x27;. Premium vizual = premium percepcija = više registracija. Izbjegavajte stock-photo izgled.</div></div></article><article class="item" data-cat="video" data-search="linkedin video cover/thumbnail linkedin video thumbnail for professional content.
+topic: [video topic].
+style: minimalist, corporate. clean and professional.
+background: subtle gradient or solid brand color.
+central element: simple, clear icon or illustration related to topic.
+color palette: [professional palette — navy, teal, gray, or brand colors].
+works with or without &#x27;play&#x27; button overlay.
+high contrast, readable at small size.
+--ar 16:9 --style raw linkedin video postovi"><div class="item-top"><div class="item-id"><span class="num">20</span><h3>LinkedIn Video Cover/Thumbnail</h3></div><div class="item-badges"><span class="badge em">1920×1080</span><span class="badge gy">LinkedIn video postovi</span></div></div><div class="item-body"><pre class="p">LinkedIn video thumbnail for professional content.
+Topic: <span class="f">[VIDEO TOPIC</span>].
+Style: Minimalist, corporate. Clean and professional.
+Background: Subtle gradient or solid brand color.
+Central element: Simple, clear icon or illustration related to topic.
+Color palette: <span class="f">[Professional palette — navy, teal, gray, or brand colors</span>].
+Works with or without &#x27;Play&#x27; button overlay.
+High contrast, readable at small size.
+<b>--ar 16:9</b> <b>--style</b> raw</pre><div class="actions"><button class="copybtn" type="button">Kopiraj prompt</button></div><div class="note"><strong>Savjet i varijacije:</strong> LinkedIn video thumbnails prikazuju se maleno u feedi — neka budu jednostavni i čitljivi. Jedan snažan vizual &gt; složena kompozicija.</div></div></article>
+<div class="empty" id="empty" hidden>Ništa ne odgovara toj pretrazi. Probaj kraću riječ.</div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">03</div><div class="txt"><h2>Dodatni savjeti</h2></div></div>
+<div class="grid g2"><div class="card"><h4>DALL-E / MIDJOURNEY MASTER TIPS — Kako dobiti bolje rezultate</h4><div class="prose" style="font-size:.93rem"><p></p></div></div><div class="card"><h4>Specificnost stila je ključna</h4><div class="prose" style="font-size:.93rem"><p>Ne pišite &#x27;lijepa slika&#x27; — pišite &#x27;flat design illustration, Pantone color palette, white background, minimal shadows&#x27;. Što specifičniji = predvidljiviji rezultat.</p></div></div><div class="card"><h4>--ar za omjer slike (Midjourney)</h4><div class="prose" style="font-size:.93rem"><p>Uvijek navedite --ar za format: --ar 1:1 (kvadrat), --ar 16:9 (landscape), --ar 9:16 (portrait/story), --ar 4:5 (Instagram portret)</p></div></div><div class="card"><h4>--style raw (Midjourney)</h4><div class="prose" style="font-size:.93rem"><p>--style raw daje manje &#x27;AI beautified&#x27; look i više fotografski/ilustrativni pristup. Koristite za poslovne vizuale.</p></div></div><div class="card"><h4>Negativni prompt /no (Midjourney)</h4><div class="prose" style="font-size:.93rem"><p>Dodajte što NE želite: &#x27;people, text, logos, watermark, blur, distortion&#x27;. U Midjourney: --no text people watermark</p></div></div><div class="card"><h4>Batch generiranje</h4><div class="prose" style="font-size:.93rem"><p>Generirajte 4-9 varijanti odjednom pa odaberite. DALL-E: jednim promptom dobivate više opcija. Midjourney: 4 automatski.</p></div></div><div class="card"><h4>Boja u HEX</h4><div class="prose" style="font-size:.93rem"><p>Umjesto &#x27;plava boja&#x27; napišite &#x27;hex color #0F3460&#x27; — preciznije i konzistentno s vašim brand bojama.</p></div></div><div class="card"><h4>Iterativno dorađivanje</h4><div class="prose" style="font-size:.93rem"><p>Generirajte → odaberite najbliže → napišite &#x27;poboljšaj samo [specifični element]&#x27; ili &#x27;promijeni boju u [boja] a zadrži sve ostalo&#x27;</p></div></div><div class="card"><h4>Kanali za inspiraciju</h4><div class="prose" style="font-size:.93rem"><p>Koristite Midjourney Discord /describe na tuđoj slici da dobijete prompt — obrnuti inženjering tuđih dobrih vizuala.</p></div></div></div>
+</section>
+
+<section>
+<div class="sec-head"><div class="sec-num">04</div><div class="txt"><h2>Radni tok od prompta do objave</h2></div></div>
+<div class="card">
+<ol class="steps">
+  <li>Odaberi prompt po namjeni i zamijeni polja u uglatim zagradama svojim podacima i HEX bojama.</li>
+  <li>Generiraj četiri varijante. Odaberi jednu, dorađuj po jednom elementu.</li>
+  <li>Skini u najvećoj dostupnoj rezoluciji &mdash; smanjivanje je bezbolno, povećavanje nije.</li>
+  <li>Otvori u Canvi, dodaj tekst, logo i CTA. Tu živi tvoje brendiranje.</li>
+  <li>Komprimiraj prije objave (npr. tinypng.com). Za email header ciljaj ispod 200 KB.</li>
+  <li>Prompt koji je dao dobar rezultat <b>snimi</b> uz gotovi vizual. Sljedeći put ne počinješ ispočetka.</li>
+</ol>
+<div class="note ru"><strong>Autorska prava, kratko:</strong> ne traži stil imenovanog živog umjetnika, ne generiraj tuđe logotipe, maskote i likove, i ne koristi AI portrete kao da su fotografije stvarnih ljudi &mdash; ni tvojih zaposlenika, ni klijenata. Ilustracije su za poslovne materijale sigurnije od foto-realističnih ljudi.</div>
+</div>
+</section>
+
+<footer class="foot"><div>GoThrive AI Academy &mdash; &bdquo;Sve AI tajne: Automatiziraj, skaliraj i boostaj biznis&ldquo;</div><div>Katarina Zubatović &amp; Dragan Petric &middot; Verzija: rujan 2026. &middot; info@gothrive.hr</div><div>Izvor: GoThrive_DALLE_Prompt_Pack (svibanj 2026.), ažuriran i pretvoren u interaktivni format.</div><div>Materijal je namijenjen polaznicima tečaja. Molimo ne dijeliti izvan grupe.</div></footer>
+
+<script>
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.copybtn'); if(!b) return;
+  var sel=b.getAttribute('data-target');
+  var node=sel?document.querySelector(sel):b.closest('.item, .card').querySelector('pre.p, textarea');
+  if(!node) return;
+  var txt=(node.value!==undefined&&node.tagName==='TEXTAREA')?node.value:node.innerText;
+  var done=function(){var o=b.textContent;b.textContent='Kopirano';b.classList.add('ok');
+    setTimeout(function(){b.textContent=o;b.classList.remove('ok')},1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else{fb()}
+  function fb(){var t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(x){}document.body.removeChild(t)}
+});
+</script>
+
+
+<script>
+(function(){
+  var q=document.getElementById('q'), chips=[].slice.call(document.querySelectorAll('.chip[data-cat]')),
+      items=[].slice.call(document.querySelectorAll('.item')), cnt=document.getElementById('cnt'),
+      empty=document.getElementById('empty'), cat='all';
+  function apply(){
+    var s=(q?q.value:'').toLowerCase().trim(), n=0;
+    items.forEach(function(it){
+      var okc = cat==='all' || it.getAttribute('data-cat')===cat;
+      var oks = !s || it.getAttribute('data-search').indexOf(s)>-1;
+      var vis = okc&&oks; it.hidden=!vis; if(vis)n++;
+    });
+    if(cnt) cnt.textContent = n + (n===1?' rezultat':(n>=2&&n<=4?' rezultata':' rezultata'));
+    if(empty) empty.hidden = n>0;
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false')});
+    c.setAttribute('aria-pressed','true'); cat=c.getAttribute('data-cat'); apply();
+  })});
+  if(q) q.addEventListener('input',apply);
+  apply();
+})();
+</script>
+
+</div>
+</body>
+</html>
