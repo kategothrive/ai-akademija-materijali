@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Claude skillovi za polaznike | AI Akademija</title>
+<meta name="description" content="28 Claude skillova za polaznike AI Akademije. Preuzmi, uploadaj u Claude, radi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#ffffff;
+  --sunk:#f2f4ee;
+  --navy:#1a1f4e;
+  --navy-soft:#3a4070;
+  --body:#333333;
+  --muted:#63687f;
+  --sage:#8a9a6b;
+  --sage-ink:#5d6b42;
+  --line:#e1e4da;
+  --line-strong:#c4cbb6;
+  --chip:#f2f4ee;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#0e1128;
+    --sunk:#171b38;
+    --navy:#e8eaf4;
+    --navy-soft:#b9bfdd;
+    --body:#d3d6e4;
+    --muted:#8e95b5;
+    --sage:#aabf82;
+    --sage-ink:#aabf82;
+    --line:#272c4e;
+    --line-strong:#3a4070;
+    --chip:#1b2042;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:Poppins,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px;line-height:1.6;
+}
+.wrap{max-width:900px;margin:0 auto;padding-inline:20px;padding-block:0 80px}
+
+/* header */
+.hero{background:var(--navy);color:#fff;margin-bottom:40px}
+@media (prefers-color-scheme: dark){ .hero{background:var(--sunk)} }
+.hero .wrap{padding-block:52px 46px}
+.kicker{
+  font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--sage);margin:0 0 14px
+}
+@media (prefers-color-scheme: dark){ .kicker{color:var(--sage)} }
+h1{
+  font-size:clamp(30px,6vw,46px);font-weight:700;line-height:1.12;margin:0 0 16px;
+  letter-spacing:-.02em;text-wrap:balance;color:#fff
+}
+@media (prefers-color-scheme: dark){ h1{color:var(--navy)} }
+.hero p{margin:0;max-width:56ch;color:#d7dbea;font-size:17px}
+@media (prefers-color-scheme: dark){ .hero p{color:var(--body)} }
+
+/* upute */
+.howto{
+  background:var(--sunk);border:1px solid var(--line);border-radius:4px;
+  padding:22px 24px;margin-bottom:34px
+}
+.howto h2{font-size:15px;font-weight:600;margin:0 0 12px;color:var(--navy);letter-spacing:.01em}
+.howto ol{margin:0;padding-left:20px}
+.howto li{margin-bottom:6px;font-size:14.5px}
+.howto li:last-child{margin-bottom:0}
+.howto code{
+  background:var(--paper);border:1px solid var(--line);border-radius:3px;
+  padding:1px 6px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13px
+}
+
+/* alatna traka */
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
+#q{
+  flex:1 1 230px;min-width:0;padding:11px 14px;font-family:inherit;font-size:15px;
+  background:var(--paper);color:var(--body);
+  border:1px solid var(--line-strong);border-radius:4px
+}
+#q:focus-visible{outline:2px solid var(--sage-ink);outline-offset:1px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{
+  font-family:inherit;font-size:13px;font-weight:500;padding:7px 13px;cursor:pointer;
+  background:var(--chip);color:var(--navy);border:1px solid var(--line);border-radius:100px
+}
+.chip:hover{border-color:var(--line-strong)}
+.chip[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+@media (prefers-color-scheme: dark){ .chip[aria-pressed="true"]{background:var(--sage);color:#0e1128;border-color:var(--sage)} }
+.chip:focus-visible{outline:2px solid var(--sage-ink);outline-offset:2px}
+.tally{font-size:13.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* grupe i redovi */
+.group{margin-top:34px}
+.group h2{
+  font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--sage-ink);margin:0 0 2px;display:flex;gap:9px;align-items:baseline
+}
+.group h2 span{color:var(--muted);font-weight:400;letter-spacing:0;text-transform:none;font-size:13px}
+.group > p{margin:0 0 14px;font-size:14px;color:var(--muted);max-width:64ch}
+
+.item{
+  display:flex;gap:18px;align-items:flex-start;justify-content:space-between;
+  padding:16px 0;border-top:1px solid var(--line)
+}
+.group .item:last-child{border-bottom:1px solid var(--line)}
+.meta{min-width:0;flex:1}
+.slug{
+  font-size:15px;font-weight:600;color:var(--navy);margin:0 0 3px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;word-break:break-word
+}
+.en{
+  font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--sage-ink);border:1px solid var(--line-strong);border-radius:3px;padding:1px 5px
+}
+.desc{margin:0;font-size:14.5px;color:var(--body);max-width:60ch}
+.get{
+  flex:none;text-decoration:none;white-space:nowrap;
+  font-size:14px;font-weight:600;padding:9px 17px;border-radius:4px;
+  background:var(--navy);color:#fff;border:1px solid var(--navy)
+}
+.get:hover{background:var(--navy-soft);border-color:var(--navy-soft)}
+@media (prefers-color-scheme: dark){
+  .get{background:var(--sage);color:#0e1128;border-color:var(--sage)}
+  .get:hover{filter:brightness(1.1)}
+}
+.get:focus-visible{outline:2px solid var(--sage-ink);outline-offset:2px}
+
+.none{padding:34px 0;color:var(--muted);font-size:15px}
+
+footer{
+  margin-top:56px;padding-top:24px;border-top:2px solid var(--navy);
+  font-size:13.5px;color:var(--muted)
+}
+footer p{margin:0 0 8px;max-width:70ch}
+footer strong{color:var(--navy);font-weight:600}
+[hidden]{display:none!important}
+
+@media (max-width:560px){
+  .item{flex-direction:column;gap:12px}
+  .get{align-self:stretch;text-align:center}
+  .hero .wrap{padding-block:38px 34px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">AI Akademija &middot; Sve AI tajne</p>
+    <h1>Claude skillovi za polaznike</h1>
+    <p>Dvadeset i osam gotovih skillova. Preuzmite one koji Vam trebaju, uploadajte ih u Claude i radit će sami kad opišete posao.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="howto">
+    <h2>Kako se skill uploada</h2>
+    <ol>
+      <li>Kliknite <strong>Preuzmi</strong> pokraj skilla. Skinut će se datoteka s nastavkom <code>.skill</code>.</li>
+      <li>U Claudeu otvorite <code>Settings → Capabilities → Skills → Upload skill</code>.</li>
+      <li>Odaberite skinutu datoteku. Skill je odmah aktivan.</li>
+      <li>Ne morate ga zvati imenom. Sam se uključi kad opišete posao koji radi. Ako ga želite pozvati izravno, napišite njegovo ime na početku poruke.</li>
+    </ol>
+  </section>
+
+  <div class="tools">
+    <input type="search" id="q" placeholder="Traži po imenu ili opisu" aria-label="Traži skill">
+    <span class="tally" id="tally"></span>
+  </div>
+  <div class="chips" id="chips"></div>
+
+  <div id="list"></div>
+  <p class="none" id="none" hidden>Nema skilla koji odgovara pretrazi.</p>
+
+  <footer>
+    <p>Prvi put kad pokrenete skill, postavit će Vam nekoliko pitanja o Vašoj firmi, publici ili brendu. Odgovorite jednom. Zapamtit će odgovore i više neće pitati.</p>
+    <p>Nijedan skill ne šalje ništa umjesto Vas i nijedan ne izmišlja podatke. Ono što ne zna, označit će s <code>[POTVRDITI]</code> da Vi provjerite prije nego što išta ode van.</p>
+    <p><strong>petricoliki-post</strong> primjenjuje LinkedIn metodologiju Dragana Petrica. <strong>webinar-skripta</strong> i <strong>prezentacija-builder</strong> koriste Agreement Engineering iz Million Dollar Webinar Workshopa. Skillovi za oglase, lead magnete i outreach naslanjaju se na okvire iz knjiga <em>$100M Leads</em> i <em>$100M Offers</em> Alexa Hormozija. <strong>newsletter-pisac</strong> primjenjuje metodu <em>Newsletter Ninja</em> Tammi Labrecque. Metode su njihove, primjena je Vaša.</p>
+  </footer>
+
+</div>
+
+<script>
+const G = [
+  ["operativa","Svakodnevni posao","Dokumentacija, sastanci, mailovi i priprema. Ovo su skillovi koje ćete koristiti svaki tjedan."],
+  ["sadrzaj","Sadržaj i objave","Od jedne ideje do objave, članka ili videa, u Vašem glasu."],
+  ["prodaja","Prodaja i klijenti","Od prvog kontakta do potpisa, plus ono što dolazi poslije."],
+  ["oglasi","Plaćeni oglasi","Strategija, tekst i dijagnoza kad brojke ne štimaju."],
+  ["mail","Email i liste","Jednokratni mailovi i njegovanje liste kroz duže vrijeme."],
+  ["prezentacije","Prezentacije i webinari","Kad prezentacija završava ponudom, pravila su drukčija."],
+  ["profili","Pregled profila","Što na Vašem profilu koči, konkretno i po točkama."]
+];
+
+const S = [
+["operativa","sop-pisac",0,"Iz grubog opisa, natuknica ili snimke radi SOP koji novi zaposlenik može slijediti bez dodatnih pitanja."],
+["operativa","zapisnik-sastanka",0,"Sirove bilješke pretvara u zapisnik, popis zaduženja s nositeljem i rokom, i gotov mail za sudionike."],
+["operativa","poslovni-mail",0,"Nacrt odgovora na poslovni mail glasom osobe koja ga potpisuje. Prigovori, odbijanja, podsjetnici za plaćanje."],
+["operativa","sinteza-izvora",0,"Više dokumenata, ponuda ili razgovora pretvara u jedan nalaz, s izvorom uz svaku tvrdnju i istaknutim proturječjima."],
+["operativa","priprema-za-sastanak",0,"Jedna stranica prije sastanka s kupcem ili dobavljačem: tko je, što traži, gdje je poluga, čime otvoriti."],
+["operativa","doktor-promptova",0,"Kaže točno zašto Vaš prompt ne radi i vrati prepravljenu verziju. Prije presude provjeri aktualne Anthropicove upute."],
+
+["sadrzaj","petricoliki-post",0,"LinkedIn objave po metodologiji Dragana Petrica: hook koji otvara „...more”, emo call umjesto CTA pitanja, procjena dosega."],
+["sadrzaj","carousel-writer",0,"Carousel za LinkedIn i Instagram, slajd po slajd, od naslovnice do zadnjeg poziva."],
+["sadrzaj","social-media-caption-writer",0,"Objave za LinkedIn, Instagram i Facebook iz teme, natuknica ili grubog nacrta."],
+["sadrzaj","video-hook-writer",0,"Uvodne rečenice za Reels, TikTok i Shorts. Serija opcija, pa uži izbor s obrazloženjem."],
+["sadrzaj","youtube-content-writer",0,"Paket za YouTube: pet naslova, SEO opis i cijela skripta koja drži gledatelja."],
+["sadrzaj","blog-writer",1,"Transkript, bilješke ili ideja u gotov blog članak optimiziran za tražilice i za AI pretragu."],
+["sadrzaj","content-repurposing-agent",0,"Jedan sadržaj u više formata po platformi, svaki prilagođen kanalu, a ne kopiran."],
+
+["prodaja","sales-call-closer",0,"Skripta za prodajni poziv od pozdrava do odluke, s rješavanjem prigovora."],
+["prodaja","cold-outreach-sequencer",0,"Sekvence hladnog kontakta: mail, poruka i ritam praćenja, po metodi Big Fast Value."],
+["prodaja","lead-magnet-architect",0,"Osmišljava besplatnu ponudu koja skuplja kontakte i vodi u plaćenu, po Hormozijevih sedam koraka."],
+["prodaja","landing-page-writer",1,"Copy za landing i sales stranicu, sekciju po sekciju, spreman za lijepljenje na web."],
+["prodaja","customer-referral-engine",0,"Sustav preporuka: kada pitati, kako pitati i što ponuditi, s gotovim porukama."],
+["prodaja","affiliate-recruitment",0,"Plan za pronalazak i regrutiranje partnera koji prodaju umjesto Vas."],
+
+["oglasi","paid-ads-strategist",0,"Cijela arhitektura kampanje: struktura, kanali, ciljanje i računica budžeta kroz LTV i CAC."],
+["oglasi","ads-copy-writer",0,"Tekst za Meta oglase prema proizvodu, cilju i temperaturi publike."],
+["oglasi","ads-performance-doctor",0,"Iz sirovih brojki kampanje kaže što skalirati, što popraviti i što ugasiti."],
+
+["mail","email-copywriter",1,"Prodajni mailovi, nurture sekvence i mailovi za lansiranje, s varijantama predmeta."],
+["mail","newsletter-pisac",0,"Newsletteri koji prvo grade odnos pa prodaju, plus welcome sekvenca i mjesečni kalendar. Prilagođeno hrvatskom tržištu."],
+
+["prezentacije","prezentacija-builder",0,"Gradi prezentaciju u Vašim bojama i fontu i isporučuje gotovu .pptx datoteku. Branding unosite pri prvom pokretanju."],
+["prezentacije","webinar-skripta",0,"Skripta za webinar ili masterclass po Agreement Engineeringu. Piše, ocjenjuje i rastavlja tuđe."],
+
+["profili","instagram-profile-reviewer",0,"Pregled Instagram profila: bio, highlights, vizual i put od profila do upita."],
+["profili","linkedin-profile-reviewer",0,"Ocijenjen pregled LinkedIn profila s konkretnim popravcima po sekcijama."]
+];
+
+const list=document.getElementById("list"), chips=document.getElementById("chips"),
+      q=document.getElementById("q"), tally=document.getElementById("tally"), none=document.getElementById("none");
+let active=null;
+
+G.forEach(([id,label])=>{
+  const b=document.createElement("button");
+  b.className="chip"; b.type="button"; b.dataset.g=id;
+  b.setAttribute("aria-pressed","false");
+  b.textContent=label+" ("+S.filter(s=>s[0]===id).length+")";
+  b.addEventListener("click",()=>{active=active===id?null:id;render();});
+  chips.appendChild(b);
+});
+
+function render(){
+  const term=q.value.trim().toLowerCase();
+  list.textContent=""; let n=0;
+
+  G.forEach(([id,label,note])=>{
+    if(active && active!==id) return;
+    const rows=S.filter(s=>s[0]===id && (!term ||
+      (s[1]+" "+s[3]).toLowerCase().includes(term)));
+    if(!rows.length) return;
+    n+=rows.length;
+
+    const sec=document.createElement("section"); sec.className="group";
+    const h=document.createElement("h2");
+    h.textContent=label;
+    const c=document.createElement("span"); c.textContent=rows.length;
+    h.appendChild(c); sec.appendChild(h);
+    const p=document.createElement("p"); p.textContent=note; sec.appendChild(p);
+
+    rows.forEach(([,slug,isEn,desc])=>{
+      const it=document.createElement("div"); it.className="item";
+      const m=document.createElement("div"); m.className="meta";
+      const t=document.createElement("p"); t.className="slug"; t.textContent=slug;
+      if(isEn){const e=document.createElement("span");e.className="en";e.textContent="upute na engleskom";t.appendChild(e);}
+      const d=document.createElement("p"); d.className="desc"; d.textContent=desc;
+      m.append(t,d);
+      const a=document.createElement("a"); a.className="get";
+      a.href=slug+".skill"; a.setAttribute("download",slug+".skill");
+      a.textContent="Preuzmi";
+      a.setAttribute("aria-label","Preuzmi skill "+slug);
+      it.append(m,a); sec.appendChild(it);
+    });
+    list.appendChild(sec);
+  });
+
+  tally.textContent=n+" od "+S.length;
+  none.hidden=n>0;
+  document.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.g===active)));
+}
+q.addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
